@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
 use Codeception\Configuration;
@@ -30,17 +32,17 @@ class OrderHelper extends Module
 
     public function failNow()
     {
-        $this->fail("intentionally");
+        $this->fail('intentionally');
     }
 
     public function seeFailNow()
     {
-        $this->fail("intentionally");
+        $this->fail('intentionally');
     }
 
     public function dontSeeFailNow()
     {
-        $this->fail("intentionally");
+        $this->fail('intentionally');
     }
 
     public function _beforeSuite($settings = [])

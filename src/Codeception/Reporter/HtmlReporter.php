@@ -54,7 +54,7 @@ class HtmlReporter implements EventSubscriberInterface
         if (!codecept_is_path_absolute($this->reportFile)) {
             $this->reportFile = codecept_output_dir($this->reportFile);
         }
-        codecept_debug(sprintf("Printing HTML report to %s", $this->reportFile));
+        codecept_debug(sprintf('Printing HTML report to %s', $this->reportFile));
 
         $this->templatePath = sprintf(
             '%s%stemplate%s',
@@ -306,7 +306,7 @@ class HtmlReporter implements EventSubscriberInterface
 
         file_put_contents($this->reportFile, $scenariosTemplate->render());
         $this->output->message(
-            "- <bold>HTML</bold> report generated in <comment>file://%s</comment>",
+            '- <bold>HTML</bold> report generated in <comment>file://%s</comment>',
             $this->reportFile
         )->writeln();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Also test multiple namespaces/classes per single file.
  */

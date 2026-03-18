@@ -34,7 +34,7 @@ class Bootstrap extends InitTemplate
 
         $this->say("<fg=white;bg=magenta> Bootstrapping Codeception </fg=white;bg=magenta>\n");
         $this->createGlobalConfig();
-        $this->say("File codeception.yml created       <- global configuration");
+        $this->say('File codeception.yml created       <- global configuration');
 
         $this->createDirs();
 
@@ -50,7 +50,7 @@ class Bootstrap extends InitTemplate
         $this->createFunctionalSuite();
         $this->createAcceptanceSuite();
 
-        $this->say(" --- ");
+        $this->say(' --- ');
         $this->say();
         $this->saySuccess('Codeception is installed for acceptance, functional, and unit testing');
         $this->say();
@@ -68,7 +68,7 @@ class Bootstrap extends InitTemplate
         $this->createDirectoryFor($this->outputDir);
         $this->createEmptyDirectory($this->dataDir);
         $this->createDirectoryFor($this->supportDir . DIRECTORY_SEPARATOR . '_generated');
-        $this->createDirectoryFor($this->supportDir . DIRECTORY_SEPARATOR . "Helper");
+        $this->createDirectoryFor($this->supportDir . DIRECTORY_SEPARATOR . 'Helper');
         $this->gitIgnore($this->outputDir);
         $this->gitIgnore($this->supportDir . DIRECTORY_SEPARATOR . '/_generated');
     }
@@ -91,8 +91,8 @@ step_decorators: ~
 
 EOF;
         $this->createSuite('Functional', $actor, $config);
-        $this->say("tests/Functional/ created          <- functional tests");
-        $this->say("tests/Functional.suite.yml written <- functional test suite configuration");
+        $this->say('tests/Functional/ created          <- functional tests');
+        $this->say('tests/Functional.suite.yml written <- functional test suite configuration');
     }
 
     protected function createAcceptanceSuite(string $actor = 'Acceptance'): void
@@ -116,8 +116,8 @@ step_decorators:
 
 EOF;
         $this->createSuite('Acceptance', $actor, $config);
-        $this->say("tests/Acceptance/ created          <- acceptance tests");
-        $this->say("tests/Acceptance.suite.yml written <- acceptance test suite configuration");
+        $this->say('tests/Acceptance/ created          <- acceptance tests');
+        $this->say('tests/Acceptance.suite.yml written <- acceptance test suite configuration');
     }
 
     protected function createUnitSuite(string $actor = 'Unit'): void
@@ -135,8 +135,8 @@ step_decorators: ~
 
 EOF;
         $this->createSuite('Unit', $actor, $config);
-        $this->say("tests/Unit/ created                <- unit tests");
-        $this->say("tests/Unit.suite.yml written       <- unit test suite configuration");
+        $this->say('tests/Unit/ created                <- unit tests');
+        $this->say('tests/Unit.suite.yml written       <- unit test suite configuration');
     }
 
     public function createGlobalConfig(): void

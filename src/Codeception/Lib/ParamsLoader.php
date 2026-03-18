@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace Codeception\Lib;
 
+use function codecept_absolute_path;
+use function codecept_relative_path;
+
 use Codeception\Exception\ConfigurationException;
 use Dotenv\Dotenv as PhpDotenv;
 use Dotenv\Repository\RepositoryBuilder;
 use Exception;
-use SimpleXMLElement;
-use Symfony\Component\Dotenv\Dotenv as SymfonyDotenv;
-use Symfony\Component\Yaml\Yaml;
 
-use function codecept_absolute_path;
-use function codecept_relative_path;
 use function file_exists;
+
 use function file_get_contents;
 use function parse_ini_file;
 use function preg_match;
 use function simplexml_load_file;
+
+use SimpleXMLElement;
+use Symfony\Component\Dotenv\Dotenv as SymfonyDotenv;
+use Symfony\Component\Yaml\Yaml;
 
 class ParamsLoader
 {
@@ -145,7 +148,7 @@ class ParamsLoader
 
         throw new ConfigurationException(
             "`vlucas/phpdotenv:5.*` or `symfony/dotenv` library is required to parse .env files.\n" .
-            "Please install it via composer, e.g.: composer require vlucas/phpdotenv"
+            'Please install it via composer, e.g.: composer require vlucas/phpdotenv'
         );
     }
 

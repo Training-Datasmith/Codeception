@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Codeception\Util;
 
+use function array_keys;
+use function array_map;
+use function json_encode;
+use function method_exists;
+
+use function range;
+
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 
-use function array_keys;
-use function array_map;
-use function json_encode;
-use function method_exists;
-use function range;
 use function var_export;
 
 class ReflectionHelper
@@ -119,7 +121,7 @@ class ReflectionHelper
         }
 
         $encoded = array_map(
-            static fn(int|string $k): string => self::phpEncodeValue($k) . ' => ' . self::phpEncodeValue($array[$k]),
+            static fn (int|string $k): string => self::phpEncodeValue($k) . ' => ' . self::phpEncodeValue($array[$k]),
             array_keys($array)
         );
 

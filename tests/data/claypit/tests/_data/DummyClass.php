@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class DummyClass
 {
     /**
@@ -9,22 +11,22 @@ class DummyClass
 
     public function __construct($checkMe = 1)
     {
-        $this->checkMe = "constructed: " . $checkMe;
+        $this->checkMe = 'constructed: ' . $checkMe;
     }
 
     public function helloWorld(): string
     {
-        return "hello";
+        return 'hello';
     }
 
     public function goodByeWorld(): string
     {
-        return "good bye";
+        return 'good bye';
     }
 
     protected function notYourBusinessWorld(): string
     {
-        return "goAway";
+        return 'goAway';
     }
 
     public function getCheckMe()

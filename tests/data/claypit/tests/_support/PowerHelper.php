@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
 class PowerHelper extends \Codeception\Module
@@ -14,7 +16,7 @@ class PowerHelper extends \Codeception\Module
     public function gotThePower()
     {
         if (!$this->config['has_power']) {
-            $this->fail("I have no power :(");
+            $this->fail('I have no power :(');
         }
     }
 

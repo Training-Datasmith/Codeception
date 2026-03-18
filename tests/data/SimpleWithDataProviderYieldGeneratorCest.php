@@ -1,7 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Attribute\DataProvider;
-use Codeception\Attribute\Examples;
 
 class SimpleWithDataProviderYieldGeneratorCest
 {

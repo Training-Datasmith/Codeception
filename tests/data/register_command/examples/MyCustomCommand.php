@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * An example for a custom command to add to the framework.
  *
@@ -11,10 +13,10 @@ namespace Project\Command;
 
 use Codeception\Command\Shared\ConfigTrait;
 use Codeception\Command\Shared\FileSystemTrait;
-use Symfony\Component\Console\Command\Command;
 use Codeception\CustomCommandInterface;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -30,7 +32,7 @@ class MyCustomCommand extends Command implements CustomCommandInterface
      */
     public static function getCommandName(): string
     {
-        return "myProject:myCommand";
+        return 'myProject:myCommand';
     }
 
     /**
@@ -52,7 +54,7 @@ class MyCustomCommand extends Command implements CustomCommandInterface
      */
     public function getDescription(): string
     {
-        return "This is my command to say hello";
+        return 'This is my command to say hello';
     }
 
     /**
@@ -74,14 +76,14 @@ class MyCustomCommand extends Command implements CustomCommandInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $messageEnd = "!" . PHP_EOL;
+        $messageEnd = '!' . PHP_EOL;
 
         if ($input->getOption('friendly')) {
-            $messageEnd = "," . PHP_EOL;
-            $messageEnd .= "how are you?" . PHP_EOL;
+            $messageEnd = ',' . PHP_EOL;
+            $messageEnd .= 'how are you?' . PHP_EOL;
         }
 
-        echo "Hello " . get_current_user();
+        echo 'Hello ' . get_current_user();
         echo $messageEnd . PHP_EOL;
         return 0;
     }

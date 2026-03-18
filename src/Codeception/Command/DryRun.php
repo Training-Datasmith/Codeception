@@ -17,22 +17,28 @@ use Codeception\SuiteManager;
 use Codeception\Test\Interfaces\ScenarioDriven;
 use Codeception\Test\Test;
 use Exception;
+
+use function ini_set;
+
 use InvalidArgumentException;
+
+use function preg_match;
+
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionUnionType;
+
+use function str_replace;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
-use function ini_set;
-use function preg_match;
-use function str_replace;
 
 /**
  * Shows step-by-step execution process for scenario driven tests without actually running them.
@@ -135,10 +141,10 @@ class DryRun extends Command
         if ($test->getMetadata()->isBlocked()) {
             $output->writeln('');
             if ($skip = $test->getMetadata()->getSkip()) {
-                $output->writeln("<warning> SKIPPED </warning>" . $skip);
+                $output->writeln('<warning> SKIPPED </warning>' . $skip);
             }
             if ($incomplete = $test->getMetadata()->getIncomplete()) {
-                $output->writeln("<warning> INCOMPLETE </warning>" . $incomplete);
+                $output->writeln('<warning> INCOMPLETE </warning>' . $incomplete);
             }
         }
         $output->writeln('');

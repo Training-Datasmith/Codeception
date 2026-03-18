@@ -11,13 +11,15 @@ use Codeception\Test\Loader\Gherkin as GherkinLoader;
 use Codeception\Test\Loader\LoaderInterface;
 use Codeception\Test\Loader\Unit as UnitLoader;
 use Exception;
-use Symfony\Component\Finder\Finder;
 
 use function file_exists;
+
 use function getcwd;
 use function is_dir;
 use function preg_match;
 use function str_replace;
+
+use Symfony\Component\Finder\Finder;
 
 /**
  * Loads all Codeception supported test formats from a directory.
@@ -57,7 +59,7 @@ class Loader
 
     public function __construct(array $suiteSettings)
     {
-        $this->path = empty($suiteSettings['path']) ? null : rtrim((string) $suiteSettings['path'], "/\\") . '/';
+        $this->path = empty($suiteSettings['path']) ? null : rtrim((string) $suiteSettings['path'], '/\\') . '/';
         $this->shard = $suiteSettings['shard'] ?? null;
 
         $this->formats = [
@@ -140,7 +142,7 @@ class Loader
         $path = $this->makePath($path);
         if (is_dir($path)) {
             $previous   = $this->path;
-            $this->path = rtrim($path, "/\\") . '/';
+            $this->path = rtrim($path, '/\\') . '/';
             $this->loadTests();
             $this->path = $previous;
             return;

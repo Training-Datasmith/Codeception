@@ -105,7 +105,7 @@ EOF;
         $this->assertStringContainsString('$I->seeInThisFile', $code);
         $this->parser->parseSteps($code);
         $text = $this->scenario->getText();
-        $this->assertStringContainsString("I see in this file", $text);
+        $this->assertStringContainsString('I see in this file', $text);
     }
 
     public function testStepsWithFriends()
@@ -114,9 +114,9 @@ EOF;
         $this->assertStringContainsString('$I->haveFriend', $code);
         $this->parser->parseSteps($code);
         $text = $this->scenario->getText();
-        $this->assertStringContainsString("jon does", $text);
-        $this->assertStringContainsString("I have friend", $text);
-        $this->assertStringContainsString("back to me", $text);
+        $this->assertStringContainsString('jon does', $text);
+        $this->assertStringContainsString('I have friend', $text);
+        $this->assertStringContainsString('back to me', $text);
     }
 
     public function testParseFile()

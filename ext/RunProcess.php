@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Codeception\Extension;
 
+use function array_reverse;
+
 use BadMethodCallException;
+
+use function class_exists;
+
 use Codeception\Events;
 use Codeception\Exception\ExtensionException;
-use Codeception\Extension;
-use Symfony\Component\Process\Process;
 
-use function array_reverse;
-use function class_exists;
+use Codeception\Extension;
+
 use function is_int;
 use function sleep;
+
+use Symfony\Component\Process\Process;
 
 /**
  * Extension to start and stop processes per suite.
@@ -68,7 +73,7 @@ class RunProcess extends Extension
      */
     protected static array $events = [
         Events::SUITE_BEFORE => 'runProcess',
-        Events::SUITE_AFTER => 'stopProcess'
+        Events::SUITE_AFTER => 'stopProcess',
     ];
 
     /**

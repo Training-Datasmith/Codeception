@@ -4,24 +4,30 @@ declare(strict_types=1);
 
 namespace Codeception\Test;
 
+use function array_keys;
+use function array_merge;
+use function basename;
+
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
+
+use function call_user_func_array;
+
 use Codeception\Lib\Generator\GherkinSnippets;
 use Codeception\Scenario;
 use Codeception\Step\Comment;
+
 use Codeception\Step\Meta;
 use Codeception\Test\Interfaces\Reported;
 use Codeception\Test\Interfaces\ScenarioDriven;
+
+use function count;
+
 use Exception;
 
-use function array_keys;
-use function array_merge;
-use function basename;
-use function call_user_func_array;
-use function count;
 use function explode;
 use function file_get_contents;
 use function is_array;
@@ -91,7 +97,7 @@ class Gherkin extends Test implements ScenarioDriven, Reported
 
         $matchedPatterns = array_filter(
             array_keys($this->steps),
-            fn(string $pattern): bool => preg_match($pattern, $text) === 1
+            fn (string $pattern): bool => preg_match($pattern, $text) === 1
         );
 
         if ($matchedPatterns === []) {
@@ -101,7 +107,7 @@ class Gherkin extends Test implements ScenarioDriven, Reported
             );
         } elseif (count($matchedPatterns) > 1) {
             $defs = array_map(
-                fn(string $pattern): string => "- {$pattern} ({$this->contextAsString($this->steps[$pattern])})",
+                fn (string $pattern): string => "- {$pattern} ({$this->contextAsString($this->steps[$pattern])})",
                 $matchedPatterns
             );
             $metadata->setIncomplete(

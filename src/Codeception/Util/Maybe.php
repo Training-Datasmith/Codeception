@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Codeception\Util;
 
-use ArrayAccess;
-use Iterator;
-use JsonSerializable;
-use Stringable;
-
 use function array_keys;
+
+use ArrayAccess;
+
 use function call_user_func_array;
 use function count;
+
 use function is_array;
 use function is_object;
+
+use Iterator;
+use JsonSerializable;
+
 use function range;
+
+use Stringable;
 
 /**
  * Class to represent any type of content.
@@ -146,7 +151,7 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
             return $this->val;
         }
 
-        return array_map(fn($v) => $v instanceof self ? $v->value() : $v, $this->val);
+        return array_map(fn ($v) => $v instanceof self ? $v->value() : $v, $this->val);
     }
 
     /**

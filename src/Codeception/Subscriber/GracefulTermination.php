@@ -8,12 +8,14 @@ namespace Codeception\Subscriber;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\ResultAggregator;
-use RuntimeException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use function function_exists;
 use function pcntl_async_signals;
+
 use function pcntl_signal;
+
+use RuntimeException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GracefulTermination implements EventSubscriberInterface
 {

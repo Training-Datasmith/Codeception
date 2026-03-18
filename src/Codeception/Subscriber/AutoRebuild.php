@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function codecept_debug;
+
 use Codeception\Configuration;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Lib\Generator\Actions;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function codecept_debug;
 use function fclose;
 use function fgets;
 use function file_exists;
@@ -20,6 +20,8 @@ use function is_writable;
 use function mkdir;
 use function preg_match;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 class AutoRebuild implements EventSubscriberInterface
 {
     use Shared\StaticEventsTrait;
@@ -28,7 +30,7 @@ class AutoRebuild implements EventSubscriberInterface
      * @var array<string, string>
      */
     protected static array $events = [
-        Events::SUITE_INIT => 'updateActor'
+        Events::SUITE_INIT => 'updateActor',
     ];
 
     public function updateActor(SuiteEvent $event): void

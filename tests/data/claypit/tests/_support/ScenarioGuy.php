@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Attribute\Given;
 use Codeception\Attribute\Then;
 use Codeception\Attribute\When;

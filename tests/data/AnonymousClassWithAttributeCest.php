@@ -1,5 +1,8 @@
 <?php
+
+declare(strict_types=1);
 // phpcs:ignoreFile
+
 namespace Tests\Unit;
 
 use JetBrains\PhpStorm\Immutable;
@@ -9,22 +12,21 @@ class AnonymousClassWithAttributeCest
 {
     public function tryToTest(UnitTester $I)
     {
-        $class1 = new #[Immutable] class{
+        $class1 = new #[Immutable] class () {
             public function foo(): string
             {
                 return 'test';
             }
         };
 
-        $class2 = new #[Immutable] class {
+        $class2 = new #[Immutable] class () {
             public function foo(): string
             {
                 return 'test';
             }
         };
 
-        $class3 = new #[Immutable] class
-        {
+        $class3 = new #[Immutable] class () {
             public function foo(): string
             {
                 return 'test';

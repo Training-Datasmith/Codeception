@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Group;
 
 use Codeception\Event\TestEvent;
@@ -25,12 +27,12 @@ class CountEvents extends \Codeception\GroupObject
     public function _before(TestEvent $event)
     {
         ++$this::$beforeCount;
-        $this->writeln("Group Before Events: " . $this::$beforeCount);
+        $this->writeln('Group Before Events: ' . $this::$beforeCount);
     }
 
     public function _after(TestEvent $event)
     {
         ++$this::$afterCount;
-        $this->writeln("Group After Events: " . $this::$afterCount);
+        $this->writeln('Group After Events: ' . $this::$afterCount);
     }
 }

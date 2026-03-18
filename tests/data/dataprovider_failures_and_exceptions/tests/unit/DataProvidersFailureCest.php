@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Attribute\DataProvider;
 
 final class DataProvidersFailureCest
@@ -7,7 +9,7 @@ final class DataProvidersFailureCest
     #[DataProvider('rectangle')]
     public function testIsTriangle(UnitTester $I)
     {
-        $I->amGoingTo("Fail before I get here.");
+        $I->amGoingTo('Fail before I get here.');
     }
 
     public function triangles(): array
@@ -15,7 +17,7 @@ final class DataProvidersFailureCest
         return [
             'real triangle' => [3,4,5],
             [10,12,5],
-            [7,10,15]
+            [7,10,15],
         ];
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 // phpcs:ignoreFile
 // @codeCoverageIgnoreStart
 
@@ -27,7 +29,7 @@ if (isset($_COOKIE['CODECEPTION_CODECOVERAGE'])) {
     if ($cookie) {
         foreach ($cookie as $key => $value) {
             if (!empty($value)) {
-                $_SERVER["HTTP_X_CODECEPTION_" . strtoupper($key)] = $value;
+                $_SERVER['HTTP_X_CODECEPTION_' . strtoupper($key)] = $value;
             }
         }
     }
@@ -177,7 +179,7 @@ if (!defined('C3_CODECOVERAGE_MEDIATE_STORAGE')) {
     function __c3_build_cobertura_report(PHP_CodeCoverage $codeCoverage, $path)
     {
         if (!class_exists(\SebastianBergmann\CodeCoverage\Report\Cobertura::class)) {
-            throw new Exception("Cobertura report requires php-code-coverage >= 9.2");
+            throw new Exception('Cobertura report requires php-code-coverage >= 9.2');
         }
         $writer = new \SebastianBergmann\CodeCoverage\Report\Cobertura();
         $writer->process($codeCoverage, $path . '.cobertura.xml');
@@ -225,15 +227,15 @@ if (!defined('C3_CODECOVERAGE_MEDIATE_STORAGE')) {
         return __c3_exit();
     }
 
-     /**
-     * Keep track of the number of running tests
-     * @param bool $decrease default false. Whether to increase or decrease the counter
-     */
+    /**
+    * Keep track of the number of running tests
+    * @param bool $decrease default false. Whether to increase or decrease the counter
+    */
     function __c3_testcounter($decrease = false)
     {
         $blockfilename = realpath(C3_CODECOVERAGE_MEDIATE_STORAGE) . DIRECTORY_SEPARATOR . 'block_report';
         $file = fopen($blockfilename, 'c+');
-        if (flock($file, LOCK_EX)){
+        if (flock($file, LOCK_EX)) {
             // 24 bytes is enough to hold largest integer supported in 64 bit systems
             $testcounter = intval(fread($file, 24)) + ($decrease ? -1 : 1);
             ftruncate($file, 0);
@@ -265,7 +267,7 @@ if (!defined('C3_CODECOVERAGE_MEDIATE_STORAGE')) {
                 // wait until serialized coverage data of all tests is written to file
                 $blockfilename = realpath(C3_CODECOVERAGE_MEDIATE_STORAGE) . DIRECTORY_SEPARATOR . 'block_report';
                 if (file_exists($blockfilename) && filesize($blockfilename) !== 0) {
-                    while(file_get_contents($blockfilename) !== '0') {
+                    while (file_get_contents($blockfilename) !== '0') {
                         usleep(250000); // 0.25 sec
                     }
                 }

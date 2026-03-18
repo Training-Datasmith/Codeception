@@ -45,7 +45,7 @@ class ModuleContainer
         'Cli' => 'codeception/module-cli',
         'DataFactory' => 'codeception/module-datafactory',
         'Db' => 'codeception/module-db',
-        'Doctrine' => "codeception/module-doctrine",
+        'Doctrine' => 'codeception/module-doctrine',
         'Filesystem' => 'codeception/module-filesystem',
         'FTP' => 'codeception/module-ftp',
         'Laravel' => 'codeception/module-laravel',
@@ -60,8 +60,8 @@ class ModuleContainer
         'Sequence' => 'codeception/module-sequence',
         'SOAP' => 'codeception/module-soap',
         'Symfony' => 'codeception/module-symfony',
-        'WebDriver' => "codeception/module-webdriver",
-        'Yii2' => "codeception/module-yii2",
+        'WebDriver' => 'codeception/module-webdriver',
+        'Yii2' => 'codeception/module-yii2',
         'ZendExpressive' => 'codeception/module-zendexpressive',
         'ZF2' => 'codeception/module-zf2',
     ];
@@ -333,7 +333,7 @@ class ModuleContainer
             throw new ModuleException($module, 'Module requires method _inject to be defined to accept dependencies');
         }
 
-        $dependencies = array_map(fn(string $dependency): ?object => $this->create($dependency, false), $this->getConfiguredDependencies($moduleName));
+        $dependencies = array_map(fn (string $dependency): ?object => $this->create($dependency, false), $this->getConfiguredDependencies($moduleName));
 
         call_user_func_array([$module, '_inject'], $dependencies);
     }

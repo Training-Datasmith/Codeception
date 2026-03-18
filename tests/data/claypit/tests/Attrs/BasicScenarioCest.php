@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Attrs;
 
 use AttrsTester;
@@ -58,7 +60,6 @@ class BasicScenarioCest
     {
         $I->assertEquals(2, 2);
     }
-
 
     private function _listItems()
     {

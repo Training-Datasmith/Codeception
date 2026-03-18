@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new CliGuy($scenario);
 $I->wantTo('change configs and check that Guy is rebuilt');
 $I->amInPath('tests/data/sandbox');

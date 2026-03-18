@@ -9,9 +9,10 @@ use Codeception\Events;
 use Codeception\Test\Descriptor;
 use Codeception\Test\Interfaces\Dependent;
 use Codeception\TestInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use function in_array;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Dependencies implements EventSubscriberInterface
 {
@@ -22,7 +23,7 @@ class Dependencies implements EventSubscriberInterface
      */
     protected static array $events = [
         Events::TEST_START => 'testStart',
-        Events::TEST_SUCCESS => 'testSuccess'
+        Events::TEST_SUCCESS => 'testSuccess',
     ];
 
     /**

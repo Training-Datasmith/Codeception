@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Step\Order\CanCantSteps;
 
 class CanCantFailCest

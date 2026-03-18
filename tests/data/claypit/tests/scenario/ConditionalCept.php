@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new ScenarioGuy($scenario);
 $I->amInPath('.');
 $I->canSeeFileFound('not-a-file');

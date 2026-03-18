@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
 class CliHelper extends \Codeception\Module
@@ -49,6 +51,6 @@ class CliHelper extends \Codeception\Module
 
     public function seeDirFound($dir)
     {
-        $this->assertTrue(is_dir($dir) && file_exists($dir), "Directory does not exist");
+        $this->assertTrue(is_dir($dir) && file_exists($dir), 'Directory does not exist');
     }
 }

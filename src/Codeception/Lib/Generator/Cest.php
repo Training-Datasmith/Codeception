@@ -53,7 +53,7 @@ EOF;
         $namespaceHeader = $this->getNamespaceHeader($this->settings['namespace'] . '\\' . ucfirst((string)$this->settings['suite']) . '\\' . $this->name);
 
         if ($namespaceHeader) {
-            $namespaceHeader .= "\nuse " . $this->supportNamespace() . $actor . ";";
+            $namespaceHeader .= "\nuse " . $this->supportNamespace() . $actor . ';';
         }
 
         return (new Template($this->template))

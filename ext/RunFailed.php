@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Codeception\Extension;
 
+use function array_key_exists;
+
 use Codeception\Event\PrintResultEvent;
 use Codeception\Events;
 use Codeception\Extension;
+
 use Codeception\Test\Descriptor;
 
-use function array_key_exists;
 use function file_put_contents;
 use function implode;
 use function is_file;
@@ -49,7 +51,7 @@ class RunFailed extends Extension
      * @var array<string, string>
      */
     public static array $events = [
-        Events::RESULT_PRINT_AFTER => 'saveFailed'
+        Events::RESULT_PRINT_AFTER => 'saveFailed',
     ];
 
     /** @var string filename/groupname for failed tests */

@@ -6,8 +6,8 @@ namespace Codeception;
 
 use Codeception\Command\Shared\FileSystemTrait;
 use Codeception\Command\Shared\StyleTrait;
-use Codeception\Lib\Generator\Actor;
 use Codeception\Lib\Generator\Actions;
+use Codeception\Lib\Generator\Actor;
 use Codeception\Lib\Generator\Helper;
 use Codeception\Lib\ModuleContainer;
 use Exception;

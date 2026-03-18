@@ -6,7 +6,7 @@ final class GlobalCommandOptionCest
 {
     public function configOption(CliGuy $I)
     {
-        $I->wantTo("start codeception with --config option");
+        $I->wantTo('start codeception with --config option');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('--config standard/codeception.yml');
         $I->seeInShellOutput('myProject:myCommand');
@@ -14,7 +14,7 @@ final class GlobalCommandOptionCest
 
     public function configOptionWithEqualSign(CliGuy $I)
     {
-        $I->wantTo("start codeception with --config= option");
+        $I->wantTo('start codeception with --config= option');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('--config=standard/codeception.yml');
         $I->seeInShellOutput('myProject:myCommand');
@@ -22,7 +22,7 @@ final class GlobalCommandOptionCest
 
     public function configOptionShortcut(CliGuy $I)
     {
-        $I->wantTo("start codeception with shortcut -c option");
+        $I->wantTo('start codeception with shortcut -c option');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('-c standard/codeception.yml');
         $I->seeInShellOutput('myProject:myCommand');
@@ -30,7 +30,7 @@ final class GlobalCommandOptionCest
 
     public function configOptionShortcutWithoutSpace(CliGuy $I)
     {
-        $I->wantTo("start codeception with shortcut -c option and not Space");
+        $I->wantTo('start codeception with shortcut -c option and not Space');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('-cstandard/codeception.yml');
         $I->seeInShellOutput('myProject:myCommand');
@@ -38,7 +38,7 @@ final class GlobalCommandOptionCest
 
     public function configOptionShortcutWithoutSpaceAndOther(CliGuy $I)
     {
-        $I->wantTo("start codeception with two shortcuts and -c option has not Space");
+        $I->wantTo('start codeception with two shortcuts and -c option has not Space');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('-vcstandard/codeception.yml');
         $I->seeInShellOutput('version');
@@ -46,7 +46,7 @@ final class GlobalCommandOptionCest
 
     public function configStartWithoutOption(CliGuy $I)
     {
-        $I->wantTo("start first time codeception without options");
+        $I->wantTo('start first time codeception without options');
         $I->amInPath('tests/data/register_command/');
         $I->executeCommand('');
         $I->seeInShellOutput('Available commands:');

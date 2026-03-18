@@ -9,9 +9,10 @@ use Codeception\Exception\ConfigurationException;
 use Codeception\Test\Gherkin;
 use Codeception\Test\Test;
 use Codeception\Util\PathResolver;
-use Symfony\Component\Finder\Finder;
 
 use function realpath;
+
+use Symfony\Component\Finder\Finder;
 
 /**
  * Loads information for groups from external sources (config, filesystem)

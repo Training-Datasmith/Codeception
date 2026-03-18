@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (!class_exists(\SebastianBergmann\CodeCoverage\Report\Cobertura::class)) {
     $scenario->skip('Cobertura report requires php-code-coverage 9.2');
 }

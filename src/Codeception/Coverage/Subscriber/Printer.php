@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Coverage\Subscriber;
 
+use function array_merge;
+
 use Codeception\Configuration;
 use Codeception\Coverage\Filter;
 use Codeception\Coverage\PhpCodeCoverageFactory;
@@ -11,6 +13,9 @@ use Codeception\Event\PrintResultEvent;
 use Codeception\Events;
 use Codeception\Lib\Console\Output;
 use Codeception\Subscriber\Shared\StaticEventsTrait;
+
+use function file_put_contents;
+
 use PHPUnit\Runner\Version as PHPUnitVersion;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover as CloverReport;
@@ -20,13 +25,13 @@ use SebastianBergmann\CodeCoverage\Report\Html\Facade as HtmlFacadeReport;
 use SebastianBergmann\CodeCoverage\Report\PHP as PhpReport;
 use SebastianBergmann\CodeCoverage\Report\Text as TextReport;
 use SebastianBergmann\CodeCoverage\Report\Thresholds;
-use SebastianBergmann\CodeCoverage\Report\Xml\Facade as XmlFacadeReport;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function array_merge;
-use function file_put_contents;
+use SebastianBergmann\CodeCoverage\Report\Xml\Facade as XmlFacadeReport;
+
 use function str_starts_with;
 use function strpos;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Printer implements EventSubscriberInterface
 {
@@ -36,7 +41,7 @@ class Printer implements EventSubscriberInterface
      * @var array<string, string>
      */
     public static array $events = [
-        Events::RESULT_PRINT_AFTER => 'printResult'
+        Events::RESULT_PRINT_AFTER => 'printResult',
     ];
 
     protected array $settings = [
@@ -44,7 +49,7 @@ class Printer implements EventSubscriberInterface
         'low_limit'         => 35,
         'high_limit'        => 70,
         'show_uncovered'    => false,
-        'show_only_summary' => false
+        'show_only_summary' => false,
     ];
 
     public static CodeCoverage $coverage;

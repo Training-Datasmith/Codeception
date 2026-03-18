@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new CliGuy($scenario);
 $I->wantTo('see that exception in before does not cause fatal error in after');
 $I->amInPath('tests/data/exception_in_before');

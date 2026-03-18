@@ -82,7 +82,7 @@ EOF;
     {
         $this->checkInstalled();
         $this->say("Let's prepare Codeception for acceptance testing");
-        $this->say("Create your tests and run them in real browser");
+        $this->say('Create your tests and run them in real browser');
         $this->say();
 
         $dir     = $this->ask('Where tests will be stored?', 'tests');
@@ -124,10 +124,10 @@ EOF;
         $this->say('<bold>Next steps:</bold>');
         $this->say('1. Launch Selenium Server and webserver');
         $this->say("2. Edit <bold>{$dir}/LoginCest.php</bold> to test login of your application");
-        $this->say("3. Run tests using: <comment>codecept run</comment>");
+        $this->say('3. Run tests using: <comment>codecept run</comment>');
         $this->say();
         $this->say("HINT: Add '\\Codeception\\Step\\Retry' trait to AcceptanceTester class to enable auto-retries");
-        $this->say("HINT: See https://codeception.com/docs/03-AcceptanceTests#retry");
+        $this->say('HINT: See https://codeception.com/docs/03-AcceptanceTests#retry');
         $this->say('<bold>Happy testing!</bold>');
     }
 }

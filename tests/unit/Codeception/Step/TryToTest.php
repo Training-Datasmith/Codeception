@@ -15,7 +15,7 @@ class TryToTest extends \PHPUnit\Framework\TestCase
     {
         // create an empty container with this class as a module
         $moduleContainer = Stub::make(ModuleContainer::class, [
-            'moduleForAction' => $this
+            'moduleForAction' => $this,
         ]);
         // run an action from this class
         $tryTo = new \Codeception\Step\TryTo('_executeFailedCode', []);
@@ -29,7 +29,7 @@ class TryToTest extends \PHPUnit\Framework\TestCase
         // run an action from this class
         $tryTo = new \Codeception\Step\TryTo('_executeFailedCode', []);
         $moduleContainer = Stub::make(ModuleContainer::class, [
-            'moduleForAction' => $this
+            'moduleForAction' => $this,
         ]);
         $tryTo->run($moduleContainer);
         // see a failed action should not fail

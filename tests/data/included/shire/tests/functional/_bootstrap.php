@@ -1,4 +1,6 @@
 <?php
 
+declare(strict_types=1);
+
 // Here you can initialize variables that will for your tests
-require_once \Codeception\Configuration::projectDir() . "src/Hobbit.php";
+require_once \Codeception\Configuration::projectDir() . 'src/Hobbit.php';

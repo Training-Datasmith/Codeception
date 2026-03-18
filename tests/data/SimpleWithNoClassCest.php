@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class SimpleWithNoClassCest
 {
     public function phpFunctions(CodeGuy $I)

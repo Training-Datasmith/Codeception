@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function array_reverse;
+
 use Codeception\Event\FailEvent;
 use Codeception\Event\StepEvent;
 use Codeception\Event\SuiteEvent;
@@ -12,9 +14,8 @@ use Codeception\Events;
 use Codeception\Exception\ThrowableWrapper;
 use Codeception\Suite;
 use Codeception\TestInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function array_reverse;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Module implements EventSubscriberInterface
 {
@@ -31,7 +32,7 @@ class Module implements EventSubscriberInterface
         Events::TEST_FAIL    => 'failed',
         Events::TEST_ERROR   => 'failed',
         Events::SUITE_BEFORE => 'beforeSuite',
-        Events::SUITE_AFTER  => 'afterSuite'
+        Events::SUITE_AFTER  => 'afterSuite',
     ];
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Test;
 
+use function array_slice;
+
 use Codeception\Example;
 use Codeception\Exception\ConfigurationException;
 use Codeception\Exception\UselessTestException;
@@ -14,20 +16,24 @@ use Codeception\Step\Comment;
 use Codeception\Util\Annotation;
 use Codeception\Util\ReflectionHelper;
 use Exception;
+
+use function file;
+use function implode;
+use function is_callable;
+
 use LogicException;
 use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\SkippedTest;
 use PHPUnit\Metadata\Api\CodeCoverage;
+
 use PHPUnit\Runner\Version as PHPUnitVersion;
 use PHPUnit\Util\Test as TestUtil;
+
+use function preg_replace;
+
 use ReflectionMethod;
 use SebastianBergmann\CodeCoverage\Version as CodeCoverageVersion;
 
-use function array_slice;
-use function file;
-use function implode;
-use function is_callable;
-use function preg_replace;
 use function sprintf;
 use function strtolower;
 

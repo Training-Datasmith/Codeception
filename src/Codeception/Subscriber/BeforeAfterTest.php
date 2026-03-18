@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function call_user_func;
+
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Test\Test;
 use Codeception\Test\TestCaseWrapper;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function call_user_func;
 use function is_callable;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BeforeAfterTest implements EventSubscriberInterface
 {
@@ -22,7 +24,7 @@ class BeforeAfterTest implements EventSubscriberInterface
      */
     protected static array $events = [
         Events::SUITE_BEFORE => 'beforeClass',
-        Events::SUITE_AFTER  => ['afterClass', 100]
+        Events::SUITE_AFTER  => ['afterClass', 100],
     ];
 
     public function beforeClass(SuiteEvent $event): void

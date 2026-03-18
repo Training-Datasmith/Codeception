@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function call_user_func;
+use function class_exists;
+
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Exception\Deprecation;
@@ -11,23 +14,26 @@ use Codeception\Exception\Error;
 use Codeception\Exception\Notice;
 use Codeception\Exception\Warning;
 use Codeception\Lib\Notification;
-use PHPUnit\Runner\Version as PHPUnitVersion;
-use Symfony\Bridge\PhpUnit\DeprecationErrorHandler as SymfonyDeprecationErrorHandler;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function call_user_func;
-use function class_exists;
 use function error_get_last;
+
 use function error_reporting;
 use function getenv;
 use function in_array;
 use function is_array;
+
+use const PHP_VERSION_ID;
+
+use PHPUnit\Runner\Version as PHPUnitVersion;
+
 use function register_shutdown_function;
 use function restore_error_handler;
 use function set_error_handler;
 use function sprintf;
 
-use const PHP_VERSION_ID;
+use Symfony\Bridge\PhpUnit\DeprecationErrorHandler as SymfonyDeprecationErrorHandler;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ErrorHandler implements EventSubscriberInterface
 {
@@ -38,7 +44,7 @@ class ErrorHandler implements EventSubscriberInterface
      */
     protected static array $events = [
         Events::SUITE_BEFORE => 'handle',
-        Events::SUITE_AFTER  => 'onFinish'
+        Events::SUITE_AFTER  => 'onFinish',
     ];
 
     /**

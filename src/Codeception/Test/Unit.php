@@ -16,9 +16,11 @@ use Codeception\Scenario;
 use Codeception\Test\Feature\Stub;
 use Codeception\TestInterface;
 use Codeception\Util\Debug;
-use LogicException;
 
 use function lcfirst;
+
+use LogicException;
+
 use function method_exists;
 
 /**
@@ -152,7 +154,7 @@ class Unit extends TestCase implements
     public function fetchDependencies(): array
     {
         return array_map(
-            fn($dep): string => !str_contains((string)$dep, ':') && method_exists($this, $dep)
+            fn ($dep): string => !str_contains((string)$dep, ':') && method_exists($this, $dep)
                 ? self::class . ":{$dep}"
                 : $dep,
             $this->getMetadata()->getDependencies()

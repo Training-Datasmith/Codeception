@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * An example for a custom command to add to the framework.
  *
@@ -9,10 +11,10 @@
 
 namespace Project\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Codeception\CustomCommandInterface;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class YourCustomCommand extends Command implements CustomCommandInterface
@@ -25,7 +27,7 @@ class YourCustomCommand extends Command implements CustomCommandInterface
      */
     public static function getCommandName(): string
     {
-        return "myProject:yourCommand";
+        return 'myProject:yourCommand';
     }
 
     /**
@@ -47,7 +49,7 @@ class YourCustomCommand extends Command implements CustomCommandInterface
      */
     public function getDescription(): string
     {
-        return "This is your command make something";
+        return 'This is your command make something';
     }
 
     /**
@@ -69,14 +71,14 @@ class YourCustomCommand extends Command implements CustomCommandInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $messageEnd = "!" . PHP_EOL;
+        $messageEnd = '!' . PHP_EOL;
 
         if ($input->getOption('something')) {
-            $messageEnd = "," . PHP_EOL;
-            $messageEnd .= "push the Button!" . PHP_EOL;
+            $messageEnd = ',' . PHP_EOL;
+            $messageEnd .= 'push the Button!' . PHP_EOL;
         }
 
-        echo "Hello Rabbit";
+        echo 'Hello Rabbit';
         echo $messageEnd . PHP_EOL;
     }
 }

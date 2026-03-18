@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Codeception\Attribute\Group;
+use Codeception\Test\Descriptor;
 use Codeception\Test\TestCaseWrapper;
 use Codeception\Test\Unit;
-use Codeception\Test\Descriptor;
 
 #[Group('testCaseWrapper')]
 final class TestCaseWrapperTest extends Unit

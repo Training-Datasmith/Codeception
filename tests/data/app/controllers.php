@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class index
 {
     public function GET($matches)
@@ -139,7 +141,6 @@ class external_url
     }
 }
 
-
 class login
 {
     public function GET($matches)
@@ -181,8 +182,8 @@ class cookiesHeader
 {
     public function GET()
     {
-        header("Set-Cookie: a=b;Path=/;");
-        header("Set-Cookie: c=d;Path=/;", false);
+        header('Set-Cookie: a=b;Path=/;');
+        header('Set-Cookie: c=d;Path=/;', false);
         include __DIR__ . '/view/index.php';
     }
 }
@@ -259,11 +260,11 @@ class httpAuth
         }
 
         if ($_SERVER['PHP_AUTH_PW'] == 'password') {
-            echo "Welcome, " . $_SERVER['PHP_AUTH_USER'];
+            echo 'Welcome, ' . $_SERVER['PHP_AUTH_USER'];
             return;
         }
 
-        echo "Forbidden";
+        echo 'Forbidden';
     }
 }
 

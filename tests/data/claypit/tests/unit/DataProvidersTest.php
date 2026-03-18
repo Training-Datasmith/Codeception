@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Group;
 use Codeception\Test\Unit;
@@ -22,7 +24,7 @@ final class DataProvidersTest extends Unit
         return [
             'real triangle' => [3,4,5],
             [10,12,5],
-            [7,10,15]
+            [7,10,15],
         ];
     }
 }

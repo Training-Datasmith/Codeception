@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Codeception\Util;
 
-use Closure;
-use Codeception\Step\Action;
-use Exception;
-use Stringable;
-
 use function call_user_func_array;
+
+use Closure;
+
 use function codecept_debug;
+
+use Codeception\Step\Action;
+
+use Exception;
+
 use function implode;
 use function str_replace;
+
+use Stringable;
 
 /**
  * Class for defining an array actions to be executed inside `performOn` of WebDriver
@@ -119,7 +124,7 @@ class ActionSequence implements Stringable
     public function __toString(): string
     {
         return implode(', ', array_map(
-            static fn(Action $step): string =>
+            static fn (Action $step): string =>
                 $step->getAction() . ': ' . str_replace('"', "'", $step->getArgumentsAsString(20)),
             $this->actions
         ));

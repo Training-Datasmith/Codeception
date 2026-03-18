@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jazz\Pianist;
 
 class BillEvans

@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function class_exists;
+
 use Codeception\Configuration;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Exception\ConfigurationException;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function class_exists;
 use function is_array;
+
 use function key;
 use function reset;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ExtensionLoader implements EventSubscriberInterface
 {
@@ -25,7 +28,7 @@ class ExtensionLoader implements EventSubscriberInterface
      */
     protected static array $events = [
         Events::MODULE_INIT => 'registerSuiteExtensions',
-        Events::SUITE_AFTER => 'stopSuiteExtensions'
+        Events::SUITE_AFTER => 'stopSuiteExtensions',
     ];
 
     /**

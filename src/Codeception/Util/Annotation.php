@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Codeception\Util;
 
+use function in_array;
+use function is_object;
+use function json_decode;
+use function preg_match_all;
+
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 use Reflector;
 
-use function in_array;
-use function is_object;
-use function json_decode;
-use function preg_match;
-use function preg_match_all;
 use function sprintf;
-use function substr;
 use function trim;
 
 /**
@@ -116,12 +115,12 @@ class Annotation
             if ($annotation === 'example') {
                 $annotation = 'examples';
             }
-            $attrClass = "Codeception\\Attribute\\" . ucfirst($annotation);
-            $attrs = array_filter($this->attributes(), static fn($a): bool => $a->getName() === $attrClass);
+            $attrClass = 'Codeception\\Attribute\\' . ucfirst($annotation);
+            $attrs = array_filter($this->attributes(), static fn ($a): bool => $a->getName() === $attrClass);
 
             return $annotation === 'examples'
-                ? array_map(static fn($a) => $a->getArguments(), $attrs)
-                : array_merge(...array_map(static fn($a) => $a->getArguments(), $attrs));
+                ? array_map(static fn ($a) => $a->getArguments(), $attrs)
+                : array_merge(...array_map(static fn ($a) => $a->getArguments(), $attrs));
         }
 
         return self::fetchAnnotationsFromDocblock($annotation, (string)$this->currentReflectedItem->getDocComment());
@@ -131,13 +130,13 @@ class Annotation
     {
         return array_filter(
             $this->currentReflectedItem->getAttributes(),
-            static fn(ReflectionAttribute $a): bool => str_starts_with($a->getName(), 'Codeception\\Attribute\\')
+            static fn (ReflectionAttribute $a): bool => str_starts_with($a->getName(), 'Codeception\\Attribute\\')
         );
     }
 
     public function attribute(string $name): ?ReflectionAttribute
     {
-        $search = "Codeception\\Attribute\\" . ucfirst($name === 'example' ? 'examples' : $name);
+        $search = 'Codeception\\Attribute\\' . ucfirst($name === 'example' ? 'examples' : $name);
         foreach ($this->attributes() as $attr) {
             if ($attr->getName() === $search) {
                 return $attr;

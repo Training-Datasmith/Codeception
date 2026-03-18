@@ -29,10 +29,10 @@ final class GherkinTest extends Unit
             [
                 'gherkin' => [
                     'contexts' => [
-                        'default' => ['GherkinTestContext']
+                        'default' => ['GherkinTestContext'],
 
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
         self::$calls = '';
@@ -43,7 +43,7 @@ final class GherkinTest extends Unit
         return [
             'di'         => new Di(),
             'dispatcher' => Stub::makeEmpty(EventDispatcher::class),
-            'modules'    => Stub::makeEmpty(ModuleContainer::class)
+            'modules'    => Stub::makeEmpty(ModuleContainer::class),
         ];
     }
 
@@ -86,8 +86,8 @@ final class GherkinTest extends Unit
                 'gherkin' => [
                     'contexts' => [
                         'default' => ['GherkinInvalidContext'],
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
         $this->loader->loadTests(codecept_data_dir('refund.feature'));
@@ -105,10 +105,10 @@ final class GherkinTest extends Unit
                     'contexts' => [
                         'default' => ['GherkinTestContext'],
                         'tag'     => [
-                            'important' => ['TagGherkinContext']
-                        ]
-                    ]
-                ]
+                            'important' => ['TagGherkinContext'],
+                        ],
+                    ],
+                ],
             ]
         );
         $this->loader->loadTests(codecept_data_dir('refund.feature'));
@@ -127,10 +127,10 @@ final class GherkinTest extends Unit
                     'contexts' => [
                         'default' => ['GherkinTestContext'],
                         'role'     => [
-                            'customer' => ['TagGherkinContext']
-                        ]
-                    ]
-                ]
+                            'customer' => ['TagGherkinContext'],
+                        ],
+                    ],
+                ],
             ]
         );
         $this->loader->loadTests(codecept_data_dir('refund.feature'));
@@ -140,7 +140,6 @@ final class GherkinTest extends Unit
         $test->test();
         $this->assertSame('aXc', self::$calls);
     }
-
 
     public function testMatchingPatterns()
     {
@@ -177,7 +176,7 @@ final class GherkinTest extends Unit
         $this->assertDoesNotMatchRegularExpression($regex, 'I have 3.5euro in my pocket');
 
         // Issue #3156
-        $pattern = "there is a :arg1 product witch costs :arg2 €";
+        $pattern = 'there is a :arg1 product witch costs :arg2 €';
         $regex = $this->loader->makePlaceholderPattern($pattern);
         $this->assertMatchesRegularExpression($regex, 'there is a "football ball" product witch costs "1,5" €');
     }

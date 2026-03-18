@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Math;
 
 class CalcHelper extends \Codeception\Module
@@ -11,7 +13,6 @@ class CalcHelper extends \Codeception\Module
     protected Divider $divider;
 
     protected int $pi = 3;
-
 
     protected function _inject(Adder $adder, Subtractor $subtractor, Divider $divider)
     {

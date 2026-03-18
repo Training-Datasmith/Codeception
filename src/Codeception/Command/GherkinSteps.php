@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Test\Loader\Gherkin as GherkinLoader;
+
+use function count;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function count;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Prints all steps from all Gherkin contexts for a specific suite
@@ -63,7 +65,7 @@ class GherkinSteps extends Command
         }
 
         if (!isset($table)) {
-            $output->writeln("No steps are defined, start creating them by running <bold>gherkin:snippets</bold>");
+            $output->writeln('No steps are defined, start creating them by running <bold>gherkin:snippets</bold>');
         }
         return Command::SUCCESS;
     }

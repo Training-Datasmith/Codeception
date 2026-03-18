@@ -15,10 +15,10 @@ trait Classname
     protected function supportNamespace(): string
     {
         if (!isset($this->settings)) {
-            return "\\";
+            return '\\';
         }
 
-        $namespace = "";
+        $namespace = '';
 
         if ($this->settings['namespace']) {
             $namespace .= '\\' . $this->settings['namespace'];

@@ -10,11 +10,11 @@ class BaseCommandRunner extends \Codeception\PHPUnit\TestCase
 {
     protected ?\PHPUnit\Framework\MockObject\MockObject $command = null;
 
-    public string $filename = "";
+    public string $filename = '';
 
-    public string $content = "";
+    public string $content = '';
 
-    public string $output = "";
+    public string $output = '';
 
     public array $config = [];
 
@@ -77,7 +77,7 @@ class BaseCommandRunner extends \Codeception\PHPUnit\TestCase
                 return pathinfo($path . DIRECTORY_SEPARATOR . $testName, PATHINFO_DIRNAME) . DIRECTORY_SEPARATOR;
             },
             'getSuites'       => fn (): array => ['shire'],
-            'getApplication'  => fn (): \Codeception\Util\Maybe => new \Codeception\Util\Maybe()
+            'getApplication'  => fn (): \Codeception\Util\Maybe => new \Codeception\Util\Maybe(),
         ];
         $mockedMethods = array_merge($mockedMethods, $extraMethods);
 

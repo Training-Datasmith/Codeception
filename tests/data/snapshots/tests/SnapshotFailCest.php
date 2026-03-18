@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Snapshot\UserSnapshot;
 
 class SnapshotFailCest
@@ -11,7 +13,7 @@ class SnapshotFailCest
         }
         $I->haveInDatabase('users', [
             'name' => 'hobgoblin',
-            'email' => 'hobgoblin@vasya.com'
+            'email' => 'hobgoblin@vasya.com',
         ]);
         $snapshot->assert();
     }

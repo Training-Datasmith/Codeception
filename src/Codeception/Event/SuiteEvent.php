@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Codeception\Event;
 
-use Codeception\ResultAggregator;
 use Codeception\Suite;
 use Symfony\Contracts\EventDispatcher\Event;
 

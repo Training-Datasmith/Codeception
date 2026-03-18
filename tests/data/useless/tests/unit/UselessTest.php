@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Stub\Expected;
 
 class UselessTest extends \Codeception\Test\Unit

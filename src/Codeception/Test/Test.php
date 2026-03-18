@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Test;
 
+use function array_reverse;
+
 use Codeception\Event\FailEvent;
 use Codeception\Event\TestEvent;
 use Codeception\Events;
@@ -12,6 +14,9 @@ use Codeception\PHPUnit\Wrapper\Test as TestWrapper;
 use Codeception\ResultAggregator;
 use Codeception\TestInterface;
 use LogicException;
+
+use function method_exists;
+
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -21,11 +26,9 @@ use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Runner\Version as PHPUnitVersion;
 use RuntimeException;
 use SebastianBergmann\Timer\Timer;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Throwable;
-
-use function array_reverse;
-use function method_exists;
 
 // phpcs:disable
 if (PHPUnitVersion::series() < 10) {
@@ -65,7 +68,7 @@ abstract class Test extends TestWrapper implements TestInterface, Interfaces\Des
         'ignoreIfMetadataBlocked',
         'codeCoverage',
         'assertionCounter',
-        'errorLogger'
+        'errorLogger',
     ];
 
     /**

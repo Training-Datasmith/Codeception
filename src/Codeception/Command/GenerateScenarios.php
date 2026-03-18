@@ -4,25 +4,28 @@ declare(strict_types=1);
 
 namespace Codeception\Command;
 
+use function basename;
+
 use Codeception\Configuration;
 use Codeception\Exception\ConfigurationException;
 use Codeception\SuiteManager;
 use Codeception\Test\Cest;
 use Codeception\Test\Interfaces\Descriptive;
 use Codeception\Test\Interfaces\ScenarioDriven;
+
+use function file_exists;
+use function is_writable;
+use function mkdir;
+use function preg_replace;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
-use function basename;
-use function file_exists;
-use function is_writable;
-use function mkdir;
-use function preg_replace;
 
 /**
  * Generates user-friendly text scenarios from scenario-driven tests (Cest).

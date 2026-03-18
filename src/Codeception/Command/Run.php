@@ -4,13 +4,43 @@ declare(strict_types=1);
 
 namespace Codeception\Command;
 
+use function array_flip;
+use function array_intersect_key;
+use function array_merge;
+
 use Codeception\Codecept;
 use Codeception\Configuration;
 use Codeception\Exception\ConfigurationException;
 use Codeception\Exception\ParseException;
+
+use function count;
+
 use Exception;
+
+use function explode;
+use function extension_loaded;
+use function getcwd;
+use function implode;
+use function in_array;
+
 use InvalidArgumentException;
+
+use function preg_match;
+
+use function preg_replace;
+use function rtrim;
+
 use RuntimeException;
+
+use function sprintf;
+use function str_contains;
+use function str_replace;
+use function str_starts_with;
+use function strpos;
+use function strtolower;
+use function substr;
+use function substr_replace;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException as SymfonyConsoleInvalidArgumentException;
@@ -20,27 +50,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use function array_flip;
-use function array_intersect_key;
-use function array_merge;
-use function count;
-use function explode;
-use function extension_loaded;
-use function getcwd;
-use function implode;
-use function in_array;
-use function preg_match;
-use function preg_replace;
-use function rtrim;
-use function sprintf;
-use function str_contains;
-use function str_replace;
-use function str_starts_with;
-use function strpos;
-use function strtolower;
-use function substr;
-use function substr_replace;
 
 /**
  * Executes tests.
@@ -225,7 +234,7 @@ class Run extends Command
 
             if ($this->options['seed']) {
                 $this->output->writeln(
-                    "Running with seed: <info>" . $this->options['seed'] . "</info>\n"
+                    'Running with seed: <info>' . $this->options['seed'] . "</info>\n"
                 );
             }
         }
@@ -278,7 +287,7 @@ class Run extends Command
         $test = $input->getArgument('test');
 
         if ($this->options['group']) {
-            $this->output->writeln(sprintf("[Groups] <info>%s</info> ", implode(', ', $this->options['group'])));
+            $this->output->writeln(sprintf('[Groups] <info>%s</info> ', implode(', ', $this->options['group'])));
         }
         if ($input->getArgument('test')) {
             $this->options['steps'] = true;
@@ -365,7 +374,7 @@ class Run extends Command
 
         if (!$this->options['silent'] && $config['settings']['shuffle']) {
             $this->output->writeln(
-                "[Seed] <info>" . $userOptions['seed'] . "</info>"
+                '[Seed] <info>' . $userOptions['seed'] . '</info>'
             );
         }
 
@@ -561,7 +570,7 @@ class Run extends Command
         if (!$config['namespace']) {
             throw new RuntimeException(
                 "Can't include into runner suite without a namespace;\n"
-                . "Please add `namespace` section into included codeception.yml file"
+                . 'Please add `namespace` section into included codeception.yml file'
             );
         }
 

@@ -13,6 +13,9 @@ use Codeception\Step\GeneratedStep;
 use Codeception\Util\ReflectionHelper;
 use Codeception\Util\Template;
 use Exception;
+
+use function implode;
+
 use InvalidArgumentException;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -21,9 +24,9 @@ use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionType;
+
 use ReflectionUnionType;
 
-use function implode;
 use function sprintf;
 
 class Actions
@@ -136,7 +139,7 @@ EOF;
         $doc = str_replace('/**', '', (string)$doc);
         $doc = trim(str_replace('*/', '', $doc));
         if ($doc === '') {
-            $doc = "*";
+            $doc = '*';
         }
         $returnType = $this->createReturnTypeHint($refMethod);
 

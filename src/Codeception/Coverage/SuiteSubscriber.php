@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Coverage;
 
+use function array_keys;
+
 use Codeception\Configuration;
 use Codeception\Coverage\Subscriber\Printer;
 use Codeception\Exception\ConfigurationException;
@@ -12,9 +14,8 @@ use Codeception\Subscriber\Shared\StaticEventsTrait;
 use Exception;
 use PHPUnit\Framework\CodeCoverageException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function array_keys;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 abstract class SuiteSubscriber implements EventSubscriberInterface
 {

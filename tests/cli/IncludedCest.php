@@ -173,7 +173,7 @@ final class IncludedCest
     #[Before('moveToIncluded')]
     public function runIncludedGroup(CliGuy $I)
     {
-        $I->executeCommand("run -g group", false);
+        $I->executeCommand('run -g group', false);
         $I->dontSeeInShellOutput('No tests executed');
         $I->seeInShellOutput('2 tests');
     }
@@ -227,7 +227,6 @@ final class IncludedCest
         $I->seeInShellOutput('Shire.functional Tests');
         // unit suites are not run
         $I->dontSeeInShellOutput('Jazz.unit Tests');
-
 
         $I->executeCommand('run *::unit');
         // only unit tests are run
@@ -295,7 +294,6 @@ final class IncludedCest
 
         // Ensure that root level suites are not run twice.
         $I->seeInShellOutput('OK (3 tests, 3 assertions)');
-
 
         $I->executeCommand('run unit,jazz::functional');
 

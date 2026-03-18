@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new CliGuy($scenario);
 $I->wantTo('see that my group extension works');
 $I->amInPath('tests/data/sandbox');

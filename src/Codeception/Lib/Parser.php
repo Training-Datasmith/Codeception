@@ -47,10 +47,10 @@ class Parser
         $isFriend = false;
 
         foreach ($lines as $line) {
-            if (preg_match("#\\\$I->haveFriend\\((.*?)\\);#", $line, $matches)) { // Friends
+            if (preg_match('#\\$I->haveFriend\\((.*?)\\);#', $line, $matches)) { // Friends
                 $friends[] = trim($matches[1], '\'"');
             }
-            if (preg_match("#\\\$(.*?)->does\\(#", $line, $matches)) { // Friends section start
+            if (preg_match('#\\$(.*?)->does\\(#', $line, $matches)) { // Friends section start
                 $friend = $matches[1];
                 if (!in_array($friend, $friends)) {
                     continue;
@@ -59,7 +59,7 @@ class Parser
                 $this->addCommentStep("\n----- {$friend} does -----");
                 continue;
             }
-            if (preg_match("#\\\$I->(.*)\\((.*?)\\);#", $line, $matches)) { // Actions
+            if (preg_match('#\\$I->(.*)\\((.*?)\\);#', $line, $matches)) { // Actions
                 $this->addStep($matches);
             }
             if ($isFriend && str_contains($line, '}')) { // Friends section ends

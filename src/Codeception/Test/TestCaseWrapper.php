@@ -91,7 +91,7 @@ class TestCaseWrapper extends Test implements Reported, Dependent, StrictCoverag
     {
         $class = $this->testCase::class;
         return array_map(
-            static fn(string $dep): string => str_contains($dep, ':') || !method_exists($class, $dep)
+            static fn (string $dep): string => str_contains($dep, ':') || !method_exists($class, $dep)
                 ? $dep
                 : "$class:$dep",
             $this->metadata->getDependencies()
@@ -132,7 +132,7 @@ class TestCaseWrapper extends Test implements Reported, Dependent, StrictCoverag
     public function test(): void
     {
         $inputs = array_map(
-            fn(string $dep) => self::$testResults[$dep] ?? null,
+            fn (string $dep) => self::$testResults[$dep] ?? null,
             $this->fetchDependencies()
         );
         $this->testCase->setDependencyInput($inputs);

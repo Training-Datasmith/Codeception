@@ -12,7 +12,7 @@ class ModuleConfigTest extends TestCase
 {
     public function testCanBeCreatedForModuleName()
     {
-        $exception = new ModuleConfigException('Codeception\Module\WebDriver', "Hello world");
+        $exception = new ModuleConfigException('Codeception\Module\WebDriver', 'Hello world');
         $this->assertSame("WebDriver module is not configured!\n \nHello world", $exception->getMessage());
     }
 
@@ -20,7 +20,7 @@ class ModuleConfigTest extends TestCase
     {
         $exception = new ModuleConfigException(
             new CodeHelper(Stub::make(ModuleContainer::class)),
-            "Hello world"
+            'Hello world'
         );
         $this->assertSame("CodeHelper module is not configured!\n \nHello world", $exception->getMessage());
     }

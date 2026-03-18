@@ -39,7 +39,7 @@ class Completion extends CompletionCommand
             'generate:stepobject',
             'generate:test',
             'gherkin:snippets',
-            'gherkin:steps'
+            'gherkin:steps',
         ];
 
         foreach ($suiteCommands as $suiteCommand) {

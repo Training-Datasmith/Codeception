@@ -118,7 +118,6 @@ class ResultAggregator
         return $this->errors;
     }
 
-
     /**
      * @return FailEvent[]
      */

@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace Codeception\Lib;
 
 use Codeception\Exception\ConfigurationException;
-use Codeception\Stub;
 use Codeception\Test\Loader\Gherkin as GherkinLoader;
-use Codeception\Test\Metadata;
 use Codeception\Test\TestCaseWrapper;
-use Codeception\Test\Unit;
-use Codeception\Util\ReflectionHelper;
-use PHPUnit\Framework\TestCase;
 
 class GroupManagerTest extends \Codeception\Test\Unit
 {
@@ -81,7 +76,6 @@ class GroupManagerTest extends \Codeception\Test\Unit
         $this->assertContains('group_1', $this->manager->groupsForTest($test1));
         $this->assertContains('group_2', $this->manager->groupsForTest($test2));
     }
-
 
     public function testGroupsByPatternWithMultipleDigits()
     {

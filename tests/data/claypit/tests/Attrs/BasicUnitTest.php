@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Attrs;
 
 use Codeception\Attribute\Examples as ExampleAttr;

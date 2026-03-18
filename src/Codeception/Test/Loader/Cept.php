@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Codeception\Test\Loader;
 
-use Codeception\Test\Cept as CeptFormat;
-
 use function basename;
+
+use Codeception\Test\Cept as CeptFormat;
 
 class Cept implements LoaderInterface
 {

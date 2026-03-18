@@ -32,6 +32,6 @@ final class RegisterCommandCest
         $I->amInPath('tests/data/register_command');
         $I->executeCommand('myProject:myCommand --config standard/codeception.yml --friendly');
         $I->seeInShellOutput("Hello {$userName},");
-        $I->seeInShellOutput("how are you?");
+        $I->seeInShellOutput('how are you?');
     }
 }

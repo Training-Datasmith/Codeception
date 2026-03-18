@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Jazz\TestGuy;
 
 $I = new TestGuy($scenario);

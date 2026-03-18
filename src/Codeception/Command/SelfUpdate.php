@@ -8,12 +8,14 @@ use Codeception\Codecept;
 use Exception;
 use Humbug\SelfUpdate\Updater;
 use Phar;
+
+use function sprintf;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function sprintf;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Auto-updates phar archive from official site: 'https://codeception.com/codecept.phar' .

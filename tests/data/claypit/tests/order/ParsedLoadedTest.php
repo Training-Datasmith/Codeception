@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // phpcs:ignoreFile PSR1.Files.SideEffects.FoundWithSymbols
 
 \Codeception\Module\OrderHelper::appendToFile('P'); // parsed

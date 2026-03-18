@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Event\PrintResultEvent;
 use Codeception\Events;
 use Codeception\Extension;
@@ -15,7 +17,7 @@ class VerbosityLevelOutput extends Extension
     public function printResult(PrintResultEvent $e)
     {
         $this->writeln(var_export($this->options, true));
-        $this->writeln("Modules used: " . implode(', ', $this->getCurrentModuleNames()));
+        $this->writeln('Modules used: ' . implode(', ', $this->getCurrentModuleNames()));
 
         if ($this->options['verbosity'] <= OutputInterface::VERBOSITY_NORMAL) {
             $this->writeln('Low verbosity');

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Codeception\Step;
 
+use function array_pop;
+
 use Codeception\Lib\ModuleContainer;
+
 use Codeception\Step as CodeceptionStep;
 
-use function array_pop;
 use function end;
 use function is_string;
 use function str_contains;

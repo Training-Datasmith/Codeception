@@ -114,8 +114,6 @@ class DataProviderTest extends Unit
         $this->assertSame($expectedResult, $result);
     }
 
-
-
     public function testExecutesPrivateDataProviderInAnotherClass()
     {
         require_once codecept_data_dir('data_provider/DataProviderInAnotherClassTest.php');
@@ -229,7 +227,7 @@ class DataProviderTest extends Unit
         $result = DataProvider::getDataForMethod($method, I: $this->tester);
 
         $expectedResult = [
-            'codeGuyMethod() exists'
+            'codeGuyMethod() exists',
         ];
 
         $this->assertSame($expectedResult, $result);

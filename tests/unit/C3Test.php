@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Configuration;
 use PHPUnit\Runner\CodeCoverage;
 

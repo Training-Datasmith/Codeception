@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace Codeception\Command\Shared;
 
-use Codeception\Configuration;
-use InvalidArgumentException;
-use Symfony\Component\Console\Exception\InvalidOptionException;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
-
 use function array_merge_recursive;
 use function array_pop;
 use function array_shift;
 use function class_exists;
+
+use Codeception\Configuration;
+
 use function count;
 use function explode;
+
+use InvalidArgumentException;
+
 use function str_repeat;
+
+use Symfony\Component\Console\Exception\InvalidOptionException;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
+
 use function ucfirst;
 
 trait ConfigTrait

@@ -8,9 +8,10 @@ use Codeception\Command\Shared\ActorTrait;
 use Codeception\Lib\Parser;
 use Codeception\Test\Cest as CestFormat;
 use Codeception\Test\DataProvider;
-use ReflectionClass;
 
 use function get_class_methods;
+
+use ReflectionClass;
 
 class Cest implements LoaderInterface
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Math\CalcHelper as Calc;
 
 class MathCest

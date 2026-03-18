@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new CliGuy($scenario);
 $I->wantTo('generate gherkin steps');
 $I->amInPath('tests/data/sandbox');

@@ -7,12 +7,14 @@ namespace Codeception\Command;
 use Codeception\Configuration;
 use Codeception\Lib\Generator\Actions as ActionsGenerator;
 use Codeception\Lib\Generator\Actor as ActorGenerator;
+
+use function implode;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface as SymfonyOutputInterface;
 
-use function implode;
+use Symfony\Component\Console\Output\OutputInterface as SymfonyOutputInterface;
 
 /**
  * Generates Actor classes (initially Guy classes) from suite configs.
@@ -47,7 +49,7 @@ class Build extends Command
         $actorGenerator = new ActorGenerator($settings);
         $this->output->writeln(
             '<info>' . Configuration::config()['namespace'] . '\\' . $actorGenerator->getActorName()
-            . "</info> includes modules: " . implode(', ', $actorGenerator->getModules())
+            . '</info> includes modules: ' . implode(', ', $actorGenerator->getModules())
         );
 
         $content = $actorGenerator->produce();
@@ -66,7 +68,7 @@ class Build extends Command
         $content = $actionsGenerator->produce();
         $this->output->writeln(
             sprintf(' -> %sActions.php generated successfully. ', $settings['actor'])
-            . $actionsGenerator->getNumMethods() . " methods added"
+            . $actionsGenerator->getNumMethods() . ' methods added'
         );
 
         $file = $this->createDirectoryFor(Configuration::supportDir() . '_generated', $settings['actor']);
@@ -78,7 +80,7 @@ class Build extends Command
     {
         $suites = $this->getSuites();
         if ($suites !== []) {
-            $this->output->writeln("<info>Building Actor classes for suites: " . implode(', ', $suites) . '</info>');
+            $this->output->writeln('<info>Building Actor classes for suites: ' . implode(', ', $suites) . '</info>');
         }
         foreach ($suites as $suite) {
             $settings = $this->getSuiteConfig($suite);

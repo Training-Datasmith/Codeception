@@ -9,7 +9,7 @@ final class ExtensionsCest
         $I->wantTo('use alternative formatter delivered through extensions');
         $I->amInPath('tests/data/sandbox');
         $I->executeCommand('run tests/dummy/FileExistsCept.php -c codeception_extended.yml');
-        $I->dontSeeInShellOutput("Check config");
+        $I->dontSeeInShellOutput('Check config');
         $I->seeInShellOutput('[+] FileExistsCept');
         $I->seeInShellOutput('Modules used: Filesystem, DumbHelper');
     }
@@ -18,7 +18,7 @@ final class ExtensionsCest
     {
         $I->amInPath('tests/data/sandbox');
         $I->executeCommand('run tests/dummy/FileExistsCept.php -o "extensions: enabled: [\Codeception\Extension\SimpleReporter]"');
-        $I->dontSeeInShellOutput("Check config");
+        $I->dontSeeInShellOutput('Check config');
         $I->seeInShellOutput('[+] FileExistsCept');
     }
 
@@ -43,7 +43,7 @@ final class ExtensionsCest
         $I->executeCommand('run -g failed -c codeception_extended.yml --no-exit');
         $I->seeInShellOutput('[-] FailingTest:testMe');
 
-        $failGroup = "some-failed";
+        $failGroup = 'some-failed';
         $I->executeCommand("run unit FailingTest.php -c codeception_extended.yml --no-exit --override \"extensions: config: Codeception\\Extension\\RunFailed: fail-group: {$failGroup}\"");
         $I->seeInShellOutput('[-] FailingTest:testMe');
         $I->seeFileFound($failGroup, 'tests/_output');

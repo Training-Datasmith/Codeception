@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FailureAndExceptionCest
 {
     public function failedTest(ScenarioGuy $I)

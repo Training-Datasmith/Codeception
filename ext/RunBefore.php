@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Codeception\Extension;
 
-use Codeception\Events;
-use Codeception\Exception\ExtensionException;
-use Codeception\Extension;
-use Symfony\Component\Process\Process;
-
 use function array_shift;
 use function class_exists;
-use function count;
+
+use Codeception\Events;
+use Codeception\Exception\ExtensionException;
+
+use Codeception\Extension;
+
 use function is_array;
 use function sleep;
+
+use Symfony\Component\Process\Process;
 
 /**
  * Extension for execution of some processes before running tests.
@@ -49,7 +51,7 @@ class RunBefore extends Extension
      * @var array<string, string>
      */
     protected static array $events = [
-        Events::SUITE_BEFORE => 'runBefore'
+        Events::SUITE_BEFORE => 'runBefore',
     ];
 
     private array $processes = [];
@@ -100,7 +102,7 @@ class RunBefore extends Extension
     {
         $this->processes[] = [
             'instance' => $process,
-            'following' => $followingCommands
+            'following' => $followingCommands,
         ];
     }
 

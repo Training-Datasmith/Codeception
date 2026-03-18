@@ -56,7 +56,6 @@ EOF;
         $this->assertSame(['key1', 'key2'], Annotation::fetchAnnotationsFromDocblock('param', $docblock));
     }
 
-
     public function testGetAllAnnotationsFromDocBlock()
     {
         $docblock = <<<EOF
@@ -69,7 +68,7 @@ EOF;
         codecept_debug($all);
         $this->assertSame([
             'user' => ['davert'],
-            'param' => ['key1', 'key2']
+            'param' => ['key1', 'key2'],
         ], Annotation::fetchAllAnnotationsFromDocblock($docblock));
     }
 

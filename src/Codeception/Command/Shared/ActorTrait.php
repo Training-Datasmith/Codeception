@@ -14,7 +14,7 @@ trait ActorTrait
             return null;
         }
 
-        $namespace = "";
+        $namespace = '';
 
         if ($this->settings['namespace']) {
             $namespace .= '\\' . $this->settings['namespace'];

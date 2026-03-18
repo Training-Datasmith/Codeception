@@ -40,7 +40,7 @@ class GenerateEnvironment extends Command
             throw new ConfigurationException(
                 "Path for environments configuration is not set.\n"
                 . "Please specify envs path in your `codeception.yml`\n \n"
-                . "envs: tests/_envs"
+                . 'envs: tests/_envs'
             );
         }
 

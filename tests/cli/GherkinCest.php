@@ -83,7 +83,7 @@ final class GherkinCest
     public function runSameStepWithInlineAndPyStringArgument(CliGuy $I)
     {
         $I->executeCommand('run scenario "InlineArgumentExample.feature:Running step with inline argument" --steps');
-        $I->seeInShellOutput("Argument: test");
+        $I->seeInShellOutput('Argument: test');
 
         $I->executeCommand('run scenario "PyStringArgumentExample.feature:Running step with PyString argument" --steps');
         $I->seeInShellOutput("Argument: First line\nSecond line");
@@ -108,7 +108,7 @@ final class GherkinCest
         $I->seeInShellOutput(
             "Ambiguous step: `a step which matches multiple step definitions` matches multiple definitions:\n" .
             "- /multiple step definitions/ (ScenarioGuy:definition1)\n" .
-            "- /a step which matches/ (ScenarioGuy:definition2)"
+            '- /a step which matches/ (ScenarioGuy:definition2)'
         );
     }
 }

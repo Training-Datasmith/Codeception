@@ -11,7 +11,7 @@ class GeneratePageObjectTest extends BaseCommandRunner
             'actor' => 'HobbitGuy',
             'path' => 'tests/shire',
             'paths' => ['tests' => 'tests'],
-            'settings' => ['bootstrap' => '_bootstrap.php']
+            'settings' => ['bootstrap' => '_bootstrap.php'],
         ];
     }
 

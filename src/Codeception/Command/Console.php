@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception\Command;
 
+use function array_keys;
+
 use Codeception\Codecept;
 use Codeception\Configuration;
 use Codeception\Event\SuiteEvent;
@@ -16,17 +18,18 @@ use Codeception\Suite;
 use Codeception\SuiteManager;
 use Codeception\Test\Cept;
 use Codeception\Util\Debug;
+
+use function file_exists;
+use function function_exists;
+use function pcntl_signal;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use function array_keys;
-use function file_exists;
-use function function_exists;
-use function pcntl_signal;
 
 /**
  * Try to execute test commands in run-time. You may try commands before writing the test.
@@ -107,7 +110,7 @@ class Console extends Command
         $this->listenToSignals();
 
         $output->writeln("<info>Interactive console started for suite {$suiteName}</info>");
-        $output->writeln("<info>Try Codeception commands without writing a test</info>");
+        $output->writeln('<info>Try Codeception commands without writing a test</info>');
 
         $suiteEvent = new SuiteEvent($this->suite, $settings);
         $eventDispatcher->dispatch($suiteEvent, Events::SUITE_INIT);
@@ -123,7 +126,7 @@ class Console extends Command
         $eventDispatcher->dispatch(new TestEvent($this->test), Events::TEST_AFTER);
         $eventDispatcher->dispatch(new SuiteEvent($this->suite), Events::SUITE_AFTER);
 
-        $output->writeln("<info>Bye-bye!</info>");
+        $output->writeln('<info>Bye-bye!</info>');
         return Command::SUCCESS;
     }
 

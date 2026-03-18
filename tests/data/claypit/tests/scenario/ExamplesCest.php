@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Example;
 
 class ExamplesCest
@@ -14,7 +16,6 @@ class ExamplesCest
         $I->amInPath($example['path']);
         $I->seeFileFound($example['file']);
     }
-
 
     /**
      * @example { "path":".", "file":"scenario.suite.yml" }

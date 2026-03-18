@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Codeception\Test;
 
+use function basename;
+
 use Codeception\Exception\TestParseException;
 use Codeception\Lib\Console\Message;
 use Codeception\Lib\Parser;
+
+use function file_get_contents;
+
 use ParseError;
 use RuntimeException;
-
-use function basename;
-use function file_get_contents;
 
 /**
  * Executes tests delivered in Cept format.
@@ -82,7 +84,7 @@ class Cept extends Test implements Interfaces\Plain, Interfaces\ScenarioDriven, 
         return [
             'name' => basename($this->getFileName(), 'Cept.php'),
             'file' => $this->getFileName(),
-            'feature' => $this->getFeature()
+            'feature' => $this->getFeature(),
         ];
     }
 

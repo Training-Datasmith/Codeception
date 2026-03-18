@@ -13,7 +13,7 @@ class GenerateGroupTest extends BaseCommandRunner
             'actor' => 'HobbitGuy',
             'path' => 'tests/shire',
             'paths' => ['support' => 'tests/_support','tests' => 'tests'],
-            'settings' => ['bootstrap' => '_bootstrap.php']
+            'settings' => ['bootstrap' => '_bootstrap.php'],
         ];
     }
 

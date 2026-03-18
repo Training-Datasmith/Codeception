@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use Codeception\Attribute\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class DataProviderInAnotherClassTest extends TestCase
 {

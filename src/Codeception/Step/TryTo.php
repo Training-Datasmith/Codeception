@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Codeception\Step;
 
+use function codecept_debug;
+
 use Codeception\Lib\ModuleContainer;
 use Codeception\Util\Template;
+
 use Exception;
 
-use function codecept_debug;
 use function ucfirst;
 
 class TryTo extends Assertion implements GeneratedStep

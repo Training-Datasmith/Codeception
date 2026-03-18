@@ -55,7 +55,7 @@ class StepTest extends TestCase
         $step = $this->getStep(['Do some testing', []]);
         $this->assertSame('I do some testing', $step->getHtml());
 
-        $argument = str_repeat("A string with a length exceeding Step::DEFAULT_MAX_LENGTH.", Step::DEFAULT_MAX_LENGTH);
+        $argument = str_repeat('A string with a length exceeding Step::DEFAULT_MAX_LENGTH.', Step::DEFAULT_MAX_LENGTH);
         $step = $this->getStep(['Do some testing', [$argument]]);
         $this->assertSame('I do some testing <span style="color: #732E81">&quot;' . $argument . '&quot;</span>', $step->getHtml());
     }

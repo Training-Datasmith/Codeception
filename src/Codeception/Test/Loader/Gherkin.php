@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Codeception\Test\Loader;
 
+use function array_keys;
+use function array_map;
+use function array_merge;
+
 use Behat\Gherkin\Dialect\CucumberDialectProvider;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Keywords\CachedArrayKeywords as GherkinKeywords;
@@ -13,17 +17,17 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Gherkin\Parser as GherkinParser;
+
+use function class_exists;
+
 use Codeception\Configuration;
 use Codeception\Exception\ParseException;
+
 use Codeception\Exception\TestParseException;
 use Codeception\Lib\Generator\Shared\Classname;
 use Codeception\Test\Gherkin as GherkinFormat;
 use Codeception\Util\Annotation;
 
-use function array_keys;
-use function array_map;
-use function array_merge;
-use function class_exists;
 use function file_get_contents;
 use function get_class_methods;
 use function glob;
@@ -45,9 +49,9 @@ class Gherkin implements LoaderInterface
             'contexts' => [
                 'default' => [],
                 'tag' => [],
-                'role' => []
-            ]
-        ]
+                'role' => [],
+            ],
+        ],
     ];
 
     /**
@@ -127,7 +131,7 @@ class Gherkin implements LoaderInterface
         foreach ($contexts as $context) {
             if (is_string($context) && !class_exists($context)) {
                 throw new \InvalidArgumentException(
-                    sprintf("Context class %s does not exist", $context)
+                    sprintf('Context class %s does not exist', $context)
                 );
             }
             $methods = get_class_methods((new \ReflectionClass($context))->newInstanceWithoutConstructor());
@@ -165,7 +169,7 @@ class Gherkin implements LoaderInterface
 
             $replacePattern = sprintf(
                 '(?|\"%s\"|%s)',
-                "((?|[^\"\\\\\\]|\\\\\\.)*?)", // matching escaped string in ""
+                '((?|[^"\\\\\\]|\\\\\\.)*?)', // matching escaped string in ""
                 '[\D]{0,1}([\d\,\.]+)[\D]{0,1}'
             ); // or matching numbers with optional $ or € chars
 

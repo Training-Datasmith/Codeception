@@ -6,7 +6,6 @@ namespace Codeception\Extension;
 
 use Codeception\Event\FailEvent;
 use Codeception\Event\PrintResultEvent;
-use Codeception\Event\TestEvent;
 use Codeception\Events;
 use Codeception\Extension;
 use Codeception\Subscriber\Console as CodeceptConsole;

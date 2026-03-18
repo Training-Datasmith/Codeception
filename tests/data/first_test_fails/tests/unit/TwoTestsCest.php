@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class TwoTestsCest
 {
     public function failing(UnitTester $I)

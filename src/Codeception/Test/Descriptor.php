@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Codeception\Test;
 
 use BackedEnum;
+
+use function codecept_relative_path;
+
 use Codeception\Test\Interfaces\Descriptive;
 use Codeception\Test\Interfaces\Plain;
 use Codeception\TestInterface;
-use PHPUnit\Framework\SelfDescribing;
-use UnitEnum;
 
-use function codecept_relative_path;
 use function json_encode;
+
 use function method_exists;
+
+use PHPUnit\Framework\SelfDescribing;
+
 use function preg_replace;
 use function realpath;
 use function sha1;
@@ -21,6 +25,8 @@ use function str_replace;
 use function strtolower;
 use function substr;
 use function ucfirst;
+
+use UnitEnum;
 
 class Descriptor
 {

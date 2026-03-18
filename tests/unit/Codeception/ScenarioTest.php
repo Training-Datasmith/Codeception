@@ -11,15 +11,15 @@ class ScenarioTest extends \PHPUnit\Framework\TestCase
                 'Do some testing',
                 [
                     'arg1',
-                    'arg2'
-                ]
+                    'arg2',
+                ],
             ])
             ->onlyMethods([])
             ->getMock();
         $step2 = $this->getMockBuilder(\Codeception\Step::class)
             ->setConstructorArgs([
                 'Do even more testing without args',
-                []
+                [],
             ])
             ->onlyMethods([])
             ->getMock();

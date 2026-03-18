@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Event\TestEvent;
 use Codeception\GroupObject;
 
@@ -10,11 +12,11 @@ class MyGroupHighlighter extends GroupObject
 
     public function _before(TestEvent $event)
     {
-        $this->writeln("======> Entering NoGroup Test Scope");
+        $this->writeln('======> Entering NoGroup Test Scope');
     }
 
     public function _after(TestEvent $event)
     {
-        $this->writeln("<====== Ending NoGroup Test Scope");
+        $this->writeln('<====== Ending NoGroup Test Scope');
     }
 }

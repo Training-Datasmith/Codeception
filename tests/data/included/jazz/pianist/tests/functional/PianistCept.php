@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Jazz\Pianist\TestGuy;
 
 $I = new TestGuy($scenario);

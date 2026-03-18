@@ -15,7 +15,7 @@ class RetryTest extends \PHPUnit\Framework\TestCase
     {
         // create an empty container with this class as a module
         $moduleContainer = Stub::make(ModuleContainer::class, [
-            'moduleForAction' => $this
+            'moduleForAction' => $this,
         ]);
         // run an action from this class
         $retry = new \Codeception\Step\Retry('_executeFailedCode', [], 2, 0);

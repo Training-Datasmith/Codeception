@@ -13,7 +13,7 @@ class BuildTest extends BaseCommandRunner
             'actor' => 'HobbitGuy',
             'path' => 'tests/shire/',
             'modules' => ['enabled' => ['Filesystem', 'EmulateModuleHelper']],
-            'include' => []
+            'include' => [],
         ];
     }
 

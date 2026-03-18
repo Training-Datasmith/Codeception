@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Codeception\Extension;
 
+use function array_diff;
+use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function array_unique;
+use function basename;
+use function codecept_output_dir;
+use function codecept_relative_path;
+
 use Codeception\Event\StepEvent;
 use Codeception\Event\TestEvent;
 use Codeception\Events;
@@ -13,24 +22,18 @@ use Codeception\Lib\Interfaces\ScreenshotSaver;
 use Codeception\Module;
 use Codeception\Module\WebDriver;
 use Codeception\Step;
+
 use Codeception\Step\Comment as CommentStep;
 use Codeception\Test\Descriptor;
 use Codeception\Util\FileSystem;
 use Codeception\Util\Template;
 use DateTime;
 use DirectoryIterator;
-use Exception;
-use Symfony\Contracts\EventDispatcher\Event;
 
-use function array_diff;
-use function array_key_exists;
-use function array_keys;
-use function array_merge;
-use function array_unique;
-use function basename;
-use function codecept_output_dir;
-use function codecept_relative_path;
 use function dirname;
+
+use Exception;
+
 use function file_put_contents;
 use function in_array;
 use function is_array;
@@ -44,6 +47,9 @@ use function str_replace;
 use function strcasecmp;
 use function strlen;
 use function substr;
+
+use Symfony\Contracts\EventDispatcher\Event;
+
 use function trim;
 use function ucfirst;
 use function uniqid;

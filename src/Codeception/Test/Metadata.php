@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Codeception\Test;
 
-use Codeception\Exception\InjectionException;
-use Codeception\Util\Annotation;
-
 use function array_merge;
 use function array_merge_recursive;
+
 use function array_unique;
+
+use Codeception\Exception\InjectionException;
+use Codeception\Util\Annotation;
 
 class Metadata
 {
@@ -206,7 +207,7 @@ class Metadata
         foreach (['group', 'env', 'before', 'after', 'prepare'] as $single) {
             if (isset($this->params[$single]) && is_array($this->params[$single])) {
                 $this->params[$single] = array_merge(
-                    ...array_map(static fn($a): array => (array) $a, $this->params[$single])
+                    ...array_map(static fn ($a): array => (array) $a, $this->params[$single])
                 );
             }
         }

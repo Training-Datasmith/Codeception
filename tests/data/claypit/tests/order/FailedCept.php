@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // @group simple
 \Codeception\Module\OrderHelper::appendToFile('S');
 $I = new OrderGuy($scenario);

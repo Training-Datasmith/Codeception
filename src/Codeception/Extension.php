@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Codeception;
 
+use function array_keys;
+use function array_merge;
+
 use Codeception\Event\SuiteEvent;
 use Codeception\Exception\ModuleRequireException;
 use Codeception\Extension\SuiteInitSubscriberTrait;
+
 use Codeception\Lib\Console\Output;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use function array_keys;
-use function array_merge;
 
 /**
  * A base class for all Codeception Extensions and GroupObjects

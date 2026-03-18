@@ -42,10 +42,10 @@ class DescriptorTest extends PHPUnitTestCase
 {
     public function testUnitEnumSerialization(): void
     {
-        $testCase = new class extends TestCase {
+        $testCase = new class () extends TestCase {
             public function getMetadata(): object
             {
-                return new class {
+                return new class () {
                     public function getCurrent(string $key): mixed
                     {
                         return ['enum' => UnitEnumExample::FOO];
@@ -60,10 +60,10 @@ class DescriptorTest extends PHPUnitTestCase
 
     public function testBackedEnumSerialization(): void
     {
-        $testCase = new class extends TestCase {
+        $testCase = new class () extends TestCase {
             public function getMetadata(): object
             {
-                return new class {
+                return new class () {
                     public function getCurrent(string $key): mixed
                     {
                         return ['enum' => BackedEnumExample::FOO];
@@ -78,10 +78,10 @@ class DescriptorTest extends PHPUnitTestCase
 
     public function testStringSerialization(): void
     {
-        $testCase = new class extends TestCase {
+        $testCase = new class () extends TestCase {
             public function getMetadata(): object
             {
-                return new class {
+                return new class () {
                     public function getCurrent(string $key): mixed
                     {
                         return ['string' => 'test value'];
@@ -96,10 +96,10 @@ class DescriptorTest extends PHPUnitTestCase
 
     public function testArraySerialization(): void
     {
-        $testCase = new class extends TestCase {
+        $testCase = new class () extends TestCase {
             public function getMetadata(): object
             {
-                return new class {
+                return new class () {
                     public function getCurrent(string $key): mixed
                     {
                         return [
@@ -110,7 +110,7 @@ class DescriptorTest extends PHPUnitTestCase
                                     'key' => 'value',
                                     'enum1' => UnitEnumExample::FOO,
                                     'enum2' => BackedEnumExample::BAR,
-                                ]
+                                ],
                             ],
                         ];
                     }

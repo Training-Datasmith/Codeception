@@ -7,8 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class ExamplesAttributeTest extends TestCase
 {
-    #[Examples("foo", 7)]
-    #[Examples("bar", 8)]
+    #[Examples('foo', 7)]
+    #[Examples('bar', 8)]
     public function testExample($arg1, $arg2): void
     {
     }

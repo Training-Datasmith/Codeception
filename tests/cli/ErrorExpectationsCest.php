@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Runner\Version;
 
 class ErrorExpectationsCest
@@ -15,7 +17,7 @@ class ErrorExpectationsCest
     public function expectNoticeWorks(\CliGuy $I)
     {
         $I->executeCommand('run tests/unit/ErrorExceptionTest.php:testNotice');
-        $I->seeInShellOutput("OK (");
+        $I->seeInShellOutput('OK (');
     }
 
     public function expectWarningWorks(\CliGuy $I)

@@ -29,7 +29,7 @@ class GenerateScenarioTest extends BaseCommandRunner
                 'data' => '_data',
 
             ],
-            'path' => 'tests/data/claypit/tests/dummy/'
+            'path' => 'tests/data/claypit/tests/dummy/',
         ];
     }
 

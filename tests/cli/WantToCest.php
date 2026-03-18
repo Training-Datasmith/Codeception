@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class WantToCest
 {
     public function iWantToSetsFeatureInCeptFormat(CliGuy $I)

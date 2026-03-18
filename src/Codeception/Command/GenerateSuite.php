@@ -8,15 +8,18 @@ use Codeception\Configuration;
 use Codeception\Lib\Generator\Actor as ActorGenerator;
 use Codeception\Util\Template;
 use Exception;
+
+use function file_exists;
+use function preg_match;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
-use function file_exists;
-use function preg_match;
 use function ucfirst;
 
 /**
@@ -94,9 +97,9 @@ EOF;
         $output->writeln("Actor <info>{$actor}</info> was created in {$file}");
         $output->writeln("Suite config <info>{$suite}.suite.yml</info> was created.");
         $output->writeln(' ');
-        $output->writeln("Next steps:");
+        $output->writeln('Next steps:');
         $output->writeln("1. Edit <bold>{$suite}.suite.yml</bold> to enable modules for this suite");
-        $output->writeln("2. Create first test with <bold>generate:cest testName</bold> ( or test|cept) command");
+        $output->writeln('2. Create first test with <bold>generate:cest testName</bold> ( or test|cept) command');
         $output->writeln("3. Run tests of this suite with <bold>codecept run {$suite}</bold> command");
 
         $output->writeln("<info>Suite {$suite} generated</info>");

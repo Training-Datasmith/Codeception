@@ -47,7 +47,7 @@ class Dependencies extends InitTemplate
             return;
         }
 
-        $this->saySuccess("Done installing!");
+        $this->saySuccess('Done installing!');
         $this->say();
 
         $this->say('Please consider donating to Codeception on regular basis:');

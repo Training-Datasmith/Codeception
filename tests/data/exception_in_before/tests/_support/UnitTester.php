@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -18,7 +20,6 @@
 class UnitTester extends \Codeception\Actor
 {
     use _generated\UnitTesterActions;
-
 
     /**
      * @When exception is thrown

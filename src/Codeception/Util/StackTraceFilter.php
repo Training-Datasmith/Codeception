@@ -25,7 +25,7 @@ class StackTraceFilter
         if ($filter) {
             $trace = array_values(array_filter(
                 $trace,
-                static fn(array $step): bool => !self::classIsFiltered($step) && !self::fileIsFiltered($step)
+                static fn (array $step): bool => !self::classIsFiltered($step) && !self::fileIsFiltered($step)
             ));
         }
 
@@ -34,8 +34,8 @@ class StackTraceFilter
         }
 
         return implode("\n", array_map(
-            static fn(array $step): string => $step['file'] . ':' . $step['line'],
-            array_filter($trace, static fn(array $step): bool => isset($step['file'], $step['line']))
+            static fn (array $step): string => $step['file'] . ':' . $step['line'],
+            array_filter($trace, static fn (array $step): bool => isset($step['file'], $step['line']))
         ));
     }
 

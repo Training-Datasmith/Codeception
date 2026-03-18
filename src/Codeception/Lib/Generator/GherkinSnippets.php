@@ -100,19 +100,19 @@ EOF;
         // match numbers (not in quotes)
         $pattern = preg_replace_callback('#([\d.])(?=([^"]*"[^"]*")*[^"]*$)#', function () use (&$args): string {
             $args[] = '$num' . (count($args) + 1);
-            return ":num" . count($args);
+            return ':num' . count($args);
         }, $pattern);
 
         // match quoted strings
         $pattern = preg_replace_callback('#"(.*?)"#', function () use (&$args): string {
             $args[] = '$arg' . (count($args) + 1);
-            return ":arg" . count($args);
+            return ':arg' . count($args);
         }, $pattern);
 
         // add multiline argument if present
         if (self::stepHasPyStringArgument($step)) {
             $args[] = '$arg' . (count($args) + 1);
-            $pattern .= " :arg" . count($args);
+            $pattern .= ' :arg' . count($args);
         }
 
         if (in_array($pattern, $this->processed)) {
@@ -124,7 +124,7 @@ EOF;
 
         $this->snippets[] = (new Template($this->template))
             ->place('type', $step->getKeywordType())
-            ->place('text', str_replace(["\\", "'"], ["\\\\", "\\'"], $pattern))
+            ->place('text', str_replace(['\\', "'"], ['\\\\', "\\'"], $pattern))
             ->place('methodName', $methodName)
             ->place('params', implode(', ', $args))
             ->produce();

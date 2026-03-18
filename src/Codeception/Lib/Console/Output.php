@@ -18,7 +18,7 @@ class Output extends ConsoleOutput
     protected array $config = [
         'colors'      => true,
         'verbosity'   => self::VERBOSITY_NORMAL,
-        'interactive' => true
+        'interactive' => true,
     ];
 
     public SymfonyFormatterHelper $formatHelper;
@@ -93,10 +93,10 @@ class Output extends ConsoleOutput
     public function exception(Exception $exception): void
     {
         $class = $exception::class;
-        $this->writeln("");
+        $this->writeln('');
         $this->writeln(sprintf('(![ %s ]!)', $class));
         $this->writeln($exception->getMessage());
-        $this->writeln("");
+        $this->writeln('');
     }
 
     public function notification(string $message): void

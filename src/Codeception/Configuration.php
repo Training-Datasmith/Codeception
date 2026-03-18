@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codeception;
 
+use function array_unique;
+
 use Codeception\Exception\ConfigurationException;
 use Codeception\Lib\ParamsLoader;
 use Codeception\Step\ConditionalAssertion;
@@ -13,9 +15,8 @@ use Codeception\Util\Template;
 use InvalidArgumentException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 
-use function array_unique;
+use Symfony\Component\Yaml\Yaml;
 
 class Configuration
 {
@@ -178,7 +179,7 @@ class Configuration
         }
 
         if ($config === self::$defaultConfig) {
-            throw new ConfigurationException("Configuration file is invalid");
+            throw new ConfigurationException('Configuration file is invalid');
         }
 
         if (isset($config['extends'])) {
@@ -413,11 +414,11 @@ class Configuration
     {
         return array_filter(
             array_map(
-                fn($m): mixed => is_array($m) ? key($m) : $m,
+                fn ($m): mixed => is_array($m) ? key($m) : $m,
                 $settings['modules']['enabled'],
                 array_keys($settings['modules']['enabled'])
             ),
-            fn($m): bool => !isset($settings['modules']['disabled']) || !in_array($m, $settings['modules']['disabled'])
+            fn ($m): bool => !isset($settings['modules']['disabled']) || !in_array($m, $settings['modules']['disabled'])
         );
     }
 
@@ -454,7 +455,7 @@ class Configuration
     public static function outputDir(): string
     {
         if (self::$outputDir === '') {
-            throw new ConfigurationException("Path for output not specified. Please, set output path in global config");
+            throw new ConfigurationException('Path for output not specified. Please, set output path in global config');
         }
         $dir = self::$outputDir . DIRECTORY_SEPARATOR;
         if (!codecept_is_path_absolute($dir)) {
@@ -584,7 +585,7 @@ class Configuration
                 ? $suiteConf['extends']
                 : realpath($suiteDir . DIRECTORY_SEPARATOR . $suiteConf['extends']);
             if ($preset === false) {
-                throw new ConfigurationException(sprintf("Configuration file %s does not exist", $suiteConf['extends']));
+                throw new ConfigurationException(sprintf('Configuration file %s does not exist', $suiteConf['extends']));
             }
             if (file_exists($preset)) {
                 $settings = self::mergeConfigs(self::getConfFromFile($preset), $settings);

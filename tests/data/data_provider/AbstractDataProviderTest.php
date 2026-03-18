@@ -22,7 +22,7 @@ class AbstractDataProviderTest extends AbstractDataProviderClass
     public function provideData(): array
     {
         return [
-            'foo' => ['foo']
+            'foo' => ['foo'],
         ];
     }
 }

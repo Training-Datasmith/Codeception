@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use function array_map;
+use function array_merge;
+use function array_reverse;
+use function codecept_relative_path;
+
 use Codeception\Event\FailEvent;
 use Codeception\Event\PrintResultEvent;
 use Codeception\Event\StepEvent;
@@ -26,36 +31,39 @@ use Codeception\Test\Interfaces\ScenarioDriven;
 use Codeception\TestInterface;
 use Codeception\Util\Debug;
 use Codeception\Util\StackTraceFilter;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\IncompleteTestError;
-use PHPUnit\Framework\SelfDescribing;
-use PHPUnit\Framework\SkippedTest;
-use SebastianBergmann\Comparator\ComparisonFailure;
-use SebastianBergmann\Timer\Duration;
-use SebastianBergmann\Timer\ResourceUsageFormatter;
-use SebastianBergmann\Timer\Timer;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function array_map;
-use function array_merge;
-use function array_reverse;
-use function codecept_relative_path;
 use function count;
 use function exec;
 use function getenv;
 use function implode;
 use function number_format;
+
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\IncompleteTestError;
+use PHPUnit\Framework\SelfDescribing;
+
+use PHPUnit\Framework\SkippedTest;
+
 use function preg_match;
 use function preg_replace;
 use function round;
+
+use SebastianBergmann\Comparator\ComparisonFailure;
+use SebastianBergmann\Timer\Duration;
+use SebastianBergmann\Timer\ResourceUsageFormatter;
+use SebastianBergmann\Timer\Timer;
+
 use function sprintf;
 use function strlen;
 use function strtoupper;
 use function substr;
+
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use function ucfirst;
 
 class Console implements EventSubscriberInterface
@@ -155,12 +163,12 @@ class Console implements EventSubscriberInterface
     // triggered for scenario based tests: cept, cest
     public function beforeSuite(SuiteEvent $event): void
     {
-        $this->namespace = "";
+        $this->namespace = '';
         $settings = $event->getSettings();
         if (isset($settings['namespace'])) {
             $this->namespace = $settings['namespace'];
         }
-        $this->message("%s Tests (%d) ")
+        $this->message('%s Tests (%d) ')
             ->with(ucfirst($event->getSuite()->getBaseName()), $event->getSuite()->getTestCount())
             ->style('bold')
             ->width($this->width, '-')
@@ -236,7 +244,7 @@ class Console implements EventSubscriberInterface
         $this->printFooter($event);
 
         if ($result->skippedCount() + $result->incompleteCount() > 0 && !$verbose) {
-            $this->output->writeln("run with `-v` to get more info about skipped or incomplete tests");
+            $this->output->writeln('run with `-v` to get more info about skipped or incomplete tests');
         }
     }
 
@@ -274,7 +282,7 @@ class Console implements EventSubscriberInterface
 
         $this->message(
             sprintf(
-                "There %s %d %s%s:",
+                'There %s %d %s%s:',
                 ($count == 1) ? 'was' : 'were',
                 $count,
                 $type,
@@ -328,26 +336,26 @@ class Console implements EventSubscriberInterface
         }
 
         $counts = [
-            sprintf("Tests: %s", $testCount),
-            sprintf("Assertions: %s", $assertionCount),
+            sprintf('Tests: %s', $testCount),
+            sprintf('Assertions: %s', $assertionCount),
         ];
         if ($result->errorCount() > 0) {
-            $counts [] = sprintf("Errors: %s", $result->errorCount());
+            $counts [] = sprintf('Errors: %s', $result->errorCount());
         }
         if ($result->failureCount() > 0) {
-            $counts [] = sprintf("Failures: %s", $result->failureCount());
+            $counts [] = sprintf('Failures: %s', $result->failureCount());
         }
         if ($result->warningCount() > 0) {
-            $counts [] = sprintf("Warnings: %s", $result->warningCount());
+            $counts [] = sprintf('Warnings: %s', $result->warningCount());
         }
         if ($result->skippedCount() > 0) {
-            $counts [] = sprintf("Skipped: %s", $result->skippedCount());
+            $counts [] = sprintf('Skipped: %s', $result->skippedCount());
         }
         if ($result->incompleteCount() > 0) {
-            $counts [] = sprintf("Incomplete: %s", $result->incompleteCount());
+            $counts [] = sprintf('Incomplete: %s', $result->incompleteCount());
         }
         if ($result->uselessCount() > 0) {
-            $counts [] = sprintf("Useless: %s", $result->uselessCount());
+            $counts [] = sprintf('Useless: %s', $result->uselessCount());
         }
 
         $this->message(implode(', ', $counts) . '.')->style($style)->writeln();
@@ -484,7 +492,7 @@ class Console implements EventSubscriberInterface
         $failedTest = $event->getTest();
         $fail = $event->getFail();
 
-        $this->output->write($eventNumber . ") ");
+        $this->output->write($eventNumber . ') ');
         $this->writeCurrentTest($failedTest, false);
         $this->output->writeln('');
 
@@ -686,7 +694,7 @@ class Console implements EventSubscriberInterface
                 ->message((string)$stepNumber)
                 ->prepend(' ')
                 ->width(strlen((string)$length))
-                ->append(". ");
+                ->append('. ');
             $message->append(OutputFormatter::escape($step->getPhpCode($this->width - $message->getLength())));
 
             if ($step->hasFailed()) {
@@ -712,7 +720,7 @@ class Console implements EventSubscriberInterface
                 break;
             }
         }
-        $this->output->writeln("");
+        $this->output->writeln('');
     }
 
     public function detectWidth(): int
@@ -720,7 +728,7 @@ class Console implements EventSubscriberInterface
         $this->width = 60;
         if (
             !$this->isWin()
-            && (PHP_SAPI === "cli")
+            && (PHP_SAPI === 'cli')
             && (getenv('TERM'))
             && (getenv('TERM') != 'unknown')
         ) {
@@ -730,7 +738,7 @@ class Console implements EventSubscriberInterface
             } else {
                 $this->width = (int)shell_exec('command -v tput >> /dev/null 2>&1 && tput cols') - 2;
             }
-        } elseif ($this->isWin() && (PHP_SAPI === "cli")) {
+        } elseif ($this->isWin() && (PHP_SAPI === 'cli')) {
             exec('mode con', $output);
             if (isset($output[4])) {
                 preg_match('#^ +.* +(\d+)$#', $output[4], $matches);
@@ -778,13 +786,13 @@ class Console implements EventSubscriberInterface
             $numFails = count(
                 array_filter(
                     $test->getScenario()?->getSteps() ?? [],
-                    fn(Step $step): bool => $step->hasFailed() && $step instanceof ConditionalAssertion
+                    fn (Step $step): bool => $step->hasFailed() && $step instanceof ConditionalAssertion
                 )
             );
 
-            $conditionalFailsMessage = "";
+            $conditionalFailsMessage = '';
             if ($numFails == 1) {
-                $conditionalFailsMessage = "[F]";
+                $conditionalFailsMessage = '[F]';
             } elseif ($numFails !== 0) {
                 $conditionalFailsMessage = "{$numFails}x[F]";
             }

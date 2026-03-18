@@ -116,9 +116,9 @@ class ModuleContainerTest extends Unit
                     \Codeception\Lib\StubModule::class => [
                         'firstField' => 'firstValue',
                         'secondField' => 'secondValue',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
@@ -137,9 +137,9 @@ class ModuleContainerTest extends Unit
                     \Codeception\Lib\StubModule::class => [
                         'firstField' => 'firstValue',
                         'secondField' => 'secondValue',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
         $module = $this->moduleContainer->create(\Codeception\Lib\StubModule::class);
@@ -158,7 +158,6 @@ class ModuleContainerTest extends Unit
         $this->moduleContainer->create('Cli');
         $this->moduleContainer->validateConflicts();
     }
-
 
     public function testConflictsByClass()
     {
@@ -180,9 +179,9 @@ class ModuleContainerTest extends Unit
             'enabled' => ['Codeception\Lib\DependencyModule'],
             'config' => [
                 'Codeception\Lib\DependencyModule' => [
-                    'depends' => 'Codeception\Lib\ConflictedModule'
-                ]
-            ]
+                    'depends' => 'Codeception\Lib\ConflictedModule',
+                ],
+            ],
         ]];
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
         $this->moduleContainer->create('Codeception\Lib\DependencyModule');
@@ -195,10 +194,10 @@ class ModuleContainerTest extends Unit
             'enabled' => [\Codeception\Lib\PartedModule::class],
             'config' => [
                 \Codeception\Lib\PartedModule::class => [
-                    'part' => 'one'
-                    ]
-                ]
-            ]
+                    'part' => 'one',
+                    ],
+                ],
+            ],
         ];
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
         $this->moduleContainer->create(\Codeception\Lib\PartedModule::class);
@@ -213,10 +212,10 @@ class ModuleContainerTest extends Unit
         $config = ['modules' => [
             'enabled' => [\Codeception\Lib\PartedModule::class],
             'config' => [\Codeception\Lib\PartedModule::class => [
-                    'part' => ['Two']
-                    ]
-                ]
-            ]
+                    'part' => ['Two'],
+                    ],
+                ],
+            ],
         ];
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
         $this->moduleContainer->create(\Codeception\Lib\PartedModule::class);
@@ -233,7 +232,7 @@ class ModuleContainerTest extends Unit
                 'enabled' => [
                         [
                             \Codeception\Lib\PartedModule::class => [
-                                'part' => 'one'
+                                'part' => 'one',
                             ],
                         ],
                 ],
@@ -255,10 +254,10 @@ class ModuleContainerTest extends Unit
                     [\Codeception\Lib\StubModule::class => [
                         'firstField' => 'firstValue',
                         'secondField' => 'secondValue',
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);
@@ -272,7 +271,7 @@ class ModuleContainerTest extends Unit
     {
         $config = ['modules' => [
             'enabled' => [['Codeception\Lib\DependencyModule' => [
-                'depends' => 'Codeception\Lib\ConflictedModule'
+                'depends' => 'Codeception\Lib\ConflictedModule',
             ]]],
         ]];
         $this->moduleContainer = new ModuleContainer(Stub::make(\Codeception\Lib\Di::class), $config);

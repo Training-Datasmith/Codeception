@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Codeception\Extension;
 
+use function class_exists;
+
 use Codeception\Event\FailEvent;
 use Codeception\Event\StepEvent;
 use Codeception\Event\SuiteEvent;
 use Codeception\Event\TestEvent;
 use Codeception\Events;
 use Codeception\Exception\ConfigurationException;
-use Codeception\Exception\ExtensionException;
 use Codeception\Extension;
 use Codeception\Test\Descriptor;
 use Monolog\Formatter\LineFormatter;
+
 use Monolog\Handler\RotatingFileHandler;
 
-use function class_exists;
-use function function_exists;
 use function str_replace;
 use function ucfirst;
 

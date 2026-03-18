@@ -4,21 +4,25 @@ declare(strict_types=1);
 
 namespace Codeception\Coverage;
 
+use function array_pop;
+
 use Codeception\Configuration;
 use Codeception\Exception\ConfigurationException;
 use Codeception\Exception\ModuleException;
-use PHPUnit\Runner\Version as PHPUnitVersion;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Filter as PhpUnitFilter;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
-use Symfony\Component\Finder\Finder;
 
-use function array_pop;
 use function explode;
 use function implode;
 use function is_array;
 use function iterator_to_array;
+
+use PHPUnit\Runner\Version as PHPUnitVersion;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Filter as PhpUnitFilter;
+
 use function str_replace;
+
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Symfony\Component\Finder\Finder;
 
 class Filter
 {
@@ -107,7 +111,7 @@ class Filter
 
         if ($include === []) {
             $include = [
-                Configuration::projectDir() . DIRECTORY_SEPARATOR . '*'
+                Configuration::projectDir() . DIRECTORY_SEPARATOR . '*',
             ];
         }
 

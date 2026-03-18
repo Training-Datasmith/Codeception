@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Depends;
 use Codeception\Attribute\Group;
@@ -63,18 +65,18 @@ class DataProviderCest
     public function __exampleDataSource(): array
     {
         return[
-              ['path' => ".", 'file' => "scenario.suite.yml"],
-              ['path' => ".",  'file' => "dummy.suite.yml"],
-              ['path' => ".",  'file' => "unit.suite.yml"]
+              ['path' => '.', 'file' => 'scenario.suite.yml'],
+              ['path' => '.',  'file' => 'dummy.suite.yml'],
+              ['path' => '.',  'file' => 'unit.suite.yml'],
           ];
     }
 
     protected function protectedDataSource(): array
     {
         return[
-              ['path' => ".", 'file' => "scenario.suite.yml"],
-              ['path' => ".",  'file' => "dummy.suite.yml"],
-              ['path' => ".",  'file' => "unit.suite.yml"]
+              ['path' => '.', 'file' => 'scenario.suite.yml'],
+              ['path' => '.',  'file' => 'dummy.suite.yml'],
+              ['path' => '.',  'file' => 'unit.suite.yml'],
           ];
     }
 }

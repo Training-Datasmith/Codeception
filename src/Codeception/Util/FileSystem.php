@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Codeception\Util;
 
+use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use FilesystemIterator;
 
 class FileSystem
 {

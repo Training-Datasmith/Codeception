@@ -23,10 +23,12 @@ use PHPUnit\Runner\Version as PHPUnitVersion;
 use PHPUnit\Util\ThrowableToStringMapper;
 use PHPUnit\Util\Xml;
 use ReflectionException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Throwable;
 
 use function sprintf;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Throwable;
 
 class JUnitReporter implements EventSubscriberInterface
 {
@@ -116,7 +118,7 @@ class JUnitReporter implements EventSubscriberInterface
         if (!codecept_is_path_absolute($this->reportFile)) {
             $this->reportFile = codecept_output_dir($this->reportFile);
         }
-        codecept_debug(sprintf("Printing %s report to %s", $this->reportName, $this->reportFile));
+        codecept_debug(sprintf('Printing %s report to %s', $this->reportName, $this->reportFile));
 
         $this->isStrict = $options['strict_xml'];
 
@@ -131,7 +133,7 @@ class JUnitReporter implements EventSubscriberInterface
     {
         file_put_contents($this->reportFile, $this->document->saveXML());
         $this->output->message(
-            "- <bold>%s</bold> report generated in <comment>file://%s</comment>",
+            '- <bold>%s</bold> report generated in <comment>file://%s</comment>',
             $this->reportName,
             $this->reportFile
         )->writeln();

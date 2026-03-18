@@ -93,7 +93,7 @@ EOF;
         $this->say();
         $this->say('<bold>Next steps:</bold>');
         $this->say("1. Edit <bold>{$dir}/ApiCest.php</bold> to write first API tests");
-        $this->say("2. Run tests using: <comment>codecept run</comment>");
+        $this->say('2. Run tests using: <comment>codecept run</comment>');
         $this->say();
         $this->say('<bold>Happy testing!</bold>');
     }

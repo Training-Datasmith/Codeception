@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $I = new DummyTester($scenario);
 
 $I->seeVarEquals(0, 1);

@@ -55,7 +55,7 @@ EOF;
         $ns = $this->getNamespaceHeader($namespacePath);
 
         if ($ns) {
-            $ns .= "\nuse " . $this->supportNamespace() . $actor . ";";
+            $ns .= "\nuse " . $this->supportNamespace() . $actor . ';';
         }
 
         $tester = '';

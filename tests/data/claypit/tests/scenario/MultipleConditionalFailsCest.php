@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class MultipleConditionalFailsCest
 {
     public function multipleFails(ScenarioGuy $I)

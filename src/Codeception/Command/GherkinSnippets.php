@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Lib\Generator\GherkinSnippets as GherkinSnippetsGenerator;
+
+use function count;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function count;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generates code snippets for matched feature files in a suite.
@@ -52,20 +54,20 @@ class GherkinSnippets extends Command
         $generator = new GherkinSnippetsGenerator($config, $test);
         $snippets = $generator->getSnippets();
         if ($snippets === []) {
-            $output->writeln("<notice> All Gherkin steps are defined. Exiting... </notice>");
+            $output->writeln('<notice> All Gherkin steps are defined. Exiting... </notice>');
             return Command::SUCCESS;
         }
-        $output->writeln("<comment> Snippets found in: </comment>");
+        $output->writeln('<comment> Snippets found in: </comment>');
 
         foreach ($generator->getFeatures() as $feature) {
             $output->writeln("<info>  - {$feature} </info>");
         }
-        $output->writeln("<comment> Generated Snippets: </comment>");
-        $output->writeln("<info> ----------------------------------------- </info>");
+        $output->writeln('<comment> Generated Snippets: </comment>');
+        $output->writeln('<info> ----------------------------------------- </info>');
         foreach ($snippets as $snippet) {
             $output->writeln($snippet);
         }
-        $output->writeln("<info> ----------------------------------------- </info>");
+        $output->writeln('<info> ----------------------------------------- </info>');
         $output->writeln(sprintf(' <bold>%d</bold> snippets proposed', count($snippets)));
         $output->writeln("<notice> Copy generated snippets to {$config['actor']} or a specific Gherkin context </notice>");
         return Command::SUCCESS;

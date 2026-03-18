@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 final class BootstrapWithNamespaceCest
 {
     public function _before(CliGuy $I)

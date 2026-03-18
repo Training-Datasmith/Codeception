@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class data
 {
     public static string $filename = '/db';

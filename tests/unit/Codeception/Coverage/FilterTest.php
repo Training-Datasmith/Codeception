@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Codeception\Coverage;
 
 use Codeception\Stub;
-use PHPUnit\Runner\Version as VersionAlias;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Filter as CodeCoverageFilter;
 
@@ -29,13 +28,13 @@ class FilterTest extends \Codeception\Test\Unit
                     'include' => [
                         'tests/*',
                         'vendor/*/*Test.php',
-                        'src/Codeception/Codecept.php'
+                        'src/Codeception/Codecept.php',
                     ],
                     'exclude' => [
-                        'tests/support/CodeGuy.php'
-                    ]
-                ]
-            ]
+                        'tests/support/CodeGuy.php',
+                    ],
+                ],
+            ],
         ];
         $this->filter->whiteList($config);
         $fileFilter = $this->filter->getFilter();
@@ -55,7 +54,7 @@ class FilterTest extends \Codeception\Test\Unit
     {
         $config = ['coverage' => [
             'include' => ['tests/*'],
-            'exclude' => ['tests/support/CodeGuy.php']
+            'exclude' => ['tests/support/CodeGuy.php'],
         ]];
         $this->filter->whiteList($config);
         $fileFilter = $this->filter->getFilter();
@@ -71,10 +70,10 @@ class FilterTest extends \Codeception\Test\Unit
                     'include' => [
                         'tests/*',
                         'vendor/*/*Test.php',
-                        'src/Codeception/Codecept.php'
+                        'src/Codeception/Codecept.php',
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $this->filter->whiteList($config);
         $fileFilter = $this->filter->getFilter();

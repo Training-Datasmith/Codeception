@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Lib\Generator\Cest as CestGenerator;
+
+use function file_exists;
+
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function file_exists;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generates Cest (scenario-driven object-oriented test) file:

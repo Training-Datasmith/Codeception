@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Codeception\Coverage\Subscriber;
 
+use function array_filter;
+use function array_replace_recursive;
+
 use Codeception\Configuration;
 use Codeception\Coverage\SuiteSubscriber;
 use Codeception\Event\StepEvent;
@@ -16,16 +19,16 @@ use Codeception\Lib\Interfaces\Web as WebInterface;
 use Codeception\Lib\Notification;
 use Codeception\Module\WebDriver as WebDriverModule;
 use Facebook\WebDriver\Exception\NoSuchAlertException;
-use RuntimeException;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
 
-use function array_filter;
-use function array_replace_recursive;
 use function file_exists;
 use function file_get_contents;
 use function json_encode;
 use function parse_url;
 use function preg_match;
+
+use RuntimeException;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
+
 use function str_replace;
 use function stream_context_create;
 use function unserialize;
@@ -76,8 +79,8 @@ class LocalServer extends SuiteSubscriber
     protected array $c3Access = [
         'http' => [
             'method' => 'GET',
-            'header' => ''
-        ]
+            'header' => '',
+        ],
     ];
 
     protected ?WebInterface $module = null;
@@ -205,7 +208,7 @@ class LocalServer extends SuiteSubscriber
             fn ($h): int|false => preg_match('#^HTTP(.*?)\s200#', (string) $h)
         );
         if ($okHeaders === []) {
-            throw new RemoteException("Request was not successful. See response header: " . $http_response_header[0]);
+            throw new RemoteException('Request was not successful. See response header: ' . $http_response_header[0]);
         }
         if ($contents === false) {
             $this->getRemoteError($http_response_header);
@@ -218,7 +221,7 @@ class LocalServer extends SuiteSubscriber
         $coverageDataJson = json_encode([
             'CodeCoverage'        => $testName,
             'CodeCoverage_Suite'  => $this->suiteName,
-            'CodeCoverage_Config' => $this->settings['remote_config']
+            'CodeCoverage_Config' => $this->settings['remote_config'],
         ], JSON_THROW_ON_ERROR);
 
         if ($this->module instanceof WebDriverModule) {
@@ -258,7 +261,7 @@ class LocalServer extends SuiteSubscriber
         if (!$cookieUpdated) {
             $cookies[] = [
                 'Name' => self::COVERAGE_COOKIE,
-                'Value' => $coverageDataJson
+                'Value' => $coverageDataJson,
             ];
         }
 

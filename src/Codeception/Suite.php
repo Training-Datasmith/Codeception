@@ -11,6 +11,9 @@ use Codeception\Test\Descriptor;
 use Codeception\Test\Interfaces\Dependent;
 use Codeception\Test\Test;
 use Codeception\Test\TestCaseWrapper;
+
+use function count;
+
 use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\SkippedWithMessageException;
@@ -18,9 +21,8 @@ use PHPUnit\Runner\Version as PHPUnitVersion;
 use PHPUnit\TextUI\CliArguments\Builder;
 use PHPUnit\TextUI\Configuration\Registry;
 use PHPUnit\TextUI\XmlConfiguration\DefaultConfiguration;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use function count;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Suite
 {

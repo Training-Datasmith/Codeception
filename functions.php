@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // function not autoloaded in PHP, thus its a good place for them
 use Codeception\Extension\Logger;
 
@@ -33,7 +35,6 @@ function codecept_log_dir($appendPath = '')
 {
     return \Codeception\Configuration::outputDir() . $appendPath;
 }
-
 
 function codecept_data_dir($appendPath = '')
 {

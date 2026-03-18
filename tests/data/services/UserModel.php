@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class UserModel
 {
     protected ?string $id = null;
