@@ -277,8 +277,8 @@ class Configuration
      */
     public static function suiteSettings(string $suite, array $config): array
     {
-        if ($suite != $config['namespace'] && str_starts_with($suite, $config['namespace'])) {
-            $suite = ltrim(substr($suite, strlen($config['namespace'])), '.');
+        if ($suite != $config['namespace'] && str_starts_with($suite, (string) $config['namespace'])) {
+            $suite = ltrim(substr($suite, strlen((string) $config['namespace'])), '.');
         }
         if (!in_array($suite, self::$suites)) {
             throw new ConfigurationException("Suite {$suite} was not loaded");

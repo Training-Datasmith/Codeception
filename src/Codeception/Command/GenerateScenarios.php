@@ -84,7 +84,10 @@ class GenerateScenarios extends Command
         $output->writeln('<comment>This command is deprecated and will be removed in the next major version of Codeception.</comment>');
 
         foreach ($tests as $test) {
-            if (!$test instanceof ScenarioDriven || !$test instanceof Descriptive) {
+            if (!$test instanceof ScenarioDriven) {
+                continue;
+            }
+            if (!$test instanceof Descriptive) {
                 continue;
             }
             $feature = $test->getScenarioText($format);
@@ -135,9 +138,9 @@ class GenerateScenarios extends Command
     private function underscore(string $name): string
     {
         $name = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\\1_\\2', $name);
-        $name = preg_replace('#([a-z\d])([A-Z])#', '\\1_\\2', $name);
+        $name = preg_replace('#([a-z\d])([A-Z])#', '\\1_\\2', (string) $name);
         $name = str_replace(['/', '\\'], ['.', '.'], $name);
         $name = preg_replace('#_Cept$#', '', $name);
-        return preg_replace('#_Cest$#', '', $name);
+        return preg_replace('#_Cest$#', '', (string) $name);
     }
 }

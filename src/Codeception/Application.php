@@ -138,7 +138,7 @@ class Application extends BaseApplication
         $argv = $_SERVER['argv'] ?? [];
 
         for ($i = 0, $count = count($argv); $i < $count; ++$i) {
-            if (preg_match('#^(?:-([^c-]*)?c|--config(?:=|$))(.*)$#', $argv[$i], $match)) {
+            if (preg_match('#^(?:-([^c-]*)?c|--config(?:=|$))(.*)$#', (string) $argv[$i], $match)) {
                 $value = $match[2] !== '' ? $match[2] : ($argv[$i + 1] ?? '');
                 if ($value !== '') {
                     $this->preloadConfiguration($value);

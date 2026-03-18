@@ -202,7 +202,7 @@ class LocalServer extends SuiteSubscriber
 
         $okHeaders = array_filter(
             $http_response_header,
-            fn ($h) => preg_match('#^HTTP(.*?)\s200#', $h)
+            fn ($h): int|false => preg_match('#^HTTP(.*?)\s200#', (string) $h)
         );
         if ($okHeaders === []) {
             throw new RemoteException("Request was not successful. See response header: " . $http_response_header[0]);

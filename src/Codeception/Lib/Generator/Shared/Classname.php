@@ -9,7 +9,7 @@ trait Classname
     protected function removeSuffix(string $classname, string $suffix): string
     {
         $classname = preg_replace('#\.php$#', '', $classname);
-        return preg_replace("#{$suffix}$#", '', $classname);
+        return preg_replace("#{$suffix}$#", '', (string) $classname);
     }
 
     protected function supportNamespace(): string

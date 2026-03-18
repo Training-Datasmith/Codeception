@@ -36,8 +36,8 @@ class GracefulTermination implements EventSubscriberInterface
             pcntl_async_signals(true);
         }
         if (function_exists(self::SIGNAL_FUNC)) {
-            pcntl_signal(SIGTERM, fn() => $this->terminate());
-            pcntl_signal(SIGINT, fn() => $this->terminate());
+            pcntl_signal(SIGTERM, $this->terminate(...));
+            pcntl_signal(SIGINT, $this->terminate(...));
         }
     }
 

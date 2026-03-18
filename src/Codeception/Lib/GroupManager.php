@@ -44,7 +44,7 @@ class GroupManager
     protected function loadGroupsByPattern(): void
     {
         foreach ($this->configuredGroups as $group => $pattern) {
-            if (!str_contains($group, '*')) {
+            if (!str_contains((string) $group, '*')) {
                 continue;
             }
 
@@ -106,22 +106,23 @@ class GroupManager
     {
         $pathParts = explode(':', $file);
         $isAbsolute = codecept_is_path_absolute($file);
-
         if ($isAbsolute) {
             if ($file[0] === '/' && count($pathParts) > 1) {
                 // Take segment before first :
                 $this->checkIfFileExists($pathParts[0], $group);
                 return sprintf('%s:%s', realpath($pathParts[0]), $pathParts[1]);
-            } elseif (count($pathParts) > 2) {
+            }
+            if (count($pathParts) > 2) {
                 // On Windows take segment before second :
                 $fullPath = $pathParts[0] . ':' . $pathParts[1];
                 $this->checkIfFileExists($fullPath, $group);
                 return sprintf('%s:%s', realpath($fullPath), $pathParts[2]);
             }
-
             $this->checkIfFileExists($file, $group);
             return realpath($file);
-        } elseif (!str_contains($file, ':')) {
+        }
+
+        if (!str_contains($file, ':')) {
             $dirtyPath = $this->rootDir . $file;
             $this->checkIfFileExists($dirtyPath, $group);
             return realpath($dirtyPath);

@@ -76,7 +76,7 @@ EOF;
                     $text .= ' ""';
                 }
                 foreach (array_keys($allSteps) as $pattern) {
-                    if (preg_match($pattern, $text)) {
+                    if (preg_match($pattern, (string) $text)) {
                         $matched = true;
                         break;
                     }

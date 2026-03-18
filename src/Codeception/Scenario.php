@@ -47,7 +47,7 @@ class Scenario
         return $this->metadata->getGroups();
     }
 
-    public function current(?string $key = null)
+    public function current(?string $key = null): mixed
     {
         return $this->metadata->getCurrent($key);
     }

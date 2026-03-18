@@ -42,7 +42,7 @@ trait PhpSuperGlobalsConverter
             }
 
             // Check if the current file info has nested arrays within its keys
-            $containsNestedArrays = count(array_filter($fileInfo, 'is_array'));
+            $containsNestedArrays = count(array_filter($fileInfo, is_array(...)));
 
             if ($containsNestedArrays || !isset($fileInfo['tmp_name'])) {
                 $nestedFiles = $this->remapFiles($fileInfo);

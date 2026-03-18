@@ -76,7 +76,7 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
         );
     }
 
-    public function __set(string $key, $val)
+    public function __set(string $key, mixed $val)
     {
         if (is_object($this->val)) {
             $this->val->{$key} = $val;

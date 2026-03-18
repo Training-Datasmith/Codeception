@@ -293,7 +293,6 @@ abstract class Module
     /**
      * Get config values or specific config item.
      *
-     * @param string|null $key
      * @return mixed the config item's value or null if it doesn't exist
      */
     public function _getConfig(?string $key = null): mixed

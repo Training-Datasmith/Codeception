@@ -25,11 +25,8 @@ class Di
      */
     protected array $container = [];
 
-    protected ?Di $fallback = null;
-
-    public function __construct(?Di $fallback = null)
+    public function __construct(protected ?Di $fallback = null)
     {
-        $this->fallback = $fallback;
     }
 
     public function get(string $className): ?object

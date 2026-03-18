@@ -46,7 +46,7 @@ class FileSystem
         $baseLen = strlen($src) + 1;
 
         foreach (self::createIterator($src, RecursiveIteratorIterator::SELF_FIRST) as $item) {
-            $target = $dst . DIRECTORY_SEPARATOR . substr($item->getPathname(), $baseLen);
+            $target = $dst . DIRECTORY_SEPARATOR . substr((string) $item->getPathname(), $baseLen);
             if ($item->isDir()) {
                 @mkdir($target, 0777, true);
             } else {

@@ -173,9 +173,9 @@ class SuiteManager
             return true;
         }
 
-        $current = array_filter(array_map('trim', explode(',', $this->env)));
+        $current = array_filter(array_map(trim(...), explode(',', $this->env)));
         foreach ($envs as $envList) {
-            $envList = array_filter(array_map('trim', explode(',', $envList)));
+            $envList = array_filter(array_map(trim(...), explode(',', (string) $envList)));
             if ($envList === [] || array_diff($envList, $current) === []) {
                 return true;
             }

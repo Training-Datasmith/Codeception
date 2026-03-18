@@ -72,7 +72,7 @@ class Filter
 
             foreach ($coverage['whitelist'][$type] as $fileOrDir) {
                 try {
-                    $finder = str_contains($fileOrDir, '*')
+                    $finder = str_contains((string) $fileOrDir, '*')
                         ? $this->matchWildcardPattern($fileOrDir)
                         : [Configuration::projectDir() . DIRECTORY_SEPARATOR . $fileOrDir];
 
@@ -129,7 +129,7 @@ class Filter
 
         foreach ($files as $fileOrDir) {
             try {
-                $finder = str_contains($fileOrDir, '*')
+                $finder = str_contains((string) $fileOrDir, '*')
                     ? $this->matchWildcardPattern($fileOrDir)
                     : $this->matchFileOrDirectory($fileOrDir);
 

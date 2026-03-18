@@ -21,8 +21,6 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
      * Whether an offset exists
      *
      * @link https://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {

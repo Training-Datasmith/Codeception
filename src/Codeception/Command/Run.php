@@ -293,7 +293,7 @@ class Run extends Command
 
                 foreach ($config['include'] as $include) {
                     // Find if the suite begins with an include path
-                    if (str_starts_with($suite, (string)$include)) {
+                    if (str_starts_with((string) $suite, (string)$include)) {
                         // Use include config
                         $config = Configuration::config($projectDir . $include);
                         $config = $this->addRuntimeOptionsToCurrentConfig($config);
@@ -349,10 +349,11 @@ class Run extends Command
         ) {
             $userOptions['filter'] = $this->matchFilteredTestName($suite);
         }
-
         if (isset($userOptions['filter']) && $filter) {
             throw new InvalidOptionException("--filter and --grep can't be used with a test name");
-        } elseif ($filter) {
+        }
+
+        if ($filter) {
             $userOptions['filter'] = $filter;
         }
 
@@ -378,7 +379,7 @@ class Run extends Command
         if (!$test) {
             $didPassCliSuite = !empty($suite);
 
-            $rawSuites = $didPassCliSuite ? explode(',', $suite) : Configuration::suites();
+            $rawSuites = $didPassCliSuite ? explode(',', (string) $suite) : Configuration::suites();
 
             /** @var string[] $mainAppSuites */
             $mainAppSuites = [];

@@ -183,7 +183,7 @@ class ErrorHandler implements EventSubscriberInterface
             // DeprecationErrorHandler only will be installed if array('PHPUnit\Util\ErrorHandler', 'handleError')
             // is installed or no other error handlers are installed.
             // So we will remove Symfony\Component\ErrorHandler\ErrorHandler if it's installed.
-            $old = set_error_handler('var_dump');
+            $old = set_error_handler(var_dump(...));
             restore_error_handler();
 
             if (

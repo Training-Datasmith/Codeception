@@ -43,6 +43,6 @@ trait Namespaces
     {
         $namespaces = $this->breakParts($class);
         array_pop($namespaces);
-        return array_filter($namespaces, 'strlen');
+        return array_filter($namespaces, strlen(...));
     }
 }

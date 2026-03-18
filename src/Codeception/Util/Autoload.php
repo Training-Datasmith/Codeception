@@ -57,7 +57,7 @@ class Autoload
     public static function addNamespace(string $prefix, string $baseDir, bool $prepend = false): void
     {
         if (!self::$registered) {
-            spl_autoload_register(fn(string $class): string|false => self::load($class));
+            spl_autoload_register(self::load(...));
             self::$registered = true;
         }
 

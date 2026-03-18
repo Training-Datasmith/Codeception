@@ -245,9 +245,9 @@ abstract class Step implements Stringable
     protected function humanize(string $text): string
     {
         $text = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\\1 \\2', $text);
-        $text = preg_replace('#([a-z\d])([A-Z])#', '\\1 \\2', $text);
-        $text = preg_replace('#\\bdont\\b#', "don't", $text);
-        return mb_strtolower($text, 'UTF-8');
+        $text = preg_replace('#([a-z\d])([A-Z])#', '\\1 \\2', (string) $text);
+        $text = preg_replace('#\\bdont\\b#', "don't", (string) $text);
+        return mb_strtolower((string) $text, 'UTF-8');
     }
 
     /**
@@ -286,7 +286,10 @@ abstract class Step implements Stringable
         }
         for ($i = count($stack) - self::STACK_POSITION - 1; isset($stack[$i]); --$i) {
             $step = $stack[$i];
-            if (!isset($step['file'], $step['function'], $step['class']) || !$this->isTestFile($step['file'])) {
+            if (!isset($step['file'], $step['function'], $step['class'])) {
+                continue;
+            }
+            if (!$this->isTestFile($step['file'])) {
                 continue;
             }
             $this->metaStep = new Step\Meta(

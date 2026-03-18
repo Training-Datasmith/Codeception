@@ -56,7 +56,7 @@ class GenerateStepObject extends Command
 
         if (!$input->getOption('silent')) {
             do {
-                $question = new Question('Add action to StepObject class (ENTER to exit): ', null);
+                $question = new Question('Add action to StepObject class (ENTER to exit): ');
                 $action = $dialog->ask($input, $output, $question);
                 if ($action) {
                     $stepObject->createAction($action);

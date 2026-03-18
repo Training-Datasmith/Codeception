@@ -168,10 +168,10 @@ EOF;
 
         // add auto generated steps
         foreach (array_unique($this->generatedSteps) as $generator) {
-            if (!is_callable([$generator, 'getTemplate'])) {
+            if (!is_callable($generator->getTemplate(...))) {
                 throw new Exception("Wrong configuration for generated steps. {$generator} doesn't implement \Codeception\Step\GeneratedStep interface");
             }
-            $template = call_user_func([$generator, 'getTemplate'], clone $methodTemplate);
+            $template = call_user_func($generator->getTemplate(...), clone $methodTemplate);
             if ($template) {
                 $body .= $template->produce();
             }
@@ -267,17 +267,18 @@ EOF;
     {
         if ($type instanceof ReflectionUnionType) {
             return $this->stringifyNamedTypes($type->getTypes(), $moduleClass, '|');
-        } elseif ($type instanceof ReflectionIntersectionType) {
+        }
+        if ($type instanceof ReflectionIntersectionType) {
             return $this->stringifyNamedTypes($type->getTypes(), $moduleClass, '&');
-        } elseif ($type instanceof ReflectionNamedType) {
+        }
+        if ($type instanceof ReflectionNamedType) {
             return sprintf(
                 '%s%s',
                 ($type->allowsNull() && $type->getName() !== 'mixed') ? '?' : '',
                 self::stringifyNamedType($type, $moduleClass)
             );
-        } else {
-            throw new InvalidArgumentException('Unsupported type class: ' . $type::class);
         }
+        throw new InvalidArgumentException('Unsupported type class: ' . $type::class);
     }
 
     /**

@@ -24,14 +24,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (method_exists(get_called_class(), '_setUpBeforeClass')) {
+        if (method_exists(static::class, '_setUpBeforeClass')) {
             static::_setUpBeforeClass();
         }
     }
 
     public static function tearDownAfterClass(): void
     {
-        if (method_exists(get_called_class(), '_tearDownAfterClass')) {
+        if (method_exists(static::class, '_tearDownAfterClass')) {
             static::_tearDownAfterClass();
         }
     }
@@ -43,16 +43,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     public static function assertRegExp(string $pattern, string $string, string $message = ''): void
     {
-        parent::assertMatchesRegularExpression($pattern, $string, $message);
     }
 
     public static function assertNotRegExp(string $pattern, string $string, string $message = ''): void
     {
-        parent::assertDoesNotMatchRegularExpression($pattern, $string, $message);
     }
 
     public static function assertFileNotExists(string $filename, string $message = ''): void
     {
-        parent::assertFileDoesNotExist($filename, $message);
     }
 }

@@ -172,7 +172,7 @@ class Console implements EventSubscriberInterface
                 implode(
                     ', ',
                     array_map(
-                        fn ($module): string => $module->_getName(),
+                        fn (\Codeception\Module $module): string => $module->_getName(),
                         $event->getSuite()->getModules()
                     )
                 )
@@ -536,7 +536,7 @@ class Console implements EventSubscriberInterface
         }
 
         foreach ($reports as $type => $report) {
-            $type = ucfirst($type);
+            $type = ucfirst((string) $type);
             $this->output->writeln("{$type}: <debug>{$report}</debug>");
         }
     }

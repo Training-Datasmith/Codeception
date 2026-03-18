@@ -49,12 +49,13 @@ class Debug
         foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3) as $backtraceStep) {
             $class = $backtraceStep['class'] ?? null;
             $fn = $backtraceStep['function'] ?? null;
-
-            if (
-                ($class === self::class && $fn === 'pause') ||
-                ($fn === 'codecept_pause' && !$class) ||
-                !isset($backtraceStep['object'])
-            ) {
+            if ($class === self::class && $fn === 'pause') {
+                continue;
+            }
+            if ($fn === 'codecept_pause' && !$class) {
+                continue;
+            }
+            if (!isset($backtraceStep['object'])) {
                 continue;
             }
 

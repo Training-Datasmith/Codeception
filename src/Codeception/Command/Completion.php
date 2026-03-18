@@ -69,7 +69,7 @@ class Completion extends CompletionCommand
     {
         if ($input->getOption('generate-hook') && $input->getOption('use-vendor-bin')) {
             global $argv;
-            $argv[0] = 'vendor/bin/' . basename($argv[0]);
+            $argv[0] = 'vendor/bin/' . basename((string) $argv[0]);
         }
 
         parent::execute($input, $output);

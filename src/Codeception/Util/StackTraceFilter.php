@@ -46,7 +46,7 @@ class StackTraceFilter
         }
 
         foreach (self::$filteredClassesPattern as $pattern) {
-            if (str_starts_with($step['class'], $pattern)) {
+            if (str_starts_with($step['class'], (string) $pattern)) {
                 return true;
             }
         }

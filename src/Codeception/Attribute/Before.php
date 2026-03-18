@@ -9,7 +9,4 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final readonly class Before
 {
-    public function __construct(string ...$methodNames)
-    {
-    }
 }

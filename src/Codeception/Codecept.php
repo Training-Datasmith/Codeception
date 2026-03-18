@@ -184,9 +184,9 @@ class Codecept
         }
 
         $map = [
-            'html'        => fn () => new HtmlReporter($this->options, $this->output),
-            'xml'         => fn () => new JUnitReporter($this->options, $this->output),
-            'phpunit-xml' => fn () => new PhpUnitReporter($this->options, $this->output),
+            'html'        => fn (): \Codeception\Reporter\HtmlReporter => new HtmlReporter($this->options, $this->output),
+            'xml'         => fn (): \Codeception\Reporter\JUnitReporter => new JUnitReporter($this->options, $this->output),
+            'phpunit-xml' => fn (): \Codeception\Reporter\PhpUnitReporter => new PhpUnitReporter($this->options, $this->output),
         ];
         foreach ($map as $flag => $create) {
             if ($this->options[$flag]) {
