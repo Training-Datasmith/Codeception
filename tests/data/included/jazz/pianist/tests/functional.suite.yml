@@ -8,4 +8,4 @@
 
 actor: TestGuy
 modules:
-    enabled: [Filesystem, \Jazz\Pianist\TestHelper]
+    enabled: [Filesystem, \Jazz\Pianist\Test_Helper]

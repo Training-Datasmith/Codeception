@@ -7,4 +7,4 @@ modules:
         - CodeHelper
         - Asserts
 steps:
-    - Codeception\Step\ConditionalAssertion
+    - Codeception\Step\Conditional_Assertion

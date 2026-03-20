@@ -10,4 +10,4 @@ settings:
     memory_limit: 2048M
 extensions:
     enabled:
-        - Codeception\Extension\RunFailed
+        - Codeception\Extension\Run_Failed

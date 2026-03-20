@@ -9,4 +9,4 @@ paths:
 actor_suffix: Tester
 extensions:
     enabled:
-        - Codeception\Extension\RunFailed
+        - Codeception\Extension\Run_Failed

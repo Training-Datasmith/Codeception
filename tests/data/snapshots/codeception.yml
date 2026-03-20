@@ -10,7 +10,7 @@ suites:
         path: .
         modules:
             enabled:
-                - \Helper\RestoreData
+                - \Helper\Restore_Data
                 - Asserts
                 - Db:
                     dsn: sqlite:tests/_data/snapshot_test.db
@@ -20,4 +20,4 @@ suites:
 actor_suffix: Tester
 extensions:
     enabled:
-        - Codeception\Extension\RunFailed
+        - Codeception\Extension\Run_Failed

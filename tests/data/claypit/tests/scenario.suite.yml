@@ -8,4 +8,4 @@ gherkin:
     contexts:
         default: [ScenarioGuy]
 steps:
-    - Codeception\Step\ConditionalAssertion
+    - Codeception\Step\Conditional_Assertion

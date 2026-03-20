@@ -2,5 +2,5 @@ actor: OrderGuy
 modules:
     enabled: [OrderHelper]
 steps:
-    - Codeception\Step\ConditionalAssertion
+    - Codeception\Step\Conditional_Assertion
 bootstrap: bootstrap_order.php

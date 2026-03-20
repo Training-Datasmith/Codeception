@@ -5,4 +5,4 @@ modules:
         - Asserts
 step_decorators:
     - Codeception\Step\Retry
-    - Codeception\Step\TryTo
+    - Codeception\Step\Try_To

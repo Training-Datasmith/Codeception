@@ -15,9 +15,9 @@ settings:
     report_useless_tests: true
 
 extensions:
-    enabled: [Codeception\Extension\RunFailed]
+    enabled: [Codeception\Extension\Run_Failed]
     config:
-        Codeception\Extension\RunFailed:
+        Codeception\Extension\Run_Failed:
             fail-group: failed
 
 coverage:

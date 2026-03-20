@@ -9,5 +9,5 @@ settings:
     colors: false
 extensions:
     commands:
-        - Project\Command\MyCustomCommand
-        - Project\Command\YourCustomCommand
+        - Project\Command\My_Custom_Command
+        - Project\Command\Your_Custom_Command
