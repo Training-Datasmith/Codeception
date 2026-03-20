@@ -1,52 +1,41 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Coverage;
 
 use function array_pop;
-
 use Codeception\Configuration;
-use Codeception\Exception\ConfigurationException;
-use Codeception\Exception\ModuleException;
-
+use Codeception\Exception\Configuration_Exception;
+use Codeception\Exception\Module_Exception;
 use function explode;
 use function implode;
 use function is_array;
 use function iterator_to_array;
-
-use PHPUnit\Runner\Version as PHPUnitVersion;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Filter as PhpUnitFilter;
-
+use Php_Unit\Runner\Version as PHPUnitVersion;
+use Sebastian_Bergmann\Code_Coverage\Code_Coverage;
+use Sebastian_Bergmann\Code_Coverage\Filter as PhpUnitFilter;
 use function str_replace;
-
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Symfony\Component\Finder\Exception\Directory_Not_Found_Exception;
 use Symfony\Component\Finder\Finder;
-
 class Filter
 {
-    protected static ?self $codeceptionFilter = null;
-
-    protected ?PhpUnitFilter $phpUnitFilter = null;
-
-    public function __construct(protected ?CodeCoverage $phpCodeCoverage)
+    protected static ?self $codeception_filter = null;
+    protected ?Php_Unit_Filter $php_unit_filter = null;
+    public function __construct(protected ?Code_Coverage $php_code_coverage)
     {
-        $this->phpUnitFilter = $this->phpCodeCoverage->filter();
+        $this->php_unit_filter = $this->php_code_coverage->filter();
     }
-
-    public static function setup(CodeCoverage $phpCoverage): self
+    public static function setup(Code_Coverage $php_coverage): self
     {
-        self::$codeceptionFilter = new self($phpCoverage);
-        return self::$codeceptionFilter;
+        self::$codeception_filter = new self($php_coverage);
+        return self::$codeception_filter;
     }
-
     /**
      * @throws ConfigurationException
      */
-    public function whiteList(array $config): self
+    public function white_list(array $config): self
     {
-        $filter = $this->phpUnitFilter;
+        $filter = $this->php_unit_filter;
         if (!isset($config['coverage'])) {
             return $this;
         }
@@ -60,140 +49,111 @@ class Filter
                 $coverage['whitelist']['exclude'] = $coverage['exclude'];
             }
         }
-
-        if (PHPUnitVersion::series() >= 11) {
-            return $this->newWhiteList($coverage['whitelist']);
+        if (Php_Unit_Version::series() >= 11) {
+            return $this->new_white_list($coverage['whitelist']);
         }
-
         foreach (['include', 'exclude'] as $type) {
             if (!isset($coverage['whitelist'][$type])) {
                 continue;
             }
-
             if (!is_array($coverage['whitelist'][$type])) {
-                throw new ConfigurationException("Error parsing yaml. Config `whitelist: {$type}:` should be an array");
+                throw new Configuration_Exception("Error parsing yaml. Config `whitelist: {$type}:` should be an array");
             }
-
-            foreach ($coverage['whitelist'][$type] as $fileOrDir) {
+            foreach ($coverage['whitelist'][$type] as $file_or_dir) {
                 try {
-                    $finder = str_contains((string) $fileOrDir, '*')
-                        ? $this->matchWildcardPattern($fileOrDir)
-                        : [Configuration::projectDir() . DIRECTORY_SEPARATOR . $fileOrDir];
-
+                    $finder = str_contains((string) $file_or_dir, '*') ? $this->match_wildcard_pattern($file_or_dir) : [Configuration::project_dir() . DIRECTORY_SEPARATOR . $file_or_dir];
                     foreach ($finder as $file) {
                         $file = (string) $file;
-                        $type === 'include' ? $filter->includeFile($file) : $filter->excludeFile($file);
+                        $type === 'include' ? $filter->include_file($file) : $filter->exclude_file($file);
                     }
-                } catch (DirectoryNotFoundException) {
+                } catch (Directory_Not_Found_Exception) {
                     continue;
                 }
             }
         }
-
         return $this;
     }
-
-    private function newWhiteList(array $whitelist): self
+    private function new_white_list(array $whitelist): self
     {
         $include = $whitelist['include'] ?? [];
         $exclude = $whitelist['exclude'] ?? [];
-
         if (!is_array($include)) {
-            throw new ConfigurationException('Error parsing yaml. Config `whitelist: include:` should be an array');
+            throw new Configuration_Exception('Error parsing yaml. Config `whitelist: include:` should be an array');
         }
         if (!is_array($exclude)) {
-            throw new ConfigurationException('Error parsing yaml. Config `whitelist: exclude:` should be an array');
+            throw new Configuration_Exception('Error parsing yaml. Config `whitelist: exclude:` should be an array');
         }
-
         if ($exclude === [] && $include === []) {
             return $this;
         }
-
         if ($include === []) {
-            $include = [
-                Configuration::projectDir() . DIRECTORY_SEPARATOR . '*',
-            ];
+            $include = [Configuration::project_dir() . DIRECTORY_SEPARATOR . '*'];
         }
-
-        $allIncludedFiles = $this->matchFiles($include);
-        $allExcludedFiles = $this->matchFiles($exclude);
-
-        $coveredFiles = array_diff($allIncludedFiles, $allExcludedFiles);
-
-        foreach ($coveredFiles as $coveredFile) {
-            $this->phpUnitFilter->includeFile((string) $coveredFile);
+        $all_included_files = $this->match_files($include);
+        $all_excluded_files = $this->match_files($exclude);
+        $covered_files = array_diff($all_included_files, $all_excluded_files);
+        foreach ($covered_files as $covered_file) {
+            $this->php_unit_filter->include_file((string) $covered_file);
         }
-
         return $this;
     }
-
-    private function matchFiles(array $files): array
+    private function match_files(array $files): array
     {
-        $matchedFiles = [];
-
-        foreach ($files as $fileOrDir) {
+        $matched_files = [];
+        foreach ($files as $file_or_dir) {
             try {
-                $finder = str_contains((string) $fileOrDir, '*')
-                    ? $this->matchWildcardPattern($fileOrDir)
-                    : $this->matchFileOrDirectory($fileOrDir);
-
-                $matchedFiles += iterator_to_array($finder->getIterator());
-            } catch (DirectoryNotFoundException) {
+                $finder = str_contains((string) $file_or_dir, '*') ? $this->match_wildcard_pattern($file_or_dir) : $this->match_file_or_directory($file_or_dir);
+                $matched_files += iterator_to_array($finder->getIterator());
+            } catch (Directory_Not_Found_Exception) {
                 continue;
             }
         }
-
-        return $matchedFiles;
+        return $matched_files;
     }
-
     /**
      * @throws ModuleException
      */
-    public function blackList(array $config): self
+    public function black_list(array $config): self
     {
         if (isset($config['coverage']['blacklist'])) {
-            throw new ModuleException($this, 'The blacklist functionality has been removed from PHPUnit 5,'
-                . ' please remove blacklist section from configuration.');
+            throw new Module_Exception($this, 'The blacklist functionality has been removed from PHPUnit 5,' . ' please remove blacklist section from configuration.');
         }
         return $this;
     }
-
-    private function matchFileOrDirectory(string $fileOrDir): Finder
+    private function match_file_or_directory(string $file_or_dir): Finder
     {
-        $fullPath = Configuration::projectDir() . $fileOrDir;
+        $full_path = Configuration::project_dir() . $file_or_dir;
         $finder = Finder::create();
-        if (is_dir($fullPath)) {
-            $finder->in($fullPath);
+        if (is_dir($full_path)) {
+            $finder->in($full_path);
             $finder->name('*.php');
         } else {
-            $finder->in(dirname($fullPath));
-            $finder->name(basename($fullPath));
+            $finder->in(dirname($full_path));
+            $finder->name(basename($full_path));
         }
-        $finder->ignoreVCS(true)->files();
+        $finder->ignore_vcs(true)->files();
         return $finder;
     }
-
-    protected function matchWildcardPattern(string $pattern): Finder
+    protected function match_wildcard_pattern(string $pattern): Finder
     {
         $finder = Finder::create();
-        $fileOrDir = str_replace('\\', '/', $pattern);
-        $parts = explode('/', $fileOrDir);
+        $file_or_dir = str_replace('\\', '/', $pattern);
+        $parts = explode('/', $file_or_dir);
         $file = array_pop($parts);
         if ($file === '*') {
             $file = '*.php';
         }
         $finder->name($file);
         if ($parts !== []) {
-            $lastPath = array_pop($parts);
-            $path = implode('/', ($lastPath === '*' ? $parts : [...$parts, $lastPath]));
-            $finder->in(Configuration::projectDir() . $path);
+            $last_path = array_pop($parts);
+            $path = implode('/', $last_path === '*' ? $parts : [...$parts, $last_path]);
+            $finder->in(Configuration::project_dir() . $path);
         }
-        $finder->ignoreVCS(true)->files();
+        $finder->ignore_vcs(true)->files();
         return $finder;
     }
-
-    public function getFilter(): PhpUnitFilter
+    public function get_filter(): Php_Unit_Filter
     {
-        return $this->phpUnitFilter;
+        return $this->php_unit_filter;
     }
 }

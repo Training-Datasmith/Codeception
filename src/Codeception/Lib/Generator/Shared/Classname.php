@@ -1,29 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Generator\Shared;
 
 trait Classname
 {
-    protected function removeSuffix(string $classname, string $suffix): string
+    protected function remove_suffix(string $classname, string $suffix): string
     {
         $classname = preg_replace('#\.php$#', '', $classname);
-        return preg_replace("#{$suffix}$#", '', (string) $classname);
+        return preg_replace("#{$suffix}\$#", '', (string) $classname);
     }
-
-    protected function supportNamespace(): string
+    protected function support_namespace(): string
     {
         if (!isset($this->settings)) {
             return '\\';
         }
-
         $namespace = '';
-
         if ($this->settings['namespace']) {
             $namespace .= '\\' . $this->settings['namespace'];
         }
-
         if (isset($this->settings['support_namespace'])) {
             $namespace .= '\\' . $this->settings['support_namespace'];
         }

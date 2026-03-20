@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
-use Codeception\Lib\Generator\PageObject as PageObjectGenerator;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Codeception\Lib\Generator\Page_Object as PageObjectGenerator;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 use function ucfirst;
-
 /**
  * Generates PageObject. Can be generated either globally, or just for one suite.
  * If PageObject is generated globally it will act as UIMap, without any logic in it.
@@ -22,49 +19,32 @@ use function ucfirst;
  * * `codecept g:page Registration`
  * * `codecept g:page Acceptance Login`
  */
-#[AsCommand(
-    name: 'generate:pageobject',
-    description: 'Generates empty PageObject class'
-)]
-class GeneratePageObject extends Command
+#[As_Command(name: 'generate:pageobject', description: 'Generates empty PageObject class')]
+class Generate_Page_Object extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this
-            ->addArgument('suite', InputArgument::REQUIRED, 'Either suite name or page object name')
-            ->addArgument('page', InputArgument::OPTIONAL, 'Page name of pageobject to represent');
+        $this->add_argument('suite', Input_Argument::REQUIRED, 'Either suite name or page object name')->add_argument('page', Input_Argument::OPTIONAL, 'Page name of pageobject to represent');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $suite = (string)$input->getArgument('suite');
-        $class = $input->getArgument('page');
-
+        $suite = (string) $input->get_argument('suite');
+        $class = $input->get_argument('page');
         if (!$class) {
             $class = $suite;
             $suite = '';
         }
-
-        $conf = $suite
-            ? $this->getSuiteConfig($suite)
-            : $this->getGlobalConfig();
-
+        $conf = $suite ? $this->get_suite_config($suite) : $this->get_global_config();
         if ($suite) {
             $suite = DIRECTORY_SEPARATOR . ucfirst($suite);
         }
-
-        $path = $this->createDirectoryFor(Configuration::supportDir() . 'Page' . $suite, $class);
-
-        $filename = $path . $this->getShortClassName($class) . '.php';
-
+        $path = $this->create_directory_for(Configuration::support_dir() . 'Page' . $suite, $class);
+        $filename = $path . $this->get_short_class_name($class) . '.php';
         $output->writeln($filename);
-
-        $pageObject = new PageObjectGenerator($conf, ucfirst($suite) . '\\' . $class);
-        $res = $this->createFile($filename, $pageObject->produce());
-
+        $page_object = new Page_Object_Generator($conf, ucfirst($suite) . '\\' . $class);
+        $res = $this->create_file($filename, $page_object->produce());
         if (!$res) {
             $output->writeln("<error>PageObject {$filename} already exists</error>");
             return Command::FAILURE;

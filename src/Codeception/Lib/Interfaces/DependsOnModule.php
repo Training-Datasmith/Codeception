@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Interfaces;
 
-interface DependsOnModule
+interface Depends_On_Module
 {
     /**
      * Specifies class or module which is required for current one.

@@ -1,53 +1,42 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
 use Codeception\Lib\Generator\Helper;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 use function ucfirst;
-
 /**
  * Creates empty Helper class.
  *
  * * `codecept g:helper MyHelper`
  * * `codecept g:helper "My\Helper"`
  */
-#[AsCommand(
-    name: 'generate:helper',
-    description: 'Generates a new helper'
-)]
-class GenerateHelper extends Command
+#[As_Command(name: 'generate:helper', description: 'Generates a new helper')]
+class Generate_Helper extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this->addArgument('name', InputArgument::REQUIRED, 'Helper name');
+        $this->add_argument('name', Input_Argument::REQUIRED, 'Helper name');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $name = ucfirst((string)$input->getArgument('name'));
-        $config = $this->getGlobalConfig();
-
-        $path = $this->createDirectoryFor(Configuration::supportDir() . 'Helper', $name);
-        $filename = $path . $this->getShortClassName($name) . '.php';
-
-        $res = $this->createFile($filename, (new Helper($config, $name))->produce());
+        $name = ucfirst((string) $input->get_argument('name'));
+        $config = $this->get_global_config();
+        $path = $this->create_directory_for(Configuration::support_dir() . 'Helper', $name);
+        $filename = $path . $this->get_short_class_name($name) . '.php';
+        $res = $this->create_file($filename, (new Helper($config, $name))->produce());
         if ($res) {
             $output->writeln("<info>Helper {$filename} created</info>");
             return Command::SUCCESS;
         }
-
         $output->writeln(sprintf('<error>Error creating helper %s</error>', $filename));
         return Command::FAILURE;
     }

@@ -1,45 +1,37 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Subscriber;
 
-use Codeception\Event\TestEvent;
+use Codeception\Event\Test_Event;
 use Codeception\Events;
 use Codeception\Lib\Di;
 use Codeception\Test\Cest;
 use Codeception\Test\Unit;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-class PrepareTest implements EventSubscriberInterface
+use Symfony\Component\Event_Dispatcher\Event_Subscriber_Interface;
+class Prepare_Test implements Event_Subscriber_Interface
 {
-    use Shared\StaticEventsTrait;
-
+    use Shared\Static_Events_Trait;
     /**
      * @var array<string, string>
      */
-    protected static array $events = [
-        Events::TEST_BEFORE => 'prepare',
-    ];
-
+    protected static array $events = [Events::TEST_BEFORE => 'prepare'];
     protected array $modules = [];
-
-    public function prepare(TestEvent $event): void
+    public function prepare(Test_Event $event): void
     {
-        $test    = $event->getTest();
-        $prepareMethods = $test->getMetadata()->getParam('prepare') ?: [];
-        if ($prepareMethods === []) {
+        $test = $event->get_test();
+        $prepare_methods = $test->get_metadata()->get_param('prepare') ?: [];
+        if ($prepare_methods === []) {
             return;
         }
         /** @var Di $di */
-        $di = $test->getMetadata()->getService('di');
-
-        foreach ($prepareMethods as $method) {
+        $di = $test->get_metadata()->get_service('di');
+        foreach ($prepare_methods as $method) {
             if ($test instanceof Cest) {
-                $di->injectDependencies($test->getTestInstance(), $method);
+                $di->inject_dependencies($test->get_test_instance(), $method);
             }
             if ($test instanceof Unit) {
-                $di->injectDependencies($test, $method);
+                $di->inject_dependencies($test, $method);
             }
         }
     }

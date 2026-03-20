@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Step;
 
 use Codeception\Util\Template;
-
-interface GeneratedStep
+interface Generated_Step
 {
-    public static function getTemplate(Template $template): ?Template;
+    public static function get_template(Template $template): ?Template;
 }

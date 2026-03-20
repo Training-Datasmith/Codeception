@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Exception;
 
 use Exception;
-
-class RemoteException extends Exception
+class Remote_Exception extends Exception
 {
     public function __construct(string $message)
     {

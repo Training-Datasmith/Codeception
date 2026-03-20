@@ -1,23 +1,18 @@
 <?php
 
-declare(strict_types=1);
-declare(ticks=1);
-
+declare (strict_types=1);
+declare (ticks=1);
 namespace Codeception\Subscriber;
 
-use Codeception\Event\SuiteEvent;
+use Codeception\Event\Suite_Event;
 use Codeception\Events;
-use Codeception\ResultAggregator;
-
+use Codeception\Result_Aggregator;
 use function function_exists;
 use function pcntl_async_signals;
-
 use function pcntl_signal;
-
 use RuntimeException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-class GracefulTermination implements EventSubscriberInterface
+use Symfony\Component\Event_Dispatcher\Event_Subscriber_Interface;
+class Graceful_Termination implements Event_Subscriber_Interface
 {
     /**
      * @var string
@@ -27,12 +22,10 @@ class GracefulTermination implements EventSubscriberInterface
      * @var string
      */
     public const ASYNC_SIGNAL_HANDLING_FUNC = 'pcntl_async_signals';
-
-    public function __construct(private readonly ResultAggregator $resultAggregator)
+    public function __construct(private readonly Result_Aggregator $result_aggregator)
     {
     }
-
-    public function handleSuite(SuiteEvent $event): void
+    public function handle_suite(Suite_Event $event): void
     {
         if (function_exists(self::ASYNC_SIGNAL_HANDLING_FUNC)) {
             pcntl_async_signals(true);
@@ -42,19 +35,15 @@ class GracefulTermination implements EventSubscriberInterface
             pcntl_signal(SIGINT, $this->terminate(...));
         }
     }
-
     public function terminate(): void
     {
-        $this->resultAggregator->stop();
-        throw new RuntimeException(
-            "\n\n---------------------------\nTESTS EXECUTION TERMINATED\n---------------------------\n"
-        );
+        $this->result_aggregator->stop();
+        throw new RuntimeException("\n\n---------------------------\nTESTS EXECUTION TERMINATED\n---------------------------\n");
     }
-
     /**
      * @return array<string, string>
      */
-    public static function getSubscribedEvents(): array
+    public static function get_subscribed_events(): array
     {
         if (!function_exists(self::SIGNAL_FUNC)) {
             return [];

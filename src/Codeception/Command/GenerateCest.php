@@ -1,20 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Lib\Generator\Cest as CestGenerator;
-
 use function file_exists;
-
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 /**
  * Generates Cest (scenario-driven object-oriented test) file:
  *
@@ -24,45 +19,34 @@ use Symfony\Component\Console\Output\OutputInterface;
  * * `codecept g:cest "App\Login"`
  *
  */
-#[AsCommand(
-    name: 'generate:cest',
-    description: 'Generates empty Cest file in suite'
-)]
-class GenerateCest extends Command
+#[As_Command(name: 'generate:cest', description: 'Generates empty Cest file in suite')]
+class Generate_Cest extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this
-            ->addArgument('suite', InputArgument::REQUIRED, 'suite where tests will be put')
-            ->addArgument('class', InputArgument::REQUIRED, 'test name');
+        $this->add_argument('suite', Input_Argument::REQUIRED, 'suite where tests will be put')->add_argument('class', Input_Argument::REQUIRED, 'test name');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $suite = $input->getArgument('suite');
-        $class = $input->getArgument('class');
-
-        $config = $this->getSuiteConfig($suite);
-        $className = $this->getShortClassName($class);
-        $path = $this->createDirectoryFor($config['path'], $class);
-
-        $filename = $this->completeSuffix($className, 'Cest');
+        $suite = $input->get_argument('suite');
+        $class = $input->get_argument('class');
+        $config = $this->get_suite_config($suite);
+        $class_name = $this->get_short_class_name($class);
+        $path = $this->create_directory_for($config['path'], $class);
+        $filename = $this->complete_suffix($class_name, 'Cest');
         $filename = $path . $filename;
-
         if (file_exists($filename)) {
             $output->writeln("<error>Test {$filename} already exists</error>");
             return Command::FAILURE;
         }
-        $cest = new CestGenerator($class, $config);
-        $res = $this->createFile($filename, $cest->produce());
+        $cest = new Cest_Generator($class, $config);
+        $res = $this->create_file($filename, $cest->produce());
         if (!$res) {
             $output->writeln("<error>Test {$filename} already exists</error>");
             return Command::FAILURE;
         }
-
         $output->writeln("<info>Test was created in {$filename}</info>");
         return Command::SUCCESS;
     }

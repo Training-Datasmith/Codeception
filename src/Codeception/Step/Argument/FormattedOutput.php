@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Step\Argument;
 
 /**
  * Implemented in Step arguments where literal values need to be modified in test execution output (e.g. passwords).
  */
-interface FormattedOutput
+interface Formatted_Output
 {
     /**
      * Returns the argument's value formatted for output.
      */
-    public function getOutput(): string;
-
+    public function get_output(): string;
     /**
      * Returns the argument's literal value.
      */

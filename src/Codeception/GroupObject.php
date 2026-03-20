@@ -1,31 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception;
 
-use Codeception\Event\TestEvent;
-
-abstract class GroupObject extends Extension
+use Codeception\Event\Test_Event;
+abstract class Group_Object extends Extension
 {
     public static $group;
-
-    public function _before(TestEvent $event)
+    public function _before(Test_Event $event)
     {
     }
-
-    public function _after(TestEvent $event)
+    public function _after(Test_Event $event)
     {
     }
-
-    public static function getSubscribedEvents(): array
+    public static function get_subscribed_events(): array
     {
-        $groupEvents = static::$group
-            ? [
-                Events::TEST_BEFORE . '.' . static::$group => '_before',
-                Events::TEST_AFTER  . '.' . static::$group => '_after',
-            ]
-            : [];
-        return array_merge($groupEvents, parent::getSubscribedEvents());
+        $group_events = static::$group ? [Events::TEST_BEFORE . '.' . static::$group => '_before', Events::TEST_AFTER . '.' . static::$group => '_after'] : [];
+        return array_merge($group_events, parent::get_subscribed_events());
     }
 }

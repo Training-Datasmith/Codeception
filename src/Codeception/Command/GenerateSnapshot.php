@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
 use Codeception\Lib\Generator\Snapshot as SnapshotGenerator;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 use function ucfirst;
-
 /**
  * Generates Snapshot.
  * Snapshot can be used to test dynamical data.
@@ -23,49 +20,32 @@ use function ucfirst;
  * * `codecept g:snapshot Products`
  * * `codecept g:snapshot Acceptance UserEmails`
  */
-#[AsCommand(
-    name: 'generate:snapshot',
-    description: 'Generates empty Snapshot class'
-)]
-class GenerateSnapshot extends Command
+#[As_Command(name: 'generate:snapshot', description: 'Generates empty Snapshot class')]
+class Generate_Snapshot extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this
-            ->addArgument('suite', InputArgument::REQUIRED, 'Suite name or snapshot name')
-            ->addArgument('snapshot', InputArgument::OPTIONAL, 'Name of snapshot');
+        $this->add_argument('suite', Input_Argument::REQUIRED, 'Suite name or snapshot name')->add_argument('snapshot', Input_Argument::OPTIONAL, 'Name of snapshot');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $suite = (string)$input->getArgument('suite');
-        $class = $input->getArgument('snapshot');
-
+        $suite = (string) $input->get_argument('suite');
+        $class = $input->get_argument('snapshot');
         if (!$class) {
             $class = $suite;
             $suite = '';
         }
-
-        $conf = $suite
-            ? $this->getSuiteConfig($suite)
-            : $this->getGlobalConfig();
-
+        $conf = $suite ? $this->get_suite_config($suite) : $this->get_global_config();
         if ($suite) {
             $suite = DIRECTORY_SEPARATOR . ucfirst($suite);
         }
-
-        $path = $this->createDirectoryFor(Configuration::supportDir() . 'Snapshot' . $suite, $class);
-
-        $filename = $path . $this->getShortClassName($class) . '.php';
-
+        $path = $this->create_directory_for(Configuration::support_dir() . 'Snapshot' . $suite, $class);
+        $filename = $path . $this->get_short_class_name($class) . '.php';
         $output->writeln($filename);
-
-        $snapshot = new SnapshotGenerator($conf, ucfirst($suite) . '\\' . $class);
-        $res = $this->createFile($filename, $snapshot->produce());
-
+        $snapshot = new Snapshot_Generator($conf, ucfirst($suite) . '\\' . $class);
+        $res = $this->create_file($filename, $snapshot->produce());
         if (!$res) {
             $output->writeln("<error>Snapshot {$filename} already exists</error>");
             return Command::FAILURE;

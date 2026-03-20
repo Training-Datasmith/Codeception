@@ -1,52 +1,39 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Subscriber;
 
 use function call_user_func;
-
-use Codeception\Event\SuiteEvent;
+use Codeception\Event\Suite_Event;
 use Codeception\Events;
 use Codeception\Test\Test;
-use Codeception\Test\TestCaseWrapper;
-
+use Codeception\Test\Test_Case_Wrapper;
 use function is_callable;
-
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-class BeforeAfterTest implements EventSubscriberInterface
+use Symfony\Component\Event_Dispatcher\Event_Subscriber_Interface;
+class Before_After_Test implements Event_Subscriber_Interface
 {
-    use Shared\StaticEventsTrait;
-
+    use Shared\Static_Events_Trait;
     /**
      * @var array<string, string|int[]|string[]>
      */
-    protected static array $events = [
-        Events::SUITE_BEFORE => 'beforeClass',
-        Events::SUITE_AFTER  => ['afterClass', 100],
-    ];
-
-    public function beforeClass(SuiteEvent $event): void
+    protected static array $events = [Events::SUITE_BEFORE => 'beforeClass', Events::SUITE_AFTER => ['afterClass', 100]];
+    public function before_class(Suite_Event $event): void
     {
-        foreach ($event->getSuite()->getTests() as $test) {
-            $this->executeMethods($test, $test->getMetadata()->getBeforeClassMethods());
+        foreach ($event->get_suite()->get_tests() as $test) {
+            $this->execute_methods($test, $test->get_metadata()->get_before_class_methods());
         }
     }
-
-    public function afterClass(SuiteEvent $event): void
+    public function after_class(Suite_Event $event): void
     {
-        foreach ($event->getSuite()->getTests() as $test) {
-            $this->executeMethods($test, $test->getMetadata()->getAfterClassMethods());
+        foreach ($event->get_suite()->get_tests() as $test) {
+            $this->execute_methods($test, $test->get_metadata()->get_after_class_methods());
         }
     }
-
-    private function executeMethods(Test $test, array $methods): void
+    private function execute_methods(Test $test, array $methods): void
     {
-        if ($test instanceof TestCaseWrapper) {
-            $test = $test->getTestCase();
+        if ($test instanceof Test_Case_Wrapper) {
+            $test = $test->get_test_case();
         }
-
         foreach ($methods as $method) {
             if (is_callable([$test, $method])) {
                 call_user_func([$test, $method]);

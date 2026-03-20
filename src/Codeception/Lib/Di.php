@@ -1,154 +1,123 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib;
 
-use Codeception\Exception\InjectionException;
-use Codeception\Util\ReflectionHelper;
+use Codeception\Exception\Injection_Exception;
+use Codeception\Util\Reflection_Helper;
 use Exception;
 use ReflectionClass;
-use ReflectionException;
+use Reflection_Exception;
 use ReflectionMethod;
-use ReflectionObject;
+use Reflection_Object;
 use Throwable;
-
 class Di
 {
     /**
      * @var string
      */
     public const DEFAULT_INJECT_METHOD_NAME = '_inject';
-
     /**
      * @var object[]
      */
     protected array $container = [];
-
     public function __construct(protected ?Di $fallback = null)
     {
     }
-
-    public function get(string $className): ?object
+    public function get(string $class_name): ?object
     {
-        $className = ltrim($className, '\\');
-        return $this->container[$className] ?? null;
+        $class_name = ltrim($class_name, '\\');
+        return $this->container[$class_name] ?? null;
     }
-
     public function set(object $class): void
     {
         $this->container[$class::class] = $class;
     }
-
     /**
      * @param string $injectMethodName Method which will be invoked after object creation;
      *                                 Resolved dependencies will be passed to it as arguments
      * @throws InjectionException|ReflectionException
      */
-    public function instantiate(
-        string $className,
-        ?array $constructorArgs = null,
-        string $injectMethodName = self::DEFAULT_INJECT_METHOD_NAME
-    ): ?object {
-        $className = ltrim($className, '\\');
-
-        if (isset($this->container[$className])) {
-            if ($this->container[$className] instanceof $className) {
-                return $this->container[$className];
+    public function instantiate(string $class_name, ?array $constructor_args = null, string $inject_method_name = self::DEFAULT_INJECT_METHOD_NAME): ?object
+    {
+        $class_name = ltrim($class_name, '\\');
+        if (isset($this->container[$class_name])) {
+            if ($this->container[$class_name] instanceof $class_name) {
+                return $this->container[$class_name];
             }
-            throw new InjectionException("Failed to resolve cyclic dependencies for class '{$className}'");
+            throw new Injection_Exception("Failed to resolve cyclic dependencies for class '{$class_name}'");
         }
-
-        if ($this->fallback instanceof Di && ($class = $this->fallback->get($className))) {
+        if ($this->fallback instanceof Di && $class = $this->fallback->get($class_name)) {
             return $class;
         }
-
-        $this->container[$className] = false;
-
+        $this->container[$class_name] = false;
         try {
-            $reflectedClass = new ReflectionClass($className);
-        } catch (ReflectionException $e) {
-            throw new InjectionException("Failed to create instance of '{$className}'. " . $e->getMessage());
+            $reflected_class = new ReflectionClass($class_name);
+        } catch (Reflection_Exception $e) {
+            throw new Injection_Exception("Failed to create instance of '{$class_name}'. " . $e->get_message());
         }
-
-        if (!$reflectedClass->isInstantiable()) {
+        if (!$reflected_class->is_instantiable()) {
             return null;
         }
-
-        $constructorArgs ??= $this->prepareArgs($reflectedClass->getConstructor());
-
+        $constructor_args ??= $this->prepare_args($reflected_class->get_constructor());
         try {
-            $object = $reflectedClass->newInstanceArgs($constructorArgs);
-        } catch (ReflectionException $e) {
-            throw new InjectionException("Failed to create instance of '{$className}'. " . $e->getMessage());
+            $object = $reflected_class->new_instance_args($constructor_args);
+        } catch (Reflection_Exception $e) {
+            throw new Injection_Exception("Failed to create instance of '{$class_name}'. " . $e->get_message());
         }
-
-        $this->injectDependencies($object, $injectMethodName);
-        $this->container[$className] = $object;
-
+        $this->inject_dependencies($object, $inject_method_name);
+        $this->container[$class_name] = $object;
         return $object;
     }
-
     /**
      * @param string $injectMethodName Method which will be invoked with resolved dependencies as its arguments
      * @throws InjectionException|ReflectionException
      */
-    public function injectDependencies(object $object, string $injectMethodName = self::DEFAULT_INJECT_METHOD_NAME, array $defaults = []): void
+    public function inject_dependencies(object $object, string $inject_method_name = self::DEFAULT_INJECT_METHOD_NAME, array $defaults = []): void
     {
-        $reflectedObject = new ReflectionObject($object);
-
-        if ($reflectedObject->hasMethod($injectMethodName)) {
-            $reflectedMethod = $reflectedObject->getMethod($injectMethodName);
-
+        $reflected_object = new Reflection_Object($object);
+        if ($reflected_object->has_method($inject_method_name)) {
+            $reflected_method = $reflected_object->get_method($inject_method_name);
             try {
-                $args = $this->prepareArgs($reflectedMethod, $defaults);
+                $args = $this->prepare_args($reflected_method, $defaults);
             } catch (Exception $e) {
-                $msg = $e->getMessage();
-                if ($e->getPrevious() instanceof Throwable) {
-                    $msg .= '; ' . $e->getPrevious();
+                $msg = $e->get_message();
+                if ($e->get_previous() instanceof Throwable) {
+                    $msg .= '; ' . $e->get_previous();
                 }
-                throw new InjectionException(
-                    "Failed to inject dependencies in instance of '{$reflectedObject->name}'. {$msg}"
-                );
+                throw new Injection_Exception("Failed to inject dependencies in instance of '{$reflected_object->name}'. {$msg}");
             }
-
-            $reflectedMethod->invokeArgs($object, $args);
+            $reflected_method->invoke_args($object, $args);
         }
     }
-
-    protected function prepareArgs(?ReflectionMethod $method = null, array $defaults = []): array
+    protected function prepare_args(?ReflectionMethod $method = null, array $defaults = []): array
     {
         $args = [];
-
         if ($method instanceof ReflectionMethod) {
-            foreach ($method->getParameters() as $k => $parameter) {
-                $dependency = ReflectionHelper::getClassFromParameter($parameter);
-
+            foreach ($method->get_parameters() as $k => $parameter) {
+                $dependency = Reflection_Helper::get_class_from_parameter($parameter);
                 if (is_null($dependency)) {
-                    if ($parameter->isVariadic()) {
+                    if ($parameter->is_variadic()) {
                         continue;
                     }
-
-                    if (!$parameter->isOptional()) {
-                        $args[] = $defaults[$k] ?? throw new InjectionException("Parameter '{$parameter->name}' must have default value.");
+                    if (!$parameter->is_optional()) {
+                        $args[] = $defaults[$k] ?? throw new Injection_Exception("Parameter '{$parameter->name}' must have default value.");
                     } else {
-                        $args[] = $parameter->getDefaultValue();
+                        $args[] = $parameter->get_default_value();
                     }
                 } else {
                     try {
                         $arg = $this->instantiate($dependency);
-                    } catch (ReflectionException $e) {
-                        throw new InjectionException("Failed to resolve dependency '{$dependency}'. " . $e->getMessage());
+                    } catch (Reflection_Exception $e) {
+                        throw new Injection_Exception("Failed to resolve dependency '{$dependency}'. " . $e->get_message());
                     }
-
-                    if (is_null($arg) && !$parameter->isVariadic()) {
-                        throw new InjectionException("Failed to resolve dependency '{$dependency}'.");
+                    if (is_null($arg) && !$parameter->is_variadic()) {
+                        throw new Injection_Exception("Failed to resolve dependency '{$dependency}'.");
                     }
                     $args[] = $arg;
                 }
             }
         }
-
         return $args;
     }
 }

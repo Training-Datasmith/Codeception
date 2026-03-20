@@ -1,22 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception;
 
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use PHPUnit\Framework\AssertionFailedError;
+use Php_Unit\Framework\Assertion_Failed_Error;
 use Traversable;
-
 class Example implements ArrayAccess, Countable, IteratorAggregate
 {
     public function __construct(protected $data)
     {
     }
-
     /**
      * Whether an offset exists
      *
@@ -26,7 +23,6 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_key_exists($offset, $this->data);
     }
-
     /**
      * Offset to retrieve
      *
@@ -36,11 +32,8 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return array_key_exists($offset, $this->data)
-            ? $this->data[$offset]
-            : throw new AssertionFailedError(sprintf("Example %s doesn't exist", $offset));
+        return array_key_exists($offset, $this->data) ? $this->data[$offset] : throw new Assertion_Failed_Error(sprintf("Example %s doesn't exist", $offset));
     }
-
     /**
      * Offset to set
      *
@@ -52,7 +45,6 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
     {
         $this->data[$offset] = $value;
     }
-
     /**
      * Offset to unset
      *
@@ -63,7 +55,6 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
     {
         unset($this->data[$offset]);
     }
-
     /**
      * Count elements of an object
      *
@@ -75,7 +66,6 @@ class Example implements ArrayAccess, Countable, IteratorAggregate
     {
         return count($this->data);
     }
-
     /**
      * Retrieve an external iterator
      *

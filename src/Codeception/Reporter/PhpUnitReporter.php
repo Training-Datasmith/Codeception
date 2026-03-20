@@ -1,80 +1,66 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Reporter;
 
-use Codeception\Event\SuiteEvent;
-use Codeception\Event\TestEvent;
+use Codeception\Event\Suite_Event;
+use Codeception\Event\Test_Event;
 use Codeception\Test\Interfaces\Reported;
 use Codeception\Test\Test;
 use ReflectionClass;
-
-class PhpUnitReporter extends JUnitReporter
+class Php_Unit_Reporter extends J_Unit_Reporter
 {
     public const SUITE_LEVEL = 1;
-    public const FILE_LEVEL  = 2;
-
-    protected string $reportFileParam = 'phpunit-xml';
-    protected string $reportName = 'PHPUNIT XML';
-    private ?string $currentFile = null;
-
-    public function startTest(TestEvent $event): void
+    public const FILE_LEVEL = 2;
+    protected string $report_file_param = 'phpunit-xml';
+    protected string $report_name = 'PHPUNIT XML';
+    private ?string $current_file = null;
+    public function start_test(Test_Event $event): void
     {
-        $test = $event->getTest();
-        $filename = method_exists($test, 'getFileName') ? $test->getFileName() : (new ReflectionClass($test))->getFileName();
-
-        if ($filename !== $this->currentFile) {
-            if ($this->currentFile !== null) {
-                parent::afterSuite(new SuiteEvent());
+        $test = $event->get_test();
+        $filename = method_exists($test, 'getFileName') ? $test->get_file_name() : (new ReflectionClass($test))->get_file_name();
+        if ($filename !== $this->current_file) {
+            if ($this->current_file !== null) {
+                parent::after_suite(new Suite_Event());
             }
-
-            $this->initializeFileLevelSuite($filename, $test);
-            $this->currentFile = $filename;
+            $this->initialize_file_level_suite($filename, $test);
+            $this->current_file = $filename;
         }
-
-        parent::startTest($event);
+        parent::start_test($event);
     }
-
-    private function initializeFileLevelSuite(string $filename, Test $test): void
+    private function initialize_file_level_suite(string $filename, Test $test): void
     {
-        $this->testSuiteAssertions[self::FILE_LEVEL] = 0;
-        $this->testSuiteTests[self::FILE_LEVEL]      = 0;
-        $this->testSuiteTimes[self::FILE_LEVEL]      = 0;
-        $this->testSuiteErrors[self::FILE_LEVEL]     = 0;
-        $this->testSuiteFailures[self::FILE_LEVEL]   = 0;
-        $this->testSuiteSkipped[self::FILE_LEVEL]    = 0;
-        $this->testSuiteUseless[self::FILE_LEVEL]    = 0;
-
-        $this->testSuiteLevel = self::FILE_LEVEL;
-
-        $currentFileSuiteElement = $this->document->createElement('testsuite');
-
+        $this->test_suite_assertions[self::FILE_LEVEL] = 0;
+        $this->test_suite_tests[self::FILE_LEVEL] = 0;
+        $this->test_suite_times[self::FILE_LEVEL] = 0;
+        $this->test_suite_errors[self::FILE_LEVEL] = 0;
+        $this->test_suite_failures[self::FILE_LEVEL] = 0;
+        $this->test_suite_skipped[self::FILE_LEVEL] = 0;
+        $this->test_suite_useless[self::FILE_LEVEL] = 0;
+        $this->test_suite_level = self::FILE_LEVEL;
+        $current_file_suite_element = $this->document->create_element('testsuite');
         if ($test instanceof Reported) {
-            $reportFields = $test->getReportFields();
-            $class = $reportFields['class'] ?? $reportFields['name'];
-            $currentFileSuiteElement->setAttribute('name', $class);
+            $report_fields = $test->get_report_fields();
+            $class = $report_fields['class'] ?? $report_fields['name'];
+            $current_file_suite_element->set_attribute('name', $class);
         } else {
-            $currentFileSuiteElement->setAttribute('name', $test::class);
+            $current_file_suite_element->set_attribute('name', $test::class);
         }
-
-        $currentFileSuiteElement->setAttribute('file', $filename);
-
-        $this->testSuites[self::SUITE_LEVEL]->appendChild($currentFileSuiteElement);
-        $this->testSuites[self::FILE_LEVEL] = $currentFileSuiteElement;
+        $current_file_suite_element->set_attribute('file', $filename);
+        $this->test_suites[self::SUITE_LEVEL]->append_child($current_file_suite_element);
+        $this->test_suites[self::FILE_LEVEL] = $current_file_suite_element;
     }
-
     /**
      * Cleans the mess caused by test suite manipulation in startTest
      */
-    public function afterSuite(SuiteEvent $event): void
+    public function after_suite(Suite_Event $event): void
     {
-        $suite = $event->getSuite();
-        if ($suite->getName() && $this->currentFile) {
-            parent::afterSuite(new SuiteEvent($suite));
-            $this->currentFile = null;
+        $suite = $event->get_suite();
+        if ($suite->get_name() && $this->current_file) {
+            parent::after_suite(new Suite_Event($suite));
+            $this->current_file = null;
         }
-        $this->testSuiteLevel = self::SUITE_LEVEL;
-        parent::afterSuite($event);
+        $this->test_suite_level = self::SUITE_LEVEL;
+        parent::after_suite($event);
     }
 }

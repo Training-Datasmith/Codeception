@@ -1,36 +1,29 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib;
 
 use Codeception\Configuration;
-use Codeception\Exception\ConfigurationException;
+use Codeception\Exception\Configuration_Exception;
 use Codeception\Test\Gherkin;
 use Codeception\Test\Test;
-use Codeception\Util\PathResolver;
-
+use Codeception\Util\Path_Resolver;
 use function realpath;
-
 use Symfony\Component\Finder\Finder;
-
 /**
  * Loads information for groups from external sources (config, filesystem)
  */
-class GroupManager
+class Group_Manager
 {
-    protected array $testsInGroups = [];
-
-    protected string $rootDir;
-
+    protected array $tests_in_groups = [];
+    protected string $root_dir;
     /** @param string[] $configuredGroups */
-    public function __construct(protected array $configuredGroups)
+    public function __construct(protected array $configured_groups)
     {
-        $this->rootDir = Configuration::baseDir();
-        $this->loadGroupsByPattern();
-        $this->loadConfiguredGroupSettings();
+        $this->root_dir = Configuration::base_dir();
+        $this->load_groups_by_pattern();
+        $this->load_configured_group_settings();
     }
-
     /**
      * proceeds group names with asterisk:
      *
@@ -42,52 +35,41 @@ class GroupManager
      * ]
      * ```
      */
-    protected function loadGroupsByPattern(): void
+    protected function load_groups_by_pattern(): void
     {
-        foreach ($this->configuredGroups as $group => $pattern) {
+        foreach ($this->configured_groups as $group => $pattern) {
             if (!str_contains((string) $group, '*')) {
                 continue;
             }
-
-            $path = PathResolver::isPathAbsolute($pattern) ? dirname($pattern) : $this->rootDir . dirname($pattern);
-
-            $files = Finder::create()->files()
-                ->name(basename($pattern))
-                ->sortByName()
-                ->in($path);
-
+            $path = Path_Resolver::is_path_absolute($pattern) ? dirname($pattern) : $this->root_dir . dirname($pattern);
+            $files = Finder::create()->files()->name(basename($pattern))->sort_by_name()->in($path);
             foreach ($files as $file) {
                 $prefix = str_replace('*', '', $group);
-                $pathPrefix = str_replace('*', '', basename($pattern));
-                $groupName = $prefix . str_replace($pathPrefix, '', $file->getRelativePathname());
-                $this->configuredGroups[$groupName] = dirname($pattern) . DIRECTORY_SEPARATOR . $file->getRelativePathname();
+                $path_prefix = str_replace('*', '', basename($pattern));
+                $group_name = $prefix . str_replace($path_prefix, '', $file->get_relative_pathname());
+                $this->configured_groups[$group_name] = dirname($pattern) . DIRECTORY_SEPARATOR . $file->get_relative_pathname();
             }
-
-            unset($this->configuredGroups[$group]);
+            unset($this->configured_groups[$group]);
         }
     }
-
-    protected function loadConfiguredGroupSettings(): void
+    protected function load_configured_group_settings(): void
     {
-        foreach ($this->configuredGroups as $group => $tests) {
-            $this->testsInGroups[$group] = [];
-            $testsArray = is_array($tests) ? $tests : $this->getTestsFromFile($tests);
-
-            foreach ($testsArray as $test) {
+        foreach ($this->configured_groups as $group => $tests) {
+            $this->tests_in_groups[$group] = [];
+            $tests_array = is_array($tests) ? $tests : $this->get_tests_from_file($tests);
+            foreach ($tests_array as $test) {
                 $file = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $test);
-                $this->testsInGroups[$group][] = $this->normalizeFilePath($file, $group);
+                $this->tests_in_groups[$group][] = $this->normalize_file_path($file, $group);
             }
         }
     }
-
-    private function getTestsFromFile(string $tests): array
+    private function get_tests_from_file(string $tests): array
     {
-        $path = codecept_is_path_absolute($tests) ? $tests : $this->rootDir . $tests;
+        $path = codecept_is_path_absolute($tests) ? $tests : $this->root_dir . $tests;
         if (!is_file($path)) {
             return [];
         }
-
-        $testsArray = [];
+        $tests_array = [];
         $handle = fopen($path, 'r');
         if ($handle) {
             while (($test = fgets($handle, 4096)) !== false) {
@@ -95,73 +77,63 @@ class GroupManager
                 // otherwise the current codeception directory becomes part of the group
                 // which causes every single test to run
                 if (trim($test) !== '') {
-                    $testsArray[] = trim($test);
+                    $tests_array[] = trim($test);
                 }
             }
             fclose($handle);
         }
-        return $testsArray;
+        return $tests_array;
     }
-
-    private function normalizeFilePath(string $file, string $group): string
+    private function normalize_file_path(string $file, string $group): string
     {
-        $pathParts = explode(':', $file);
-        $isAbsolute = codecept_is_path_absolute($file);
-        if ($isAbsolute) {
-            if ($file[0] === '/' && count($pathParts) > 1) {
+        $path_parts = explode(':', $file);
+        $is_absolute = codecept_is_path_absolute($file);
+        if ($is_absolute) {
+            if ($file[0] === '/' && count($path_parts) > 1) {
                 // Take segment before first :
-                $this->checkIfFileExists($pathParts[0], $group);
-                return sprintf('%s:%s', realpath($pathParts[0]), $pathParts[1]);
+                $this->check_if_file_exists($path_parts[0], $group);
+                return sprintf('%s:%s', realpath($path_parts[0]), $path_parts[1]);
             }
-            if (count($pathParts) > 2) {
+            if (count($path_parts) > 2) {
                 // On Windows take segment before second :
-                $fullPath = $pathParts[0] . ':' . $pathParts[1];
-                $this->checkIfFileExists($fullPath, $group);
-                return sprintf('%s:%s', realpath($fullPath), $pathParts[2]);
+                $full_path = $path_parts[0] . ':' . $path_parts[1];
+                $this->check_if_file_exists($full_path, $group);
+                return sprintf('%s:%s', realpath($full_path), $path_parts[2]);
             }
-            $this->checkIfFileExists($file, $group);
+            $this->check_if_file_exists($file, $group);
             return realpath($file);
         }
-
         if (!str_contains($file, ':')) {
-            $dirtyPath = $this->rootDir . $file;
-            $this->checkIfFileExists($dirtyPath, $group);
-            return realpath($dirtyPath);
+            $dirty_path = $this->root_dir . $file;
+            $this->check_if_file_exists($dirty_path, $group);
+            return realpath($dirty_path);
         }
-
-        $dirtyPath = $this->rootDir . $pathParts[0];
-        $this->checkIfFileExists($dirtyPath, $group);
-        return sprintf('%s:%s', realpath($dirtyPath), $pathParts[1]);
+        $dirty_path = $this->root_dir . $path_parts[0];
+        $this->check_if_file_exists($dirty_path, $group);
+        return sprintf('%s:%s', realpath($dirty_path), $path_parts[1]);
     }
-
-    private function checkIfFileExists(string $path, string $group): void
+    private function check_if_file_exists(string $path, string $group): void
     {
         if (!file_exists($path)) {
-            throw new ConfigurationException('GroupManager: File or directory ' . $path . ' set in ' . $group . ' group does not exist');
+            throw new Configuration_Exception('GroupManager: File or directory ' . $path . ' set in ' . $group . ' group does not exist');
         }
     }
-
-    public function groupsForTest(Test $test): array
+    public function groups_for_test(Test $test): array
     {
-        $filename = realpath($test->getFileName());
-        $testName = $test->getName();
-        $groups = $test->getMetadata()->getGroups();
-
-        foreach ($this->testsInGroups as $group => $tests) {
+        $filename = realpath($test->get_file_name());
+        $test_name = $test->get_name();
+        $groups = $test->get_metadata()->get_groups();
+        foreach ($this->tests_in_groups as $group => $tests) {
             /** @var string[] $tests */
-            foreach ($tests as $testPattern) {
-                if ($filename == $testPattern || str_starts_with($filename . ':' . $testName, $testPattern)) {
+            foreach ($tests as $test_pattern) {
+                if ($filename == $test_pattern || str_starts_with($filename . ':' . $test_name, $test_pattern)) {
                     $groups[] = $group;
                 }
-                if (
-                    $test instanceof Gherkin
-                    && mb_strtolower($filename . ':' . $test->getMetadata()->getFeature()) === mb_strtolower($testPattern)
-                ) {
+                if ($test instanceof Gherkin && mb_strtolower($filename . ':' . $test->get_metadata()->get_feature()) === mb_strtolower($test_pattern)) {
                     $groups[] = $group;
                 }
             }
         }
-
         return array_unique($groups);
     }
 }

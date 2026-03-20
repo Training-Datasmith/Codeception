@@ -1,16 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Interfaces;
 
-interface ActiveRecord extends ORM
+interface Active_Record extends ORM
 {
-    public function haveRecord(string $model, array $attributes = []);
-
-    public function seeRecord(string $model, array $attributes = []): void;
-
-    public function dontSeeRecord(string $model, array $attributes = []): void;
-
-    public function grabRecord(string $model, array $attributes = []);
+    public function have_record(string $model, array $attributes = []);
+    public function see_record(string $model, array $attributes = []): void;
+    public function dont_see_record(string $model, array $attributes = []): void;
+    public function grab_record(string $model, array $attributes = []);
 }

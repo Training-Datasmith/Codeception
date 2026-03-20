@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command\Shared;
 
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Output\OutputInterface;
-
-trait StyleTrait
+use Symfony\Component\Console\Formatter\Output_Formatter_Style;
+use Symfony\Component\Console\Output\Output_Interface;
+trait Style_Trait
 {
-    public function addStyles(OutputInterface $output): void
+    public function add_styles(Output_Interface $output): void
     {
-        $output->getFormatter()->setStyle('notice', new OutputFormatterStyle('white', 'green', ['bold']));
-        $output->getFormatter()->setStyle('bold', new OutputFormatterStyle(null, null, ['bold']));
-        $output->getFormatter()->setStyle('warning', new OutputFormatterStyle(null, 'yellow', ['bold']));
-        $output->getFormatter()->setStyle('debug', new OutputFormatterStyle('cyan'));
+        $output->get_formatter()->set_style('notice', new Output_Formatter_Style('white', 'green', ['bold']));
+        $output->get_formatter()->set_style('bold', new Output_Formatter_Style(null, null, ['bold']));
+        $output->get_formatter()->set_style('warning', new Output_Formatter_Style(null, 'yellow', ['bold']));
+        $output->get_formatter()->set_style('debug', new Output_Formatter_Style('cyan'));
     }
 }

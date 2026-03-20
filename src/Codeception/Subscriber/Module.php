@@ -1,116 +1,93 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Subscriber;
 
 use function array_reverse;
-
-use Codeception\Event\FailEvent;
-use Codeception\Event\StepEvent;
-use Codeception\Event\SuiteEvent;
-use Codeception\Event\TestEvent;
+use Codeception\Event\Fail_Event;
+use Codeception\Event\Step_Event;
+use Codeception\Event\Suite_Event;
+use Codeception\Event\Test_Event;
 use Codeception\Events;
-use Codeception\Exception\ThrowableWrapper;
+use Codeception\Exception\Throwable_Wrapper;
 use Codeception\Suite;
-use Codeception\TestInterface;
-
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-class Module implements EventSubscriberInterface
+use Codeception\Test_Interface;
+use Symfony\Component\Event_Dispatcher\Event_Subscriber_Interface;
+class Module implements Event_Subscriber_Interface
 {
-    use Shared\StaticEventsTrait;
-
+    use Shared\Static_Events_Trait;
     /**
      * @var array<string, string>
      */
-    protected static array $events = [
-        Events::TEST_BEFORE  => 'before',
-        Events::TEST_AFTER   => 'after',
-        Events::STEP_BEFORE  => 'beforeStep',
-        Events::STEP_AFTER   => 'afterStep',
-        Events::TEST_FAIL    => 'failed',
-        Events::TEST_ERROR   => 'failed',
-        Events::SUITE_BEFORE => 'beforeSuite',
-        Events::SUITE_AFTER  => 'afterSuite',
-    ];
-
+    protected static array $events = [Events::TEST_BEFORE => 'before', Events::TEST_AFTER => 'after', Events::STEP_BEFORE => 'beforeStep', Events::STEP_AFTER => 'afterStep', Events::TEST_FAIL => 'failed', Events::TEST_ERROR => 'failed', Events::SUITE_BEFORE => 'beforeSuite', Events::SUITE_AFTER => 'afterSuite'];
     /**
      * @param \Codeception\Module[] $modules
      */
     public function __construct(protected array $modules = [])
     {
     }
-
-    public function beforeSuite(SuiteEvent $event): void
+    public function before_suite(Suite_Event $event): void
     {
-        $suite = $event->getSuite();
+        $suite = $event->get_suite();
         if (!$suite instanceof Suite) {
             return;
         }
-        $this->modules = $suite->getModules();
+        $this->modules = $suite->get_modules();
         foreach ($this->modules as $module) {
-            $module->_beforeSuite($event->getSettings());
+            $module->_before_suite($event->get_settings());
         }
     }
-
-    public function afterSuite(): void
+    public function after_suite(): void
     {
         foreach (array_reverse($this->modules) as $module) {
-            $module->_afterSuite();
+            $module->_after_suite();
         }
     }
-
-    public function before(TestEvent $event): void
+    public function before(Test_Event $event): void
     {
-        if (!$event->getTest() instanceof TestInterface) {
+        if (!$event->get_test() instanceof Test_Interface) {
             return;
         }
-
         foreach ($this->modules as $module) {
-            $module->_before($event->getTest());
+            $module->_before($event->get_test());
         }
     }
-
-    public function after(TestEvent $event): void
+    public function after(Test_Event $event): void
     {
-        if (!$event->getTest() instanceof TestInterface) {
+        if (!$event->get_test() instanceof Test_Interface) {
             return;
         }
         foreach (array_reverse($this->modules) as $module) {
-            $module->_after($event->getTest());
-            $module->_resetConfig();
+            $module->_after($event->get_test());
+            $module->_reset_config();
         }
     }
-
-    public function failed(FailEvent $event): void
+    public function failed(Fail_Event $event): void
     {
-        if (!$event->getTest() instanceof TestInterface) {
+        if (!$event->get_test() instanceof Test_Interface) {
             return;
         }
         foreach (array_reverse($this->modules) as $module) {
-            $exception = $event->getFail();
+            $exception = $event->get_fail();
             if (!$exception instanceof \Exception) {
                 /**
                  * @TODO Change _failed parameter to \Throwable in the next major version
                  */
-                $exception = new ThrowableWrapper($exception);
+                $exception = new Throwable_Wrapper($exception);
             }
-            $module->_failed($event->getTest(), $exception);
+            $module->_failed($event->get_test(), $exception);
         }
     }
-
-    public function beforeStep(StepEvent $event): void
+    public function before_step(Step_Event $event): void
     {
         foreach ($this->modules as $module) {
-            $module->_beforeStep($event->getStep());
+            $module->_before_step($event->get_step());
         }
     }
-
-    public function afterStep(StepEvent $event): void
+    public function after_step(Step_Event $event): void
     {
         foreach (array_reverse($this->modules) as $module) {
-            $module->_afterStep($event->getStep());
+            $module->_after_step($event->get_step());
         }
     }
 }

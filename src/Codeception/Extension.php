@@ -1,19 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception;
 
 use function array_keys;
 use function array_merge;
-
-use Codeception\Event\SuiteEvent;
-use Codeception\Exception\ModuleRequireException;
-use Codeception\Extension\SuiteInitSubscriberTrait;
-
+use Codeception\Event\Suite_Event;
+use Codeception\Exception\Module_Require_Exception;
+use Codeception\Extension\Suite_Init_Subscriber_Trait;
 use Codeception\Lib\Console\Output;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
+use Symfony\Component\Event_Dispatcher\Event_Subscriber_Interface;
 /**
  * A base class for all Codeception Extensions and GroupObjects
  *
@@ -22,36 +18,29 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * * config: current extension configuration
  * * options: passed running options
  */
-abstract class Extension implements EventSubscriberInterface
+abstract class Extension implements Event_Subscriber_Interface
 {
-    use SuiteInitSubscriberTrait;
-
+    use Suite_Init_Subscriber_Trait;
     /**
      * @var array<int|string, mixed>
      */
     protected array $config = [];
-
     protected Output $output;
-
-    protected array $globalConfig = [];
-
+    protected array $global_config = [];
     /**
      * @var array<string, Module>
      */
     private array $modules = [];
-
     public function __construct(array $config, protected array $options)
     {
         $this->config = array_merge($this->config, $config);
         $this->output = new Output($options);
         $this->_initialize();
     }
-
-    public function receiveModuleContainer(SuiteEvent $event): void
+    public function receive_module_container(Suite_Event $event): void
     {
-        $this->modules = $event->getSuite()->getModules();
+        $this->modules = $event->get_suite()->get_modules();
     }
-
     /**
      * Pass config variables that should be injected into global config.
      */
@@ -59,16 +48,15 @@ abstract class Extension implements EventSubscriberInterface
     {
         Configuration::append($config);
     }
-
     /**
      * You can do all preparations here. No need to override constructor.
      * Also, you can skip calling `_reconfigure` if you don't need to.
      */
     public function _initialize(): void
     {
-        $this->_reconfigure(); // hook for BC only.
+        $this->_reconfigure();
+        // hook for BC only.
     }
-
     /**
      * @param string|iterable $messages The message as an iterable of strings or a single string
      */
@@ -78,7 +66,6 @@ abstract class Extension implements EventSubscriberInterface
             $this->output->write($messages);
         }
     }
-
     /**
      * @param string|iterable $messages The message as an iterable of strings or a single string
      */
@@ -88,49 +75,41 @@ abstract class Extension implements EventSubscriberInterface
             $this->output->writeln($messages);
         }
     }
-
-    public function hasModule(string $name): bool
+    public function has_module(string $name): bool
     {
         return isset($this->modules[$name]);
     }
-
     /**
      * @return string[]
      */
-    public function getCurrentModuleNames(): array
+    public function get_current_module_names(): array
     {
         return array_keys($this->modules);
     }
-
-    public function getModule(string $name): Module
+    public function get_module(string $name): Module
     {
-        if (!$this->hasModule($name)) {
-            throw new ModuleRequireException($name, 'module is not enabled');
+        if (!$this->has_module($name)) {
+            throw new Module_Require_Exception($name, 'module is not enabled');
         }
         return $this->modules[$name];
     }
-
-    public function getTestsDir(): string
+    public function get_tests_dir(): string
     {
-        return Configuration::testsDir();
+        return Configuration::tests_dir();
     }
-
-    public function getLogDir(): string
+    public function get_log_dir(): string
     {
-        return Configuration::outputDir();
+        return Configuration::output_dir();
     }
-
-    public function getDataDir(): string
+    public function get_data_dir(): string
     {
-        return Configuration::dataDir();
+        return Configuration::data_dir();
     }
-
-    public function getRootDir(): string
+    public function get_root_dir(): string
     {
-        return Configuration::projectDir();
+        return Configuration::project_dir();
     }
-
-    public function getGlobalConfig(): array
+    public function get_global_config(): array
     {
         return Configuration::config();
     }

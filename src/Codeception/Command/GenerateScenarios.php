@@ -1,32 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use function basename;
-
 use Codeception\Configuration;
-use Codeception\Exception\ConfigurationException;
-use Codeception\SuiteManager;
+use Codeception\Exception\Configuration_Exception;
+use Codeception\Suite_Manager;
 use Codeception\Test\Cest;
 use Codeception\Test\Interfaces\Descriptive;
-use Codeception\Test\Interfaces\ScenarioDriven;
-
+use Codeception\Test\Interfaces\Scenario_Driven;
 use function file_exists;
 use function is_writable;
 use function mkdir;
 use function preg_replace;
-
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Input\Input_Option;
+use Symfony\Component\Console\Output\Output_Interface;
+use Symfony\Component\Event_Dispatcher\Event_Dispatcher;
 /**
  * Generates user-friendly text scenarios from scenario-driven tests (Cest).
  *
@@ -34,91 +28,63 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * * `codecept g:scenarios Acceptance --format html` - in html format
  * * `codecept g:scenarios Acceptance --path doc` - generate scenarios to `doc` dir
  */
-#[AsCommand(
-    name: 'generate:scenarios',
-    description: 'Generates text representation for all scenarios'
-)]
-class GenerateScenarios extends Command
+#[As_Command(name: 'generate:scenarios', description: 'Generates text representation for all scenarios')]
+class Generate_Scenarios extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this
-            ->addArgument('suite', InputArgument::REQUIRED, 'suite from which texts should be generated')
-            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Use specified path as destination instead of default')
-            ->addOption('single-file', '', InputOption::VALUE_NONE, 'Render all scenarios to only one file')
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'Specify output format: html or text (default)', 'text');
+        $this->add_argument('suite', Input_Argument::REQUIRED, 'suite from which texts should be generated')->add_option('path', 'p', Input_Option::VALUE_REQUIRED, 'Use specified path as destination instead of default')->add_option('single-file', '', Input_Option::VALUE_NONE, 'Render all scenarios to only one file')->add_option('format', 'f', Input_Option::VALUE_REQUIRED, 'Specify output format: html or text (default)', 'text');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $suite = $input->getArgument('suite');
-
-        $suiteConf = $this->getSuiteConfig($suite);
-
-        $path = $input->getOption('path') ?: Configuration::dataDir() . 'scenarios';
-
-        $format = $input->getOption('format');
-
+        $suite = $input->get_argument('suite');
+        $suite_conf = $this->get_suite_config($suite);
+        $path = $input->get_option('path') ?: Configuration::data_dir() . 'scenarios';
+        $format = $input->get_option('format');
         @mkdir($path, 0777, true);
-
         if (!is_writable($path)) {
-            throw new ConfigurationException(
-                "Path {$path} is not writable. Please, set valid permissions for folder to store scenarios."
-            );
+            throw new Configuration_Exception("Path {$path} is not writable. Please, set valid permissions for folder to store scenarios.");
         }
-
         $path .= DIRECTORY_SEPARATOR . $suite;
-        if (!$input->getOption('single-file')) {
+        if (!$input->get_option('single-file')) {
             @mkdir($path);
         }
-
-        $suiteManager = new SuiteManager(new EventDispatcher(), $suite, $suiteConf, []);
-
-        if ($suiteConf['bootstrap'] && file_exists($suiteConf['path'] . $suiteConf['bootstrap'])) {
-            require_once $suiteConf['path'] . $suiteConf['bootstrap'];
+        $suite_manager = new Suite_Manager(new Event_Dispatcher(), $suite, $suite_conf, []);
+        if ($suite_conf['bootstrap'] && file_exists($suite_conf['path'] . $suite_conf['bootstrap'])) {
+            require_once $suite_conf['path'] . $suite_conf['bootstrap'];
         }
-
-        $tests = $this->getTests($suiteManager);
+        $tests = $this->get_tests($suite_manager);
         $scenarios = '';
-
         $output->writeln('<comment>This command is deprecated and will be removed in the next major version of Codeception.</comment>');
-
         foreach ($tests as $test) {
-            if (!$test instanceof ScenarioDriven) {
+            if (!$test instanceof Scenario_Driven) {
                 continue;
             }
             if (!$test instanceof Descriptive) {
                 continue;
             }
-            $feature = $test->getScenarioText($format);
-
-            $name = $this->underscore(basename($test->getFileName(), '.php'));
-
+            $feature = $test->get_scenario_text($format);
+            $name = $this->underscore(basename($test->get_file_name(), '.php'));
             // create separate file for each test in Cest
-            if ($test instanceof Cest && !$input->getOption('single-file')) {
-                $name .= '.' . $this->underscore($test->getTestMethod());
+            if ($test instanceof Cest && !$input->get_option('single-file')) {
+                $name .= '.' . $this->underscore($test->get_test_method());
             }
-
-            if ($input->getOption('single-file')) {
+            if ($input->get_option('single-file')) {
                 $scenarios .= $feature;
                 $output->writeln("* {$name} rendered");
             } else {
                 $feature = $this->decorate($feature, $format);
-                $this->createFile($path . DIRECTORY_SEPARATOR . $name . $this->formatExtension($format), $feature, true);
+                $this->create_file($path . DIRECTORY_SEPARATOR . $name . $this->format_extension($format), $feature, true);
                 $output->writeln("* {$name} generated");
             }
         }
-
-        if ($input->getOption('single-file')) {
-            $this->createFile($path . $this->formatExtension($format), $this->decorate($scenarios, $format), true);
+        if ($input->get_option('single-file')) {
+            $this->create_file($path . $this->format_extension($format), $this->decorate($scenarios, $format), true);
         }
-
         return Command::SUCCESS;
     }
-
     protected function decorate(string $text, string $format): string
     {
         if ($format === 'html') {
@@ -126,22 +92,19 @@ class GenerateScenarios extends Command
         }
         return $text;
     }
-
-    protected function getTests($suiteManager)
+    protected function get_tests($suite_manager)
     {
-        $suiteManager->loadTests();
-        return $suiteManager->getSuite()->getTests();
+        $suite_manager->load_tests();
+        return $suite_manager->get_suite()->get_tests();
     }
-
-    protected function formatExtension(string $format): string
+    protected function format_extension(string $format): string
     {
         return '.' . ($format === 'html' ? 'html' : 'txt');
     }
-
     private function underscore(string $name): string
     {
-        $name = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\\1_\\2', $name);
-        $name = preg_replace('#([a-z\d])([A-Z])#', '\\1_\\2', (string) $name);
+        $name = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\1_\2', $name);
+        $name = preg_replace('#([a-z\d])([A-Z])#', '\1_\2', (string) $name);
         $name = str_replace(['/', '\\'], ['.', '.'], $name);
         $name = preg_replace('#_Cept$#', '', $name);
         return preg_replace('#_Cest$#', '', (string) $name);

@@ -1,125 +1,104 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Template;
 
-use Codeception\InitTemplate;
-use Codeception\Template\Shared\TemplateHelpersTrait;
+use Codeception\Init_Template;
+use Codeception\Template\Shared\Template_Helpers_Trait;
 use Codeception\Util\Template;
 use Symfony\Component\Yaml\Yaml;
-
-class Acceptance extends InitTemplate
+class Acceptance extends Init_Template
 {
-    use TemplateHelpersTrait;
-
-    protected string $configTemplate = <<<EOF
-# suite config
-suites:
-    Acceptance:
-        actor: AcceptanceTester
-        path: .
-        modules:
-            enabled:
-                - WebDriver:
-                    url: {{url}}
-                    browser: {{browser}}
-
-        # add Codeception\Step\Retry trait to AcceptanceTester to enable retries
-        step_decorators:
-            - Codeception\Step\ConditionalAssertion
-            - Codeception\Step\TryTo
-            - Codeception\Step\Retry
-
-extensions:
-    enabled: [Codeception\Extension\RunFailed]
-
-params:
-    - env
-
-gherkin: []
-
-# additional paths
-paths:
-    tests: {{baseDir}}
-    output: {{baseDir}}/_output
-    data: {{baseDir}}/Support/Data
-    support: {{baseDir}}/Support
-    envs: {{baseDir}}/_envs
-
-settings:
-    shuffle: false
-    lint: true
-EOF;
-
-    protected string $firstTest = <<<EOF
-<?php
-
-namespace {{namespace}};
-
-use {{namespace}}\{{support_namespace}}\AcceptanceTester;
-
-class LoginCest
-{
-    public function _before(AcceptanceTester \$I)
+    use Template_Helpers_Trait;
+    protected string $config_template = <<<EOF
+    # suite config
+    suites:
+        Acceptance:
+            actor: AcceptanceTester
+            path: .
+            modules:
+                enabled:
+                    - WebDriver:
+                        url: {{url}}
+                        browser: {{browser}}
+    
+            # add Codeception\\Step\\Retry trait to AcceptanceTester to enable retries
+            step_decorators:
+                - Codeception\\Step\\ConditionalAssertion
+                - Codeception\\Step\\TryTo
+                - Codeception\\Step\\Retry
+    
+    extensions:
+        enabled: [Codeception\\Extension\\RunFailed]
+    
+    params:
+        - env
+    
+    gherkin: []
+    
+    # additional paths
+    paths:
+        tests: {{baseDir}}
+        output: {{baseDir}}/_output
+        data: {{baseDir}}/Support/Data
+        support: {{baseDir}}/Support
+        envs: {{baseDir}}/_envs
+    
+    settings:
+        shuffle: false
+        lint: true
+    EOF;
+    protected string $first_test = <<<EOF
+    <?php
+    
+    namespace {{namespace}};
+    
+    use {{namespace}}\\{{support_namespace}}\\AcceptanceTester;
+    
+    class LoginCest
     {
-        \$I->amOnPage('/');
+        public function _before(AcceptanceTester \$I)
+        {
+            \$I->amOnPage('/');
+        }
+    
+        public function loginSuccessfully(AcceptanceTester \$I)
+        {
+            // write a positive login test 
+        }
+    
+        public function loginWithInvalidPassword(AcceptanceTester \$I)
+        {
+            // write a negative login test
+        }
     }
-
-    public function loginSuccessfully(AcceptanceTester \$I)
-    {
-        // write a positive login test 
-    }
-
-    public function loginWithInvalidPassword(AcceptanceTester \$I)
-    {
-        // write a negative login test
-    }
-}
-EOF;
-
+    EOF;
     public function setup(): void
     {
-        $this->checkInstalled();
+        $this->check_installed();
         $this->say("Let's prepare Codeception for acceptance testing");
         $this->say('Create your tests and run them in real browser');
         $this->say();
-
-        $dir     = $this->ask('Where tests will be stored?', 'tests');
+        $dir = $this->ask('Where tests will be stored?', 'tests');
         $browser = $this->ask('Select a browser for testing', ['chrome', 'firefox']);
-        $this->sayInfo(
-            $browser === 'chrome'
-                ? 'Ensure Selenium Server and ChromeDriver are installed'
-                : 'Ensure Selenium Server and GeckoDriver are installed'
-        );
+        $this->say_info($browser === 'chrome' ? 'Ensure Selenium Server and ChromeDriver are installed' : 'Ensure Selenium Server and GeckoDriver are installed');
         $url = $this->ask('Start URL for tests', 'http://localhost');
-        $this->createSuiteDirs($dir);
-        $this->sayInfo("Created test directories at {$dir}");
-        $this->ensureModules(['WebDriver']);
-        $config = (new Template($this->configTemplate))
-            ->place('url', $url)
-            ->place('browser', $browser)
-            ->place('baseDir', $dir)
-            ->produce();
-
+        $this->create_suite_dirs($dir);
+        $this->say_info("Created test directories at {$dir}");
+        $this->ensure_modules(['WebDriver']);
+        $config = (new Template($this->config_template))->place('url', $url)->place('browser', $browser)->place('baseDir', $dir)->produce();
         $namespace = rtrim($this->namespace, '\\');
-        $config = "namespace: {$namespace}\nsupport_namespace: {$this->supportNamespace}\n" . $config;
-        $this->createFile('codeception.yml', $config);
-
+        $config = "namespace: {$namespace}\nsupport_namespace: {$this->support_namespace}\n" . $config;
+        $this->create_file('codeception.yml', $config);
         $settings = Yaml::parse($config)['suites']['Acceptance'];
-        $settings['support_namespace'] = $this->supportNamespace;
-        $this->createActor('AcceptanceTester', $dir . DIRECTORY_SEPARATOR . 'Support', $settings);
-
-        $this->sayInfo('Created global config codeception.yml inside the root directory');
-
-        $firstTest = (new Template($this->firstTest))
-            ->place('namespace', $namespace)
-            ->place('support_namespace', $this->supportNamespace)
-            ->produce();
-        $this->createFile($dir . DIRECTORY_SEPARATOR . 'LoginCest.php', $firstTest);
-        $this->sayInfo('Created a demo test LoginCest.php');
+        $settings['support_namespace'] = $this->support_namespace;
+        $this->create_actor('AcceptanceTester', $dir . DIRECTORY_SEPARATOR . 'Support', $settings);
+        $this->say_info('Created global config codeception.yml inside the root directory');
+        $first_test = (new Template($this->first_test))->place('namespace', $namespace)->place('support_namespace', $this->support_namespace)->produce();
+        $this->create_file($dir . DIRECTORY_SEPARATOR . 'LoginCest.php', $first_test);
+        $this->say_info('Created a demo test LoginCest.php');
         $this->say();
-        $this->saySuccess('INSTALLATION COMPLETE');
+        $this->say_success('INSTALLATION COMPLETE');
         $this->say();
         $this->say('<bold>Next steps:</bold>');
         $this->say('1. Launch Selenium Server and webserver');

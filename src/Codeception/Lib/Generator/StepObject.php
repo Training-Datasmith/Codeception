@@ -1,75 +1,56 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Generator;
 
-use Codeception\Exception\ConfigurationException;
+use Codeception\Exception\Configuration_Exception;
 use Codeception\Lib\Generator\Shared\Classname;
 use Codeception\Util\Shared\Namespaces;
 use Codeception\Util\Template;
-
-class StepObject
+class Step_Object
 {
     use Namespaces;
     use Classname;
-
     protected string $template = <<<EOF
-<?php
-
-declare(strict_types=1);
-
-namespace {{namespace}};
-
-class {{name}} extends {{actorClass}}
-{
-{{actions}}
-}
-
-EOF;
-
-    protected string $actionTemplate = <<<EOF
-
-    public function {{action}}()
+    <?php
+    
+    declare(strict_types=1);
+    
+    namespace {{namespace}};
+    
+    class {{name}} extends {{actorClass}}
     {
-        \$I = \$this;
+    {{actions}}
     }
-
-EOF;
-
+    
+    EOF;
+    protected string $action_template = <<<EOF
+    
+        public function {{action}}()
+        {
+            \$I = \$this;
+        }
+    
+    EOF;
     protected string $name;
-
     protected string $actions = '';
-
     public string $namespace;
-
     public function __construct(protected array $settings, string $name)
     {
-        $this->name = $this->getShortClassName($name);
-        $this->namespace = $this->getNamespaceString($this->supportNamespace() . 'Step\\' . $name);
+        $this->name = $this->get_short_class_name($name);
+        $this->namespace = $this->get_namespace_string($this->support_namespace() . 'Step\\' . $name);
     }
-
     public function produce(): string
     {
         $actor = $this->settings['actor'];
         if (!$actor) {
-            throw new ConfigurationException("Steps can't be created for suite without an actor");
+            throw new Configuration_Exception("Steps can't be created for suite without an actor");
         }
-
-        $extended = '\\' . ltrim($this->supportNamespace() . $actor, '\\');
-
-        return (new Template($this->template))
-            ->place('namespace', $this->namespace)
-            ->place('name', $this->name)
-            ->place('actorClass', $extended)
-            ->place('actions', $this->actions)
-            ->produce();
+        $extended = '\\' . ltrim($this->support_namespace() . $actor, '\\');
+        return (new Template($this->template))->place('namespace', $this->namespace)->place('name', $this->name)->place('actorClass', $extended)->place('actions', $this->actions)->produce();
     }
-
-    public function createAction($action): void
+    public function create_action($action): void
     {
-        $this->actions .= (new Template($this->actionTemplate))
-            ->place('action', $action)
-            ->produce();
+        $this->actions .= (new Template($this->action_template))->place('action', $action)->produce();
     }
 }

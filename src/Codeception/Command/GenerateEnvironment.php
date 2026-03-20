@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
-use Codeception\Exception\ConfigurationException;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Codeception\Exception\Configuration_Exception;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 /**
  * Generates empty environment configuration file into envs dir:
  *
@@ -19,44 +17,31 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Required to have `envs` path to be specified in `codeception.yml`
  */
-#[AsCommand(
-    name: 'generate:environment',
-    description: 'Generates empty environment config'
-)]
-class GenerateEnvironment extends Command
+#[As_Command(name: 'generate:environment', description: 'Generates empty environment config')]
+class Generate_Environment extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this->addArgument('env', InputArgument::REQUIRED, 'Environment name');
+        $this->add_argument('env', Input_Argument::REQUIRED, 'Environment name');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $config = $this->getGlobalConfig();
-        if (Configuration::envsDir() === '') {
-            throw new ConfigurationException(
-                "Path for environments configuration is not set.\n"
-                . "Please specify envs path in your `codeception.yml`\n \n"
-                . 'envs: tests/_envs'
-            );
+        $config = $this->get_global_config();
+        if (Configuration::envs_dir() === '') {
+            throw new Configuration_Exception("Path for environments configuration is not set.\n" . "Please specify envs path in your `codeception.yml`\n \n" . 'envs: tests/_envs');
         }
-
-        $relativePath = $config['paths']['envs'];
-        $env = $input->getArgument('env');
+        $relative_path = $config['paths']['envs'];
+        $env = $input->get_argument('env');
         $file = $env . '.yml';
-
-        $path = $this->createDirectoryFor($relativePath, $file);
-        $saved = $this->createFile($path . $file, sprintf('# `%s` environment config goes here', $env));
-
+        $path = $this->create_directory_for($relative_path, $file);
+        $saved = $this->create_file($path . $file, sprintf('# `%s` environment config goes here', $env));
         if ($saved) {
-            $output->writeln(sprintf('<info>%s config was created in %s/%s</info>', $env, $relativePath, $file));
+            $output->writeln(sprintf('<info>%s config was created in %s/%s</info>', $env, $relative_path, $file));
             return Command::SUCCESS;
         }
-
-        $output->writeln(sprintf('<error>File %s/%s already exists</error>', $relativePath, $file));
+        $output->writeln(sprintf('<error>File %s/%s already exists</error>', $relative_path, $file));
         return Command::FAILURE;
     }
 }

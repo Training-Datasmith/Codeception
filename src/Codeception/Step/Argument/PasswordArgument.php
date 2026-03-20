@@ -1,25 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Step\Argument;
 
 use Stringable;
-
-class PasswordArgument implements FormattedOutput, Stringable
+class Password_Argument implements Formatted_Output, Stringable
 {
     public function __construct(private readonly string $password)
     {
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getOutput(): string
+    public function get_output(): string
     {
         return '******';
     }
-
     /**
      * {@inheritdoc}
      */

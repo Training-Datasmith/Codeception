@@ -1,24 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Util;
 
 use function call_user_func_array;
-
 use Closure;
-
 use function codecept_debug;
-
 use Codeception\Step\Action;
-
 use Exception;
-
 use function implode;
 use function str_replace;
-
 use Stringable;
-
 /**
  * Class for defining an array actions to be executed inside `performOn` of WebDriver
  *
@@ -57,11 +49,10 @@ use Stringable;
  * @method $this seeOptionIsSelected($selector, $optionText)
  * @method $this dontSeeOptionIsSelected($selector, $optionText)
  */
-class ActionSequence implements Stringable
+class Action_Sequence implements Stringable
 {
     /** @var Action[] */
     protected array $actions = [];
-
     /**
      * Creates an instance
      */
@@ -69,43 +60,38 @@ class ActionSequence implements Stringable
     {
         return new self();
     }
-
     public function __call(string $action, array $arguments): self
     {
-        $this->addAction($action, $arguments);
+        $this->add_action($action, $arguments);
         return $this;
     }
-
-    protected function addAction(string $action, $arguments): void
+    protected function add_action(string $action, $arguments): void
     {
         if (!is_array($arguments)) {
             $arguments = [$arguments];
         }
         $this->actions[] = new Action($action, $arguments);
     }
-
     /**
      * Creates action sequence from associative array,
      * where key is action, and value is action arguments
      */
-    public function fromArray(array $actions): self
+    public function from_array(array $actions): self
     {
         foreach ($actions as $action => $arguments) {
-            $this->addAction($action, $arguments);
+            $this->add_action($action, $arguments);
         }
         return $this;
     }
-
     /**
      * Returns a list of logged actions as associative array
      *
      * @return Action[]
      */
-    public function getActions(): array
+    public function get_actions(): array
     {
         return $this->actions;
     }
-
     /**
      * Executes sequence of action as methods of passed object.
      */
@@ -114,19 +100,15 @@ class ActionSequence implements Stringable
         foreach ($this->actions as $step) {
             codecept_debug("- {$step}");
             try {
-                call_user_func_array([$context, $step->getAction()], $step->getArguments());
+                call_user_func_array([$context, $step->get_action()], $step->get_arguments());
             } catch (Exception $e) {
-                throw new ($e::class)($e->getMessage() . "\nat {$step}"); // rethrow exception for a specific action
+                throw new ($e::class)($e->get_message() . "\nat {$step}");
+                // rethrow exception for a specific action
             }
         }
     }
-
     public function __toString(): string
     {
-        return implode(', ', array_map(
-            static fn (Action $step): string =>
-                $step->getAction() . ': ' . str_replace('"', "'", $step->getArgumentsAsString(20)),
-            $this->actions
-        ));
+        return implode(', ', array_map(static fn(Action $step): string => $step->get_action() . ': ' . str_replace('"', "'", $step->get_arguments_as_string(20)), $this->actions));
     }
 }

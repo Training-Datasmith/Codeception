@@ -1,33 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Step;
 
-use Codeception\Lib\ModuleContainer;
+use Codeception\Lib\Module_Container;
 use Codeception\Step as CodeceptionStep;
-use PHPUnit\Framework\SkippedTestError;
-use PHPUnit\Framework\SkippedWithMessageException;
-use PHPUnit\Runner\Version as PHPUnitVersion;
-
-class Skip extends CodeceptionStep
+use Php_Unit\Framework\Skipped_Test_Error;
+use Php_Unit\Framework\Skipped_With_Message_Exception;
+use Php_Unit\Runner\Version as PHPUnitVersion;
+class Skip extends Codeception_Step
 {
-    public function run(?ModuleContainer $container = null): void
+    public function run(?Module_Container $container = null): void
     {
-        $skipMessage = $this->getAction();
-
-        if (
-            version_compare(PHPUnitVersion::series(), '10.0', '<')
-            && class_exists(SkippedTestError::class)
-        ) {
-            throw new SkippedTestError($skipMessage);
+        $skip_message = $this->get_action();
+        if (version_compare(Php_Unit_Version::series(), '10.0', '<') && class_exists(Skipped_Test_Error::class)) {
+            throw new Skipped_Test_Error($skip_message);
         }
-
-        throw new SkippedWithMessageException($skipMessage);
+        throw new Skipped_With_Message_Exception($skip_message);
     }
-
     public function __toString(): string
     {
-        return $this->getAction();
+        return $this->get_action();
     }
 }

@@ -1,21 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception;
 
 use Closure;
-use Codeception\Lib\ModuleContainer;
-use Codeception\Step\Argument\FormattedOutput;
+use Codeception\Lib\Module_Container;
+use Codeception\Step\Argument\Formatted_Output;
 use Codeception\Step\Meta as MetaStep;
 use Codeception\Util\Locator;
 use Exception;
-use PHPUnit\Framework\Constraint\Constraint;
-use PHPUnit\Framework\MockObject\MockObject;
+use Php_Unit\Framework\Constraint\Constraint;
+use Php_Unit\Framework\Mock_Object\Mock_Object;
 use ReflectionClass;
 use RuntimeException;
 use Stringable;
-
 abstract class Step implements Stringable
 {
     /**
@@ -25,22 +23,19 @@ abstract class Step implements Stringable
     /**
      * @var int
      */
-    public const STACK_POSITION     = 3;
+    public const STACK_POSITION = 3;
     public bool $executed = false;
-
-    protected bool $failed   = false;
-    protected bool $isTry    = false;
+    protected bool $failed = false;
+    protected bool $is_try = false;
     protected string|int|null $line = null;
-    protected ?string $file         = null;
-    protected string $prefix        = 'I';
-    protected ?MetaStep $metaStep   = null;
-
+    protected ?string $file = null;
+    protected string $prefix = 'I';
+    protected ?Meta_Step $meta_step = null;
     /** @param string[] $arguments */
     public function __construct(protected string $action, protected array $arguments = [])
     {
     }
-
-    public function saveTrace(): void
+    public function save_trace(): void
     {
         $stack = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
         if (count($stack) <= self::STACK_POSITION) {
@@ -52,236 +47,196 @@ abstract class Step implements Stringable
         }
         $this->file = $trace['file'];
         $this->line = $trace['line'];
-        $this->addMetaStep($trace, $stack);
+        $this->add_meta_step($trace, $stack);
     }
-
-    private function isTestFile(string $file): int|false
+    private function is_test_file(string $file): int|false
     {
         return preg_match('#[^\\' . DIRECTORY_SEPARATOR . '](Cest|Cept|Test).php$#', $file);
     }
-
-    public function getName(): string
+    public function get_name(): string
     {
         $parts = explode('\\', self::class);
         return end($parts);
     }
-
-    public function getAction(): string
+    public function get_action(): string
     {
         return $this->action;
     }
-
-    public function getFilePath(): ?string
+    public function get_file_path(): ?string
     {
         return $this->file ? codecept_relative_path($this->file) : null;
     }
-
-    public function getLineNumber(): ?int
+    public function get_line_number(): ?int
     {
         return $this->line ?: null;
     }
-
-    public function hasFailed(): bool
+    public function has_failed(): bool
     {
         return $this->failed;
     }
-
-    public function getArguments(): array
+    public function get_arguments(): array
     {
         return $this->arguments;
     }
-
-    public function getArgumentsAsString(int $maxLength = self::DEFAULT_MAX_LENGTH): string
+    public function get_arguments_as_string(int $max_length = self::DEFAULT_MAX_LENGTH): string
     {
-        $arguments     = $this->arguments;
-        $argumentCount = count($arguments);
-        $totalLength   = $argumentCount - 1;
-
+        $arguments = $this->arguments;
+        $argument_count = count($arguments);
+        $total_length = $argument_count - 1;
         foreach ($arguments as $key => $argument) {
-            $stringified     = $this->stringifyArgument($argument);
+            $stringified = $this->stringify_argument($argument);
             $arguments[$key] = $stringified;
-            $totalLength   += mb_strlen($stringified, 'utf-8');
+            $total_length += mb_strlen($stringified, 'utf-8');
         }
-
-        if ($totalLength > $maxLength && $maxLength > 0) {
-            uasort($arguments, fn ($a, $b): int => mb_strlen($a, 'utf-8') <=> mb_strlen($b, 'utf-8'));
-
-            $allowedLength      = floor(($maxLength - $argumentCount + 1) / $argumentCount);
-            $lengthRemaining    = $maxLength;
-            $argumentsRemaining = $argumentCount;
-
+        if ($total_length > $max_length && $max_length > 0) {
+            uasort($arguments, fn($a, $b): int => mb_strlen($a, 'utf-8') <=> mb_strlen($b, 'utf-8'));
+            $allowed_length = floor(($max_length - $argument_count + 1) / $argument_count);
+            $length_remaining = $max_length;
+            $arguments_remaining = $argument_count;
             foreach ($arguments as $key => $arg) {
-                --$argumentsRemaining;
-                if (mb_strlen($arg, 'utf-8') > $allowedLength) {
-                    $arguments[$key] = mb_substr($arg, 0, (int)$allowedLength - 4, 'utf-8')
-                        . '...'
-                        . mb_substr($arg, -1, 1, 'utf-8');
-                    $lengthRemaining -= ($allowedLength + 1);
+                --$arguments_remaining;
+                if (mb_strlen($arg, 'utf-8') > $allowed_length) {
+                    $arguments[$key] = mb_substr($arg, 0, (int) $allowed_length - 4, 'utf-8') . '...' . mb_substr($arg, -1, 1, 'utf-8');
+                    $length_remaining -= $allowed_length + 1;
                 } else {
-                    $lengthRemaining -= (mb_strlen($arg, 'utf-8') + 1);
-                    if ($argumentsRemaining > 0) {
-                        $allowedLength = floor(($lengthRemaining - $argumentsRemaining + 1) / $argumentsRemaining);
+                    $length_remaining -= mb_strlen($arg, 'utf-8') + 1;
+                    if ($arguments_remaining > 0) {
+                        $allowed_length = floor(($length_remaining - $arguments_remaining + 1) / $arguments_remaining);
                     }
                 }
             }
-
             ksort($arguments);
         }
-
         return implode(',', $arguments);
     }
-
-    protected function stringifyArgument(mixed $argument): string
+    protected function stringify_argument(mixed $argument): string
     {
         if (is_string($argument)) {
-            return '"' . strtr($argument, ["\n" => '\\n', "\r" => '\\r', "\t" => ' ']) . '"';
+            return '"' . strtr($argument, ["\n" => '\n', "\r" => '\r', "\t" => ' ']) . '"';
         }
         if (is_resource($argument)) {
             $argument = (string) $argument;
         } elseif (is_array($argument)) {
             foreach ($argument as $key => $value) {
                 if (is_object($value)) {
-                    $argument[$key] = $this->getClassName($value);
+                    $argument[$key] = $this->get_class_name($value);
                 }
             }
         } elseif (is_object($argument)) {
-            if ($argument instanceof FormattedOutput) {
-                $argument = $argument->getOutput();
+            if ($argument instanceof Formatted_Output) {
+                $argument = $argument->get_output();
             } elseif (method_exists($argument, '__toString')) {
                 $argument = (string) $argument;
-            } elseif ($argument::class === 'Facebook\\WebDriver\\WebDriverBy') {
-                $argument = Locator::humanReadableString($argument);
+            } elseif ($argument::class === 'Facebook\WebDriver\WebDriverBy') {
+                $argument = Locator::human_readable_string($argument);
             } elseif ($argument instanceof Constraint) {
-                $argument = $argument->toString();
+                $argument = $argument->to_string();
             } else {
-                $argument = $this->getClassName($argument);
+                $argument = $this->get_class_name($argument);
             }
         }
-        $arg_str = json_encode(
-            $argument,
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE
-        );
+        $arg_str = json_encode($argument, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
         return str_replace('"', '"', $arg_str);
     }
-
-    protected function getClassName(object $argument): string
+    protected function get_class_name(object $argument): string
     {
         if ($argument instanceof Closure) {
             return Closure::class;
         }
-        if ($argument instanceof MockObject) {
+        if ($argument instanceof Mock_Object) {
             $parent = get_parent_class($argument);
             if ($parent) {
-                return $this->formatClassName($parent);
+                return $this->format_class_name($parent);
             }
-            foreach ((new ReflectionClass($argument))->getInterfaceNames() as $interface) {
+            foreach ((new ReflectionClass($argument))->get_interface_names() as $interface) {
                 if (!str_starts_with($interface, 'PHPUnit\\') && !str_starts_with($interface, 'Codeception\\')) {
-                    return $this->formatClassName($interface);
+                    return $this->format_class_name($interface);
                 }
             }
         }
-        return $this->formatClassName($argument::class);
+        return $this->format_class_name($argument::class);
     }
-
-    protected function formatClassName(string $classname): string
+    protected function format_class_name(string $classname): string
     {
         return trim($classname, '\\');
     }
-
-    public function getPhpCode(int $maxLength): string
+    public function get_php_code(int $max_length): string
     {
-        $base      = "\${$this->prefix}->" . $this->getAction() . '(';
-        $remaining = $maxLength - mb_strlen($base, 'utf-8') - 1;
-        return $base . $this->getHumanizedArguments($remaining) . ')';
+        $base = "\${$this->prefix}->" . $this->get_action() . '(';
+        $remaining = $max_length - mb_strlen($base, 'utf-8') - 1;
+        return $base . $this->get_humanized_arguments($remaining) . ')';
     }
-
-    public function getMetaStep(): ?MetaStep
+    public function get_meta_step(): ?Meta_Step
     {
-        return $this->metaStep;
+        return $this->meta_step;
     }
-
     public function __toString(): string
     {
-        return $this->humanize($this->getAction()) . ' ' . $this->getHumanizedArguments();
+        return $this->humanize($this->get_action()) . ' ' . $this->get_humanized_arguments();
     }
-
-    public function toString(int $maxLength): string
+    public function to_string(int $max_length): string
     {
-        $action    = $this->humanize($this->getAction());
-        $remaining = $maxLength - mb_strlen($action, 'utf-8') - 1;
-        return $action . ' ' . $this->getHumanizedArguments($remaining);
+        $action = $this->humanize($this->get_action());
+        $remaining = $max_length - mb_strlen($action, 'utf-8') - 1;
+        return $action . ' ' . $this->get_humanized_arguments($remaining);
     }
-
-    public function getHtml(string $highlightColor = '#732E81'): string
+    public function get_html(string $highlight_color = '#732E81'): string
     {
         if ($this->arguments === []) {
-            return sprintf('%s %s', ucfirst($this->prefix), $this->humanize($this->getAction()));
+            return sprintf('%s %s', ucfirst($this->prefix), $this->humanize($this->get_action()));
         }
-
-        return sprintf(
-            '%s %s <span style="color: %s">%s</span>',
-            ucfirst($this->prefix),
-            htmlspecialchars($this->humanize($this->getAction()), ENT_QUOTES | ENT_SUBSTITUTE),
-            $highlightColor,
-            htmlspecialchars($this->getHumanizedArguments(0), ENT_QUOTES | ENT_SUBSTITUTE)
-        );
+        return sprintf('%s %s <span style="color: %s">%s</span>', ucfirst($this->prefix), htmlspecialchars($this->humanize($this->get_action()), ENT_QUOTES | ENT_SUBSTITUTE), $highlight_color, htmlspecialchars($this->get_humanized_arguments(0), ENT_QUOTES | ENT_SUBSTITUTE));
     }
-
-    public function getHumanizedActionWithoutArguments(): string
+    public function get_humanized_action_without_arguments(): string
     {
-        return $this->humanize($this->getAction());
+        return $this->humanize($this->get_action());
     }
-
-    public function getHumanizedArguments(int $maxLength = self::DEFAULT_MAX_LENGTH): string
+    public function get_humanized_arguments(int $max_length = self::DEFAULT_MAX_LENGTH): string
     {
-        return $this->getArgumentsAsString($maxLength);
+        return $this->get_arguments_as_string($max_length);
     }
-
     protected function clean(string $text): string
     {
         return str_replace('\/', '', $text);
     }
-
     protected function humanize(string $text): string
     {
-        $text = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\\1 \\2', $text);
-        $text = preg_replace('#([a-z\d])([A-Z])#', '\\1 \\2', (string) $text);
-        $text = preg_replace('#\\bdont\\b#', "don't", (string) $text);
+        $text = preg_replace('#([A-Z]+)([A-Z][a-z])#', '\1 \2', $text);
+        $text = preg_replace('#([a-z\d])([A-Z])#', '\1 \2', (string) $text);
+        $text = preg_replace('#\bdont\b#', "don't", (string) $text);
         return mb_strtolower((string) $text, 'UTF-8');
     }
-
     /**
      * @return mixed
      */
-    public function run(?ModuleContainer $container = null)
+    public function run(?Module_Container $container = null)
     {
         $this->executed = true;
-        if (!$container instanceof ModuleContainer) {
+        if (!$container instanceof Module_Container) {
             return null;
         }
-        $module = $container->moduleForAction($this->action);
+        $module = $container->module_for_action($this->action);
         if (!is_callable([$module, $this->action])) {
             throw new RuntimeException("Action '{$this->action}' can't be called");
         }
         try {
             return $module->{$this->action}(...$this->arguments);
         } catch (Exception $e) {
-            if ($this->isTry) {
+            if ($this->is_try) {
                 throw $e;
             }
             $this->failed = true;
-            $this->metaStep?->setFailed(true);
+            $this->meta_step?->set_failed(true);
             throw $e;
         }
     }
-
     /**
      * If steps are combined into one method they can be reproduced as meta-step.
      * We are using stack trace to analyze if steps were called from test, if not - they were called from meta-step.
      */
-    protected function addMetaStep(array $step, array $stack): void
+    protected function add_meta_step(array $step, array $stack): void
     {
-        if ($this->isTestFile($this->file) || $step['class'] === Scenario::class) {
+        if ($this->is_test_file($this->file) || $step['class'] === Scenario::class) {
             return;
         }
         for ($i = count($stack) - self::STACK_POSITION - 1; isset($stack[$i]); --$i) {
@@ -289,31 +244,26 @@ abstract class Step implements Stringable
             if (!isset($step['file'], $step['function'], $step['class'])) {
                 continue;
             }
-            if (!$this->isTestFile($step['file'])) {
+            if (!$this->is_test_file($step['file'])) {
                 continue;
             }
-            $this->metaStep = new Step\Meta(
-                $step['function'],
-                array_map(fn ($v) => $v, array_values($step['args']))
-            );
-            $this->metaStep->setTraceInfo($step['file'], $step['line']);
+            $this->meta_step = new Step\Meta($step['function'], array_map(fn($v) => $v, array_values($step['args'])));
+            $this->meta_step->set_trace_info($step['file'], $step['line']);
             if (!in_array(Actor::class, class_parents($step['class']))) {
                 if (isset($step['object'])) {
-                    $this->metaStep->setPrefix($step['object']::class . ':');
+                    $this->meta_step->set_prefix($step['object']::class . ':');
                 } else {
-                    $this->metaStep->setPrefix($step['class'] . ':');
+                    $this->meta_step->set_prefix($step['class'] . ':');
                 }
             }
             return;
         }
     }
-
-    public function setMetaStep(?MetaStep $metaStep): void
+    public function set_meta_step(?Meta_Step $meta_step): void
     {
-        $this->metaStep = $metaStep;
+        $this->meta_step = $meta_step;
     }
-
-    public function getPrefix(): string
+    public function get_prefix(): string
     {
         return $this->prefix . ' ';
     }

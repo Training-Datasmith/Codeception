@@ -1,53 +1,33 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Step;
 
 use function codecept_debug;
-
-use Codeception\Lib\ModuleContainer;
+use Codeception\Lib\Module_Container;
 use Codeception\Util\Template;
-
 use Exception;
-
 use function ucfirst;
-
-class TryTo extends Assertion implements GeneratedStep
+class Try_To extends Assertion implements Generated_Step
 {
-    public function run(?ModuleContainer $container = null): bool
+    public function run(?Module_Container $container = null): bool
     {
-        $this->isTry = true;
+        $this->is_try = true;
         try {
             parent::run($container);
         } catch (Exception $e) {
-            codecept_debug("Failed to perform: {$e->getMessage()}, skipping...");
+            codecept_debug("Failed to perform: {$e->get_message()}, skipping...");
             return false;
         }
         return true;
     }
-
-    public static function getTemplate(Template $template): ?Template
+    public static function get_template(Template $template): ?Template
     {
-        $action = (string) $template->getVar('action');
-
-        if (
-            str_starts_with($action, 'have') ||
-            str_starts_with($action, 'am')   ||
-            str_starts_with($action, 'wait') ||
-            str_starts_with($action, 'grab')
-        ) {
+        $action = (string) $template->get_var('action');
+        if (str_starts_with($action, 'have') || str_starts_with($action, 'am') || str_starts_with($action, 'wait') || str_starts_with($action, 'grab')) {
             return null;
         }
-
-        $conditionalDoc = "* [!] Test won't be stopped on fail. Error won't be logged \n     "
-            . $template->getVar('doc');
-
-        return $template
-            ->place('doc', $conditionalDoc)
-            ->place('action', 'tryTo' . ucfirst($action))
-            ->place('return', 'return ')
-            ->place('return_type', ': bool')
-            ->place('step', 'TryTo');
+        $conditional_doc = "* [!] Test won't be stopped on fail. Error won't be logged \n     " . $template->get_var('doc');
+        return $template->place('doc', $conditional_doc)->place('action', 'tryTo' . ucfirst($action))->place('return', 'return ')->place('return_type', ': bool')->place('step', 'TryTo');
     }
 }

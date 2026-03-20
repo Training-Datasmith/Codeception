@@ -1,77 +1,63 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib;
 
 use Codeception\Actor;
-use Codeception\Exception\TestRuntimeException;
-use Codeception\Lib\Interfaces\MultiSession;
-
+use Codeception\Exception\Test_Runtime_Exception;
+use Codeception\Lib\Interfaces\Multi_Session;
 class Friend
 {
     protected array $data = [];
-
-    protected array $multiSessionModules = [];
-
+    protected array $multi_session_modules = [];
     public function __construct(protected string $name, protected Actor $actor, array $modules = [])
     {
-        $this->multiSessionModules = array_filter($modules, fn ($m): bool => $m instanceof MultiSession);
-
-        if ($this->multiSessionModules === []) {
-            throw new TestRuntimeException("No multisession modules used. Can't instantiate friend");
+        $this->multi_session_modules = array_filter($modules, fn($m): bool => $m instanceof Multi_Session);
+        if ($this->multi_session_modules === []) {
+            throw new Test_Runtime_Exception("No multisession modules used. Can't instantiate friend");
         }
     }
-
     public function does(callable $closure)
     {
-        $currentUserData = [];
-
-        foreach ($this->multiSessionModules as $module) {
-            $name = $module->_getName();
-            $currentUserData[$name] = $module->_backupSession();
+        $current_user_data = [];
+        foreach ($this->multi_session_modules as $module) {
+            $name = $module->_get_name();
+            $current_user_data[$name] = $module->_backup_session();
             if (empty($this->data[$name])) {
-                $module->_initializeSession();
-                $this->data[$name] = $module->_backupSession();
+                $module->_initialize_session();
+                $this->data[$name] = $module->_backup_session();
                 continue;
             }
-            $module->_loadSession($this->data[$name]);
+            $module->_load_session($this->data[$name]);
         }
-
         $this->actor->comment(strtoupper("{$this->name} does ---"));
         $result = $closure($this->actor);
         $this->actor->comment(strtoupper("--- {$this->name} finished"));
-
-        foreach ($this->multiSessionModules as $module) {
-            $name = $module->_getName();
-            $this->data[$name] = $module->_backupSession();
-            $module->_loadSession($currentUserData[$name]);
+        foreach ($this->multi_session_modules as $module) {
+            $name = $module->_get_name();
+            $this->data[$name] = $module->_backup_session();
+            $module->_load_session($current_user_data[$name]);
         }
-
         return $result;
     }
-
-    public function isGoingTo(string $argumentation): void
+    public function is_going_to(string $argumentation): void
     {
-        $this->actor->amGoingTo($argumentation);
+        $this->actor->am_going_to($argumentation);
     }
-
     public function expects(string $prediction): void
     {
         $this->actor->expect($prediction);
     }
-
-    public function expectsTo(string $prediction): void
+    public function expects_to(string $prediction): void
     {
-        $this->actor->expectTo($prediction);
+        $this->actor->expect_to($prediction);
     }
-
     public function leave(): void
     {
-        foreach ($this->multiSessionModules as $module) {
-            $name = $module->_getName();
+        foreach ($this->multi_session_modules as $module) {
+            $name = $module->_get_name();
             if (isset($this->data[$name])) {
-                $module->_closeSession($this->data[$name]);
+                $module->_close_session($this->data[$name]);
             }
         }
     }

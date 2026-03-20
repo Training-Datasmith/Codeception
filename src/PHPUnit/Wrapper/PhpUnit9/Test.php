@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Codeception\Php_Unit\Wrapper;
 
-namespace Codeception\PHPUnit\Wrapper;
-
-use PHPUnit\Framework\Test as PHPUnitTest;
-use PHPUnit\Framework\TestResult;
-
-abstract class Test implements PHPUnitTest
+use Php_Unit\Framework\Test as PHPUnitTest;
+use Php_Unit\Framework\Test_Result;
+abstract class Test implements Php_Unit_Test
 {
-    public function run(?TestResult $result = null): TestResult
+    public function run(?Test_Result $result = null): Test_Result
     {
         // does nothing
     }

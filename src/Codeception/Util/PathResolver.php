@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Util;
 
 use function array_fill;
@@ -14,61 +13,50 @@ use function implode;
 use function preg_match;
 use function strlen;
 use function substr;
-
-class PathResolver
+class Path_Resolver
 {
     /**
      * Returns path to a given directory relative to $projDir.
      */
-    public static function getRelativeDir(string $path, string $projDir, string $dirSep = DIRECTORY_SEPARATOR): string
+    public static function get_relative_dir(string $path, string $proj_dir, string $dir_sep = DIRECTORY_SEPARATOR): string
     {
-        $projDir = rtrim($projDir, $dirSep) . $dirSep;
-        $projLen = strlen($projDir);
-
-        if (self::fsCaseStrCmp(substr($path, 0, $projLen), $projDir, $dirSep) === 0) {
-            return substr($path, $projLen);
+        $proj_dir = rtrim($proj_dir, $dir_sep) . $dir_sep;
+        $proj_len = strlen($proj_dir);
+        if (self::fs_case_str_cmp(substr($path, 0, $proj_len), $proj_dir, $dir_sep) === 0) {
+            return substr($path, $proj_len);
         }
-
-        $pathPref = self::getPathAbsolutenessPrefix($path, $dirSep);
-        $projPref = self::getPathAbsolutenessPrefix($projDir, $dirSep);
-
-        if (self::fsCaseStrCmp($pathPref['wholePrefix'], $projPref['wholePrefix'], $dirSep) !== 0) {
-            if ($pathPref['devicePrefix'] !== '' && self::fsCaseStrCmp($pathPref['devicePrefix'], $projPref['devicePrefix'], $dirSep) === 0) {
-                return substr($path, strlen($pathPref['devicePrefix']));
+        $path_pref = self::get_path_absoluteness_prefix($path, $dir_sep);
+        $proj_pref = self::get_path_absoluteness_prefix($proj_dir, $dir_sep);
+        if (self::fs_case_str_cmp($path_pref['wholePrefix'], $proj_pref['wholePrefix'], $dir_sep) !== 0) {
+            if ($path_pref['devicePrefix'] !== '' && self::fs_case_str_cmp($path_pref['devicePrefix'], $proj_pref['devicePrefix'], $dir_sep) === 0) {
+                return substr($path, strlen($path_pref['devicePrefix']));
             }
             return $path;
         }
-
-        $baseLen   = strlen($pathPref['wholePrefix']);
-        $partsPath = array_values(array_filter(explode($dirSep, substr($path, $baseLen))));
-        $partsProj = array_values(array_filter(explode($dirSep, substr($projDir, strlen($projPref['wholePrefix'])))));
-
-        while ($partsPath && $partsProj && self::fsCaseStrCmp($partsPath[0], $partsProj[0], $dirSep) === 0) {
-            array_shift($partsPath);
-            array_shift($partsProj);
+        $base_len = strlen($path_pref['wholePrefix']);
+        $parts_path = array_values(array_filter(explode($dir_sep, substr($path, $base_len))));
+        $parts_proj = array_values(array_filter(explode($dir_sep, substr($proj_dir, strlen($proj_pref['wholePrefix'])))));
+        while ($parts_path && $parts_proj && self::fs_case_str_cmp($parts_path[0], $parts_proj[0], $dir_sep) === 0) {
+            array_shift($parts_path);
+            array_shift($parts_proj);
         }
-
-        if ($partsProj !== []) {
-            $partsPath = array_merge(array_fill(0, count($partsProj), '..'), $partsPath);
+        if ($parts_proj !== []) {
+            $parts_path = array_merge(array_fill(0, count($parts_proj), '..'), $parts_path);
         }
-
-        $trailingSep = (substr($path, -1) === $dirSep) ? $dirSep : '';
-
-        return implode($dirSep, $partsPath) . $trailingSep;
+        $trailing_sep = substr($path, -1) === $dir_sep ? $dir_sep : '';
+        return implode($dir_sep, $parts_path) . $trailing_sep;
     }
-
     /**
      * FileSystem Case String Comparison
      * Compare two strings with the filesystem's case-sensitiveness
      *
      * @return int -1 / 0 / 1 for < / = / > respectively
      */
-    private static function fsCaseStrCmp(string $str1, string $str2, string $dirSep = DIRECTORY_SEPARATOR): int
+    private static function fs_case_str_cmp(string $str1, string $str2, string $dir_sep = DIRECTORY_SEPARATOR): int
     {
-        $cmpFn = self::isWindowsFilesystem($dirSep) ? 'strcasecmp' : 'strcmp';
-        return $cmpFn($str1, $str2);
+        $cmp_fn = self::is_windows_filesystem($dir_sep) ? 'strcasecmp' : 'strcmp';
+        return $cmp_fn($str1, $str2);
     }
-
     /**
      * What part of this path (leftmost 0-3 characters) what
      * it is absolute relative to:
@@ -88,37 +76,26 @@ class PathResolver
      *
      * @return array<string, string>
      */
-    private static function getPathAbsolutenessPrefix(string $path, string $dirSep = DIRECTORY_SEPARATOR): array
+    private static function get_path_absoluteness_prefix(string $path, string $dir_sep = DIRECTORY_SEPARATOR): array
     {
-        $isWindows = self::isWindowsFilesystem($dirSep);
-
-        if ($isWindows && preg_match('/^[A-Za-z]:/', $path, $m)) {
+        $is_windows = self::is_windows_filesystem($dir_sep);
+        if ($is_windows && preg_match('/^[A-Za-z]:/', $path, $m)) {
             $dev = $m[0];
-            $hasDirSep = (substr($path, strlen($dev), 1) === $dirSep) ? $dirSep : '';
-            return [
-                'wholePrefix'  => $dev . $hasDirSep,
-                'devicePrefix' => $dev,
-            ];
+            $has_dir_sep = substr($path, strlen($dev), 1) === $dir_sep ? $dir_sep : '';
+            return ['wholePrefix' => $dev . $has_dir_sep, 'devicePrefix' => $dev];
         }
-        $wholePrefix = ($path !== '' && $path[0] === $dirSep) ? $dirSep : '';
-
-        return [
-            'wholePrefix'  => $wholePrefix,
-            'devicePrefix' => '',
-        ];
+        $whole_prefix = $path !== '' && $path[0] === $dir_sep ? $dir_sep : '';
+        return ['wholePrefix' => $whole_prefix, 'devicePrefix' => ''];
     }
-
-    private static function isWindowsFilesystem(string $dirSep = DIRECTORY_SEPARATOR): bool
+    private static function is_windows_filesystem(string $dir_sep = DIRECTORY_SEPARATOR): bool
     {
-        return $dirSep === '\\';
+        return $dir_sep === '\\';
     }
-
-    public static function isPathAbsolute(string $path): bool
+    public static function is_path_absolute(string $path): bool
     {
         if (DIRECTORY_SEPARATOR === '/') {
             return $path !== '' && $path[0] === DIRECTORY_SEPARATOR;
         }
-
         return preg_match('#^[A-Z]:(?![^/\\\\])#i', $path) === 1;
     }
 }

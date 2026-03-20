@@ -1,47 +1,39 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
-use Codeception\Util\FileSystem;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Codeception\Util\File_System;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Output\Output_Interface;
 /**
  * Recursively cleans `output` directory and generated code.
  *
  * * `codecept clean`
  *
  */
-#[AsCommand(
-    name: 'clean',
-    description: 'Recursively cleans log and generated code'
-)]
+#[As_Command(name: 'clean', description: 'Recursively cleans log and generated code')]
 class Clean extends Command
 {
-    use Shared\ConfigTrait;
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    use Shared\Config_Trait;
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $this->cleanProjectsRecursively($output, Configuration::projectDir());
+        $this->clean_projects_recursively($output, Configuration::project_dir());
         $output->writeln('Done');
         return Command::SUCCESS;
     }
-
-    private function cleanProjectsRecursively(OutputInterface $output, string $projectDir): void
+    private function clean_projects_recursively(Output_Interface $output, string $project_dir): void
     {
-        $config = Configuration::config($projectDir);
-        $logDir = Configuration::outputDir();
-        $output->writeln(sprintf('<info>Cleaning up output %s...</info>', $logDir));
-        FileSystem::doEmptyDir($logDir);
-
-        $subProjects = $config['include'];
-        foreach ($subProjects as $subProject) {
-            $this->cleanProjectsRecursively($output, $projectDir . $subProject);
+        $config = Configuration::config($project_dir);
+        $log_dir = Configuration::output_dir();
+        $output->writeln(sprintf('<info>Cleaning up output %s...</info>', $log_dir));
+        File_System::do_empty_dir($log_dir);
+        $sub_projects = $config['include'];
+        foreach ($sub_projects as $sub_project) {
+            $this->clean_projects_recursively($output, $project_dir . $sub_project);
         }
     }
 }

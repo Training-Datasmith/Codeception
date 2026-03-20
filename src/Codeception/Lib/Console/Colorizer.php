@@ -1,22 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Console;
 
-use Symfony\Component\Console\Formatter\OutputFormatter;
-
+use Symfony\Component\Console\Formatter\Output_Formatter;
 class Colorizer
 {
     public function colorize(string $string = ''): string
     {
         $lines = explode("\n", $string);
-        $colorizedMessage = '';
-
+        $colorized_message = '';
         foreach ($lines as $line) {
             $char = $line[0] ?? '';
-            $line = OutputFormatter::escape(trim($line));
-
+            $line = Output_Formatter::escape(trim($line));
             switch ($char) {
                 case '+':
                     $line = "<info>{$line}</info>";
@@ -25,10 +21,8 @@ class Colorizer
                     $line = "<comment>{$line}</comment>";
                     break;
             }
-
-            $colorizedMessage .= $line . "\n";
+            $colorized_message .= $line . "\n";
         }
-
-        return trim($colorizedMessage);
+        return trim($colorized_message);
     }
 }

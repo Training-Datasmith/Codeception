@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Codeception\Php_Unit\Wrapper;
 
-namespace Codeception\PHPUnit\Wrapper;
-
-use PHPUnit\Framework\Test as PHPUnitTest;
-
-abstract class Test implements PHPUnitTest
+use Php_Unit\Framework\Test as PHPUnitTest;
+abstract class Test implements Php_Unit_Test
 {
     public function run(): void
     {

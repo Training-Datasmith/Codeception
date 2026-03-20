@@ -1,26 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Util;
 
 use function array_keys;
-
 use ArrayAccess;
-
 use function call_user_func_array;
 use function count;
-
 use function is_array;
 use function is_object;
-
 use Iterator;
 use JsonSerializable;
-
 use function range;
-
 use Stringable;
-
 /**
  * Class to represent any type of content.
  * This class can act as an object, array, or string.
@@ -41,46 +33,36 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
 {
     protected int $position = 0;
     protected mixed $val = null;
-    protected ?bool $assocArray = null;
+    protected ?bool $assoc_array = null;
     private array $keys = [];
-
     public function __construct(mixed $val = null)
     {
         $this->set($val);
     }
-
     private function set(mixed $val): void
     {
         $this->val = $val;
         if (is_array($val)) {
-            $this->assocArray = $this->isAssocArray($val);
+            $this->assoc_array = $this->is_assoc_array($val);
             $this->keys = array_keys($val);
         } else {
-            $this->assocArray = null;
+            $this->assoc_array = null;
             $this->keys = [];
         }
         $this->position = 0;
     }
-
-    private function isAssocArray(array $arr): bool
+    private function is_assoc_array(array $arr): bool
     {
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
-
     public function __toString(): string
     {
-        return $this->val === null ? '?' : (string)$this->val;
+        return $this->val === null ? '?' : (string) $this->val;
     }
-
     public function __get(string $key): Maybe
     {
-        return new self(
-            is_object($this->val)
-                ? ($this->val->{$key} ?? null)
-                : (is_array($this->val) ? ($this->val[$key] ?? null) : null)
-        );
+        return new self(is_object($this->val) ? $this->val->{$key} ?? null : (is_array($this->val) ? $this->val[$key] ?? null : null));
     }
-
     public function __set(string $key, mixed $val)
     {
         if (is_object($this->val)) {
@@ -90,19 +72,16 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
             $this->set($this->val);
         }
     }
-
     public function __call(string $method, array $args)
     {
         return $this->val === null ? new self() : call_user_func_array([$this->val, $method], $args);
     }
-
     public function __clone()
     {
         if (is_object($this->val)) {
             $this->val = clone $this->val;
         }
     }
-
     public function __unset(string $key)
     {
         if (is_object($this->val)) {
@@ -112,19 +91,14 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
             $this->set($this->val);
         }
     }
-
     public function offsetExists(mixed $offset): bool
     {
         return (is_array($this->val) || $this->val instanceof ArrayAccess) && isset($this->val[$offset]);
     }
-
     public function offsetGet(mixed $offset): Maybe
     {
-        return new self(
-            (is_array($this->val) || $this->val instanceof ArrayAccess) ? ($this->val[$offset] ?? null) : null
-        );
+        return new self(is_array($this->val) || $this->val instanceof ArrayAccess ? $this->val[$offset] ?? null : null);
     }
-
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if (is_array($this->val) || $this->val instanceof ArrayAccess) {
@@ -134,7 +108,6 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
             }
         }
     }
-
     public function offsetUnset(mixed $offset): void
     {
         if (is_array($this->val) || $this->val instanceof ArrayAccess) {
@@ -144,16 +117,13 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
             }
         }
     }
-
     public function value()
     {
         if (!is_array($this->val)) {
             return $this->val;
         }
-
-        return array_map(fn ($v) => $v instanceof self ? $v->value() : $v, $this->val);
+        return array_map(fn($v) => $v instanceof self ? $v->value() : $v, $this->val);
     }
-
     /**
      * Return the current element
      * @link https://php.net/manual/en/iterator.current.php
@@ -164,10 +134,9 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
         if (!is_array($this->val)) {
             return null;
         }
-        $key = $this->assocArray === true ? ($this->keys[$this->position] ?? null) : $this->position;
+        $key = $this->assoc_array === true ? $this->keys[$this->position] ?? null : $this->position;
         return $this->val[$key] ?? null;
     }
-
     /**
      * Move forward to next element
      * @link https://php.net/manual/en/iterator.next.php
@@ -177,7 +146,6 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
     {
         ++$this->position;
     }
-
     /**
      * Return the key of the current element
      * @link https://php.net/manual/en/iterator.key.php
@@ -185,9 +153,8 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
      */
     public function key(): mixed
     {
-        return $this->assocArray === true ? ($this->keys[$this->position] ?? null) : $this->position;
+        return $this->assoc_array === true ? $this->keys[$this->position] ?? null : $this->position;
     }
-
     /**
      * Checks if current position is valid
      * @link https://php.net/manual/en/iterator.valid.php
@@ -199,9 +166,8 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
         if (!is_array($this->val)) {
             return false;
         }
-        return $this->assocArray === true ? isset($this->keys[$this->position]) : isset($this->val[$this->position]);
+        return $this->assoc_array === true ? isset($this->keys[$this->position]) : isset($this->val[$this->position]);
     }
-
     /**
      * Rewind the Iterator to the first element
      * @link https://php.net/manual/en/iterator.rewind.php
@@ -210,12 +176,11 @@ class Maybe implements ArrayAccess, Iterator, JsonSerializable, Stringable
     public function rewind(): void
     {
         if (is_array($this->val)) {
-            $this->assocArray = $this->isAssocArray($this->val);
+            $this->assoc_array = $this->is_assoc_array($this->val);
             $this->keys = array_keys($this->val);
         }
         $this->position = 0;
     }
-
     /**
      * Specify data which should be serialized to JSON
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php

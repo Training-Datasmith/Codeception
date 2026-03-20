@@ -1,22 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Util;
 
 use function in_array;
 use function is_object;
 use function json_decode;
 use function preg_match_all;
-
-use ReflectionAttribute;
+use Reflection_Attribute;
 use ReflectionClass;
 use ReflectionMethod;
 use Reflector;
-
 use function sprintf;
 use function trim;
-
 /**
  * Simple annotation parser. Take only key-value annotations for methods or class.
  */
@@ -25,17 +21,13 @@ class Annotation
     /**
      * @var ReflectionClass[]
      */
-    protected static array $reflectedClasses = [];
-
+    protected static array $reflected_classes = [];
     protected static string $regex = '/@%s(?:[ \t]*(.*?))?[ \t]*(?:\*\/)?\r?$/m';
-
-    protected ReflectionClass $reflectedClass;
-
+    protected ReflectionClass $reflected_class;
     /**
      * @var ReflectionClass|ReflectionMethod
      */
-    protected Reflector $currentReflectedItem;
-
+    protected Reflector $current_reflected_item;
     /**
      * Grabs annotation values.
      *
@@ -48,122 +40,99 @@ class Annotation
      * Annotation::forClass('MyTestCase')->method('testData')->fetchAll('depends');
      * ```
      */
-    public static function forClass(object|string $class): self
+    public static function for_class(object|string $class): self
     {
-        $className = is_object($class) ? $class::class : $class;
-        static::$reflectedClasses[$className] ??= new ReflectionClass($className);
-        return new self(static::$reflectedClasses[$className]);
+        $class_name = is_object($class) ? $class::class : $class;
+        static::$reflected_classes[$class_name] ??= new ReflectionClass($class_name);
+        return new self(static::$reflected_classes[$class_name]);
     }
-
-    public static function forMethod(object|string $class, string $method): self
+    public static function for_method(object|string $class, string $method): self
     {
-        return self::forClass($class)->method($method);
+        return self::for_class($class)->method($method);
     }
-
     /**
      * Parses raw comment for annotations
      */
-    public static function fetchAnnotationsFromDocblock(string $annotation, string $docblock): array
+    public static function fetch_annotations_from_docblock(string $annotation, string $docblock): array
     {
         return preg_match_all(sprintf(self::$regex, $annotation), $docblock, $m) ? $m[1] : [];
     }
-
     /**
      * Fetches all available annotations
      */
-    public static function fetchAllAnnotationsFromDocblock(string $docblock): array
+    public static function fetch_all_annotations_from_docblock(string $docblock): array
     {
         if (!preg_match_all(sprintf(self::$regex, '(\w+)'), $docblock, $matched)) {
             return [];
         }
-
         $annotations = [];
         foreach ($matched[1] as $i => $annotation) {
             $annotations[$annotation][] = $matched[2][$i] ?? '';
         }
         return $annotations;
     }
-
-    public function __construct(ReflectionClass $reflectionClass)
+    public function __construct(ReflectionClass $reflection_class)
     {
-        $this->currentReflectedItem = $this->reflectedClass = $reflectionClass;
+        $this->current_reflected_item = $this->reflected_class = $reflection_class;
     }
-
     public function method(string $method): self
     {
-        $this->currentReflectedItem = $this->reflectedClass->getMethod($method);
+        $this->current_reflected_item = $this->reflected_class->get_method($method);
         return $this;
     }
-
     public function fetch(string $annotation): ?string
     {
-        if (($attr = $this->attribute($annotation)) instanceof ReflectionAttribute) {
-            return $attr->getArguments()[0] ?? '';
+        if (($attr = $this->attribute($annotation)) instanceof Reflection_Attribute) {
+            return $attr->get_arguments()[0] ?? '';
         }
-
-        $matches = self::fetchAnnotationsFromDocblock($annotation, (string)$this->currentReflectedItem->getDocComment());
+        $matches = self::fetch_annotations_from_docblock($annotation, (string) $this->current_reflected_item->get_doc_comment());
         return $matches[0] ?? null;
     }
-
-    public function fetchAll(string $annotation): array
+    public function fetch_all(string $annotation): array
     {
-        if (($attr = $this->attribute($annotation)) instanceof ReflectionAttribute) {
-            if (!$attr->isRepeated()) {
-                return $attr->getArguments();
+        if (($attr = $this->attribute($annotation)) instanceof Reflection_Attribute) {
+            if (!$attr->is_repeated()) {
+                return $attr->get_arguments();
             }
-
             if ($annotation === 'example') {
                 $annotation = 'examples';
             }
-            $attrClass = 'Codeception\\Attribute\\' . ucfirst($annotation);
-            $attrs = array_filter($this->attributes(), static fn ($a): bool => $a->getName() === $attrClass);
-
-            return $annotation === 'examples'
-                ? array_map(static fn ($a) => $a->getArguments(), $attrs)
-                : array_merge(...array_map(static fn ($a) => $a->getArguments(), $attrs));
+            $attr_class = 'Codeception\Attribute\\' . ucfirst($annotation);
+            $attrs = array_filter($this->attributes(), static fn($a): bool => $a->get_name() === $attr_class);
+            return $annotation === 'examples' ? array_map(static fn($a) => $a->get_arguments(), $attrs) : array_merge(...array_map(static fn($a) => $a->get_arguments(), $attrs));
         }
-
-        return self::fetchAnnotationsFromDocblock($annotation, (string)$this->currentReflectedItem->getDocComment());
+        return self::fetch_annotations_from_docblock($annotation, (string) $this->current_reflected_item->get_doc_comment());
     }
-
     public function attributes(): array
     {
-        return array_filter(
-            $this->currentReflectedItem->getAttributes(),
-            static fn (ReflectionAttribute $a): bool => str_starts_with($a->getName(), 'Codeception\\Attribute\\')
-        );
+        return array_filter($this->current_reflected_item->get_attributes(), static fn(Reflection_Attribute $a): bool => str_starts_with($a->get_name(), 'Codeception\Attribute\\'));
     }
-
-    public function attribute(string $name): ?ReflectionAttribute
+    public function attribute(string $name): ?Reflection_Attribute
     {
-        $search = 'Codeception\\Attribute\\' . ucfirst($name === 'example' ? 'examples' : $name);
+        $search = 'Codeception\Attribute\\' . ucfirst($name === 'example' ? 'examples' : $name);
         foreach ($this->attributes() as $attr) {
-            if ($attr->getName() === $search) {
+            if ($attr->get_name() === $search) {
                 return $attr;
             }
         }
         return null;
     }
-
     public function raw(): string|false
     {
-        return $this->currentReflectedItem->getDocComment();
+        return $this->current_reflected_item->get_doc_comment();
     }
-
     /**
      * Returns an associative array value of annotation
      * Either JSON or Doctrine-annotation style allowed
      * Returns null if not a valid array data
      */
-    public static function arrayValue(string $annotation): ?array
+    public static function array_value(string $annotation): ?array
     {
         $annotation = trim($annotation);
-        $first      = $annotation[0] ?? '';
-
+        $first = $annotation[0] ?? '';
         if (in_array($first, ['{', '['])) {
             return json_decode($annotation, true, 512, JSON_THROW_ON_ERROR);
         }
-
         if ($first === '(') {
             preg_match_all('#(\w+)\s*=\s*"(.*?)"\s*[,)]#', $annotation, $matches, PREG_SET_ORDER);
             $data = [];

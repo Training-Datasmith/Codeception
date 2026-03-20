@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Lib\Interfaces;
 
 /**
@@ -22,7 +21,7 @@ namespace Codeception\Lib\Interfaces;
  *
  * @package Codeception\Lib\Interfaces
  */
-interface PartedModule
+interface Parted_Module
 {
     public function _parts(): array;
 }

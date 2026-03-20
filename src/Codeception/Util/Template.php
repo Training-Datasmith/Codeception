@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Util;
 
 use function array_key_exists;
@@ -11,7 +10,6 @@ use function preg_quote;
 use function preg_replace_callback;
 use function sprintf;
 use function strval;
-
 /**
  * Basic template engine used for generating initial Cept/Cest/Test files.
  */
@@ -19,20 +17,10 @@ class Template
 {
     private array $vars = [];
     private readonly string $regex;
-
-    public function __construct(
-        private readonly string $template,
-        private readonly string $placeholderStart = '{{',
-        private readonly string $placeholderEnd = '}}',
-        private readonly ?string $encoderFunction = null,
-    ) {
-        $this->regex = sprintf(
-            '~%s([\w\.]+)%s~',
-            preg_quote($this->placeholderStart, '~'),
-            preg_quote($this->placeholderEnd, '~'),
-        );
+    public function __construct(private readonly string $template, private readonly string $placeholder_start = '{{', private readonly string $placeholder_end = '}}', private readonly ?string $encoder_function = null)
+    {
+        $this->regex = sprintf('~%s([\w\.]+)%s~', preg_quote($this->placeholder_start, '~'), preg_quote($this->placeholder_end, '~'));
     }
-
     /**
      * Replaces {{var}} string with provided value
      */
@@ -41,20 +29,17 @@ class Template
         $this->vars[$var] = $val;
         return $this;
     }
-
     /**
      * Sets all template vars
      */
-    public function setVars(array $vars): void
+    public function set_vars(array $vars): void
     {
         $this->vars = $vars;
     }
-
-    public function getVar(string $name)
+    public function get_var(string $name)
     {
         return $this->vars[$name] ?? null;
     }
-
     /**
      * Fills up template string with placed variables.
      */
@@ -62,8 +47,7 @@ class Template
     {
         return preg_replace_callback($this->regex, function (array $match): string {
             $placeholder = $match[1];
-            $value       = $this->vars;
-
+            $value = $this->vars;
             foreach (explode('.', trim($placeholder, '\'"')) as $segment) {
                 if (is_array($value) && array_key_exists($segment, $value)) {
                     $value = $value[$segment];
@@ -71,10 +55,7 @@ class Template
                     return $match[0];
                 }
             }
-            $value = $this->encoderFunction !== null
-                ? ($this->encoderFunction)($value)
-                : $value;
-
+            $value = $this->encoder_function !== null ? ($this->encoder_function)($value) : $value;
             return is_string($value) ? $value : strval($value);
         }, $this->template);
     }

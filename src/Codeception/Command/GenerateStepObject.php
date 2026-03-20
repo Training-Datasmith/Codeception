@@ -1,22 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Command;
 
 use Codeception\Configuration;
-use Codeception\Lib\Generator\StepObject as StepObjectGenerator;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Codeception\Lib\Generator\Step_Object as StepObjectGenerator;
+use Symfony\Component\Console\Attribute\As_Command;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\Question_Helper;
+use Symfony\Component\Console\Input\Input_Argument;
+use Symfony\Component\Console\Input\Input_Interface;
+use Symfony\Component\Console\Input\Input_Option;
+use Symfony\Component\Console\Output\Output_Interface;
 use Symfony\Component\Console\Question\Question;
-
 use function ucfirst;
-
 /**
  * Generates StepObject class. You will be asked for steps you want to implement.
  *
@@ -24,48 +21,36 @@ use function ucfirst;
  * * `codecept g:stepobject Acceptance UserSteps --silent` - skip action questions
  *
  */
-#[AsCommand(
-    name: 'generate:stepobject',
-    description: 'Generates empty StepObject class'
-)]
-class GenerateStepObject extends Command
+#[As_Command(name: 'generate:stepobject', description: 'Generates empty StepObject class')]
+class Generate_Step_Object extends Command
 {
-    use Shared\FileSystemTrait;
-    use Shared\ConfigTrait;
-
+    use Shared\File_System_Trait;
+    use Shared\Config_Trait;
     protected function configure(): void
     {
-        $this
-            ->addArgument('suite', InputArgument::REQUIRED, 'Suite for StepObject')
-            ->addArgument('step', InputArgument::REQUIRED, 'StepObject name')
-            ->addOption('silent', '', InputOption::VALUE_NONE, 'Skip verification question');
+        $this->add_argument('suite', Input_Argument::REQUIRED, 'Suite for StepObject')->add_argument('step', Input_Argument::REQUIRED, 'StepObject name')->add_option('silent', '', Input_Option::VALUE_NONE, 'Skip verification question');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(Input_Interface $input, Output_Interface $output): int
     {
-        $suite = (string)$input->getArgument('suite');
-        $step = $input->getArgument('step');
-        $config = $this->getSuiteConfig($suite);
-        $class = $this->getShortClassName($step);
-        $path = $this->createDirectoryFor(Configuration::supportDir() . 'Step' . DIRECTORY_SEPARATOR . ucfirst($suite), $step);
-
+        $suite = (string) $input->get_argument('suite');
+        $step = $input->get_argument('step');
+        $config = $this->get_suite_config($suite);
+        $class = $this->get_short_class_name($step);
+        $path = $this->create_directory_for(Configuration::support_dir() . 'Step' . DIRECTORY_SEPARATOR . ucfirst($suite), $step);
         /** @var QuestionHelper $dialog */
-        $dialog = $this->getHelper('question');
+        $dialog = $this->get_helper('question');
         $filename = $path . $class . '.php';
-        $stepObject = new StepObjectGenerator($config, ucfirst($suite) . '\\' . $step);
-
-        if (!$input->getOption('silent')) {
+        $step_object = new Step_Object_Generator($config, ucfirst($suite) . '\\' . $step);
+        if (!$input->get_option('silent')) {
             do {
                 $question = new Question('Add action to StepObject class (ENTER to exit): ');
                 $action = $dialog->ask($input, $output, $question);
                 if ($action) {
-                    $stepObject->createAction($action);
+                    $step_object->create_action($action);
                 }
             } while ($action);
         }
-
-        $res = $this->createFile($filename, $stepObject->produce());
-
+        $res = $this->create_file($filename, $step_object->produce());
         if (!$res) {
             $output->writeln("<error>StepObject {$filename} already exists</error>");
             return Command::FAILURE;

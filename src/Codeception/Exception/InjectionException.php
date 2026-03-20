@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception\Exception;
 
 use Exception;
-
-class InjectionException extends Exception
+class Injection_Exception extends Exception
 {
 }

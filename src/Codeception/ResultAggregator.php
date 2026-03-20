@@ -1,44 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Codeception;
 
-use Codeception\Event\FailEvent;
+use Codeception\Event\Fail_Event;
 use Codeception\Test\Test;
-
-class ResultAggregator
+class Result_Aggregator
 {
     /**
      * @var bool Stop execution of test suite if this property is true
      */
     private bool $stop = false;
-
     /**
      * @var FailEvent[]
      */
     private array $failures = [];
-
     /**
      * @var FailEvent[]
      */
     private array $errors = [];
-
     /**
      * @var FailEvent[]
      */
     private array $warnings = [];
-
     /**
      * @var FailEvent[]
      */
     private array $useless = [];
-
     /**
      * @var FailEvent[]
      */
     private array $skipped = [];
-
     /**
      * @var FailEvent[]
      */
@@ -46,62 +38,50 @@ class ResultAggregator
     private int $count = 0;
     private int $successful = 0;
     private int $assertions = 0;
-
     public function stop(): void
     {
         $this->stop = true;
     }
-
-    public function shouldStop(): bool
+    public function should_stop(): bool
     {
         return $this->stop;
     }
-
-    public function addTest(Test $test): void
+    public function add_test(Test $test): void
     {
         ++$this->count;
     }
-
-    public function addSuccessful(Test $test): void
+    public function add_successful(Test $test): void
     {
         ++$this->successful;
     }
-
-    public function addFailure(FailEvent $e): void
+    public function add_failure(Fail_Event $e): void
     {
         $this->failures[] = $e;
     }
-
-    public function addError(FailEvent $e): void
+    public function add_error(Fail_Event $e): void
     {
         $this->errors[] = $e;
     }
-
-    public function addWarning(FailEvent $e): void
+    public function add_warning(Fail_Event $e): void
     {
         $this->warnings[] = $e;
     }
-
-    public function addSkipped(FailEvent $e): void
+    public function add_skipped(Fail_Event $e): void
     {
         $this->skipped[] = $e;
     }
-
-    public function addIncomplete(FailEvent $e): void
+    public function add_incomplete(Fail_Event $e): void
     {
         $this->incomplete[] = $e;
     }
-
-    public function addUseless(FailEvent $e): void
+    public function add_useless(Fail_Event $e): void
     {
         $this->useless[] = $e;
     }
-
-    public function addToAssertionCount(int $n): void
+    public function add_to_assertion_count(int $n): void
     {
         $this->assertions += $n;
     }
-
     /**
      * @return FailEvent[]
      */
@@ -109,7 +89,6 @@ class ResultAggregator
     {
         return $this->failures;
     }
-
     /**
      * @return FailEvent[]
      */
@@ -117,7 +96,6 @@ class ResultAggregator
     {
         return $this->errors;
     }
-
     /**
      * @return FailEvent[]
      */
@@ -125,16 +103,13 @@ class ResultAggregator
     {
         return $this->useless;
     }
-
     /**
      * @return FailEvent[]
      */
-
     public function incomplete(): array
     {
         return $this->incomplete;
     }
-
     /**
      * @return FailEvent[]
      */
@@ -142,82 +117,66 @@ class ResultAggregator
     {
         return $this->skipped;
     }
-
-    public function wasSuccessful(): bool
+    public function was_successful(): bool
     {
-        return $this->errorCount() + $this->failureCount() + $this->warningCount() === 0;
+        return $this->error_count() + $this->failure_count() + $this->warning_count() === 0;
     }
-
-    public function wasSuccessfulIgnoringWarnings(): bool
+    public function was_successful_ignoring_warnings(): bool
     {
-        return $this->errorCount() + $this->failureCount() === 0;
+        return $this->error_count() + $this->failure_count() === 0;
     }
-
     /**
      * @deprecated replaced by wasSuccessfulAndNoTestIsUselessOrSkippedOrIncomplete
      */
-    public function wasSuccessfulAndNoTestIsRiskyOrSkippedOrIncomplete(): bool
+    public function was_successful_and_no_test_is_risky_or_skipped_or_incomplete(): bool
     {
-        return $this->wasSuccessfulAndNoTestIsUselessOrSkippedOrIncomplete();
+        return $this->was_successful_and_no_test_is_useless_or_skipped_or_incomplete();
     }
-
-    public function wasSuccessfulAndNoTestIsUselessOrSkippedOrIncomplete(): bool
+    public function was_successful_and_no_test_is_useless_or_skipped_or_incomplete(): bool
     {
-        return $this->wasSuccessful()
-            && $this->uselessCount() + $this->skippedCount() + $this->incompleteCount() === 0;
+        return $this->was_successful() && $this->useless_count() + $this->skipped_count() + $this->incomplete_count() === 0;
     }
-
-    public function testCount(): int
+    public function test_count(): int
     {
         return $this->count;
     }
-
-    public function successfulCount(): int
+    public function successful_count(): int
     {
         return $this->successful;
     }
-
-    public function assertionCount(): int
+    public function assertion_count(): int
     {
         return $this->assertions;
     }
-
-    public function skippedCount(): int
+    public function skipped_count(): int
     {
         return count($this->skipped);
     }
-
-    public function incompleteCount(): int
+    public function incomplete_count(): int
     {
         return count($this->incomplete);
     }
-
-    public function errorCount(): int
+    public function error_count(): int
     {
         return count($this->errors);
     }
-
-    public function failureCount(): int
+    public function failure_count(): int
     {
         return count($this->failures);
     }
-
-    public function warningCount(): int
+    public function warning_count(): int
     {
         return count($this->warnings);
     }
-
-    public function uselessCount(): int
+    public function useless_count(): int
     {
         return count($this->useless);
     }
-
-    public function popLastFailure(): ?FailEvent
+    public function pop_last_failure(): ?Fail_Event
     {
         return array_pop($this->failures);
     }
-
-    public function getLastFailure(): ?FailEvent
+    public function get_last_failure(): ?Fail_Event
     {
         return end($this->failures) ?: null;
     }
