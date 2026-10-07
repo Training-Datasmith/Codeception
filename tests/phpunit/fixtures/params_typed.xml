@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters>
+    <parameter key="COUNT" type="integer">42</parameter>
+    <parameter key="FLAG" type="boolean">1</parameter>
+    <parameter key="RATIO" type="float">3.14</parameter>
+</parameters>

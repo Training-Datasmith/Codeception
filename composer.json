@@ -92,6 +92,10 @@
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "CodeceptionPhpunit\\Support\\": "tests/phpunit/Support/",
+            "CodeceptionPhpunit\\Tests\\": "tests/phpunit/"
+        },
         "classmap": [
             "tests/cli/_steps",
             "tests/data/app/data.php",
@@ -104,7 +108,8 @@
             "tests/data/services/UserService.php",
             "tests/unit/Codeception/Command/BaseCommandRunner.php",
             "tests/unit/Codeception/Util/MockAutoload.php",
-            "tests/unit/Codeception/Util/ReflectionTestClass.php"
+            "tests/unit/Codeception/Util/ReflectionTestClass.php",
+            "tests/phpunit/fixtures/ParserSampleClass.php"
         ]
     },
     "bin":["codecept"],

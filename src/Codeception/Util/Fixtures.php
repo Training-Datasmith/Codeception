@@ -36,12 +36,14 @@ class Fixtures
 
     public static function cleanup(string $name = ''): void
     {
-        if (self::exists($name)) {
-            unset(self::$fixtures[$name]);
+        if ($name === '') {
+            self::$fixtures = [];
             return;
         }
 
-        self::$fixtures = [];
+        if (self::exists($name)) {
+            unset(self::$fixtures[$name]);
+        }
     }
 
     public static function exists(string $name): bool

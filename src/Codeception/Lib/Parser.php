@@ -173,7 +173,7 @@ class Parser
 
     protected function stripComments(string $code): string
     {
-        return preg_replace(['#//.*?$#m', '#/*\*.*?\*/#ms'], '', $code); // inline & block comments
+        return preg_replace(['#//.*?$#m', '#/\*.*?\*/#ms'], '', $code); // inline & block comments
     }
 
     protected function matchComments(string $code): string

@@ -111,7 +111,13 @@ class ActionSequence implements Stringable
             try {
                 call_user_func_array([$context, $step->getAction()], $step->getArguments());
             } catch (Exception $e) {
-                throw new ($e::class)($e->getMessage() . "\nat {$step}"); // rethrow exception for a specific action
+                $message = $e->getMessage() . "\nat {$step}";
+                try {
+                    $replacement = new ($e::class)($message);
+                } catch (\Throwable) {
+                    throw $e;
+                }
+                throw $replacement;
             }
         }
     }

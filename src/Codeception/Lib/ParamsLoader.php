@@ -104,7 +104,7 @@ class ParamsLoader
                 $type = isset($param['type']) ? (string)$param['type'] : 'string';
                 $value = (string)$param;
                 $a[$key] = match ($type) {
-                    'bool', 'boolean', 'int', 'integer', 'float', 'double' => settype($value, $type),
+                    'bool', 'boolean', 'int', 'integer', 'float', 'double' => self::castXmlScalar($value, $type),
                     'constant' => constant($value),
                     'collection' => $paramsToArray($param),
                     default => (string)$param,
@@ -159,6 +159,12 @@ class ParamsLoader
             throw new ConfigurationException("Params can't be loaded from `{$file}`.");
         }
         return $contents;
+    }
+
+    private static function castXmlScalar(string $value, string $type): bool|int|float
+    {
+        settype($value, $type);
+        return $value;
     }
 
     /**
