@@ -7,29 +7,39 @@ namespace CodeceptionPhpunit\Tests\Test;
 use Codeception\Test\Descriptor;
 use Codeception\Test\Interfaces\Descriptive;
 use CodeceptionPhpunit\Support\PhpunitTestCase;
-use UnitEnum;
 
-enum DescriptorSampleEnum
+enum DescriptorUnitEnum
 {
-    case ALPHA;
+    case FOO;
+    case BAR;
 }
 
 final class DescriptorEnumTest extends PhpunitTestCase
 {
-    public function testExampleMetadataHashIsDerivedFromJson(): void
+    public function testUnitEnumSignatureProperties(): void
     {
-        $payload = ['id' => 7, 'label' => 'x'];
-        $test = $this->descriptiveWithExample($payload);
-        $signature = Descriptor::getTestSignatureUnique($test);
-        $suffix = substr(sha1((string) json_encode($payload, JSON_THROW_ON_ERROR)), 0, 7);
-        $this->assertStringEndsWith(':' . $suffix, $signature);
+        $fooOnce = Descriptor::getTestSignatureUnique(
+            $this->descriptiveWithExample(['enum' => DescriptorUnitEnum::FOO])
+        );
+        $fooAgain = Descriptor::getTestSignatureUnique(
+            $this->descriptiveWithExample(['enum' => DescriptorUnitEnum::FOO])
+        );
+        $bar = Descriptor::getTestSignatureUnique(
+            $this->descriptiveWithExample(['enum' => DescriptorUnitEnum::BAR])
+        );
+
+        $this->assertNotEmpty($fooOnce);
+        $this->assertMatchesRegularExpression('/:[0-9a-f]{7}$/', $fooOnce);
+        $this->assertNotSame($fooOnce, $bar);
+        $this->assertSame($fooOnce, $fooAgain);
     }
 
-    public function testUnitEnumUsesKnownHashSuffix(): void
+    public function testFooUsesKnownSuffix(): void
     {
-        $test = $this->descriptiveWithExample(['enum' => DescriptorSampleEnum::ALPHA]);
-        $signature = Descriptor::getTestSignatureUnique($test);
-        $this->assertSame('sig:3a2c921', $signature);
+        $signature = Descriptor::getTestSignatureUnique(
+            $this->descriptiveWithExample(['enum' => DescriptorUnitEnum::FOO])
+        );
+        $this->assertSame('sig:41e8901', $signature);
     }
 
     /**

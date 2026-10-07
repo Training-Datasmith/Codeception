@@ -21,14 +21,12 @@ final class ParamsLoaderTest extends PhpunitTestCase
         $this->assertSame('val1', $params['KEY1']);
     }
 
-    public function testIniFromDataDir(): void
+    public function testIniFromFixture(): void
     {
-        $file = codecept_root_dir('tests/data/params/params.ini');
-        if (!is_file($file)) {
-            $this->markTestSkipped('params.ini fixture missing');
-        }
-        $params = ParamsLoader::load('tests/data/params/params.ini');
-        $this->assertIsArray($params);
+        $path = dirname(__DIR__) . '/fixtures/params.ini';
+        $params = ParamsLoader::load($path);
+        $this->assertSame('val1', $params['KEY1']);
+        $this->assertSame('val2', $params['KEY2']);
     }
 
     public function testXmlTypedScalars(): void

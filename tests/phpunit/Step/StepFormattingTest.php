@@ -20,7 +20,7 @@ final class StepFormattingTest extends PhpunitTestCase
     public function testPasswordArgumentType(): void
     {
         $arg = new PasswordArgument('secret');
-        $this->assertInstanceOf(PasswordArgument::class, $arg);
+        $this->assertSame('******', $arg->getOutput());
     }
 
     public function testConditionalAssertionActionName(): void

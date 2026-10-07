@@ -13,22 +13,51 @@ final class StackTraceFilterTest extends PhpunitTestCase
 {
     public function testFiltersConfiguredClassPrefix(): void
     {
-        $exception = new Exception('x');
-        $property = new ReflectionProperty(StackTraceFilter::class, 'filteredClassesPattern');
-        $property->setAccessible(true);
-        $property->setValue(null, ['CodeceptionPhpunit\\Tests\\Util\\StackTraceFilterTest']);
+        $patternProperty = new ReflectionProperty(StackTraceFilter::class, 'filteredClassesPattern');
+        $patternProperty->setAccessible(true);
+        $originalPatterns = $patternProperty->getValue();
 
-        $trace = $exception->getTrace();
-        $trace[0]['class'] = self::class;
-        $fileProp = new ReflectionProperty(Exception::class, 'file');
-        $fileProp->setAccessible(true);
-        $lineProp = new ReflectionProperty(Exception::class, 'line');
-        $lineProp->setAccessible(true);
-        $fileProp->setValue($exception, '/tmp/StackTraceFilterTest.php');
-        $lineProp->setValue($exception, 99);
+        try {
+            $patternProperty->setValue(null, [self::class]);
 
-        $filtered = StackTraceFilter::getFilteredStackTrace($exception, false, true);
-        $this->assertIsArray($filtered);
+            $exception = new Exception('x');
+            $traceProperty = new ReflectionProperty(Exception::class, 'trace');
+            $traceProperty->setAccessible(true);
+            $fileProp = new ReflectionProperty(Exception::class, 'file');
+            $fileProp->setAccessible(true);
+            $lineProp = new ReflectionProperty(Exception::class, 'line');
+            $lineProp->setAccessible(true);
+
+            $prependedFile = '/tmp/StackTraceFilterTest.php';
+            $prependedLine = 99;
+            $trace = [
+                ['class' => self::class, 'file' => '/tmp/other.php', 'line' => 1],
+                ['class' => 'OtherClass', 'file' => '/tmp/kept.php', 'line' => 2],
+            ];
+            $traceProperty->setValue($exception, $trace);
+            $fileProp->setValue($exception, $prependedFile);
+            $lineProp->setValue($exception, $prependedLine);
+
+            $filtered = StackTraceFilter::getFilteredStackTrace($exception, false, true);
+            $this->assertIsArray($filtered);
+
+            foreach ($filtered as $frame) {
+                if (isset($frame['class'])) {
+                    $this->assertNotSame(self::class, $frame['class']);
+                }
+            }
+
+            $hasPrepended = false;
+            foreach ($filtered as $frame) {
+                if (($frame['file'] ?? null) === $prependedFile && ($frame['line'] ?? null) === $prependedLine) {
+                    $hasPrepended = true;
+                    break;
+                }
+            }
+            $this->assertTrue($hasPrepended);
+        } finally {
+            $patternProperty->setValue(null, $originalPatterns);
+        }
     }
 
     public function testRealThrowIncludesProjectRelativeFrame(): void

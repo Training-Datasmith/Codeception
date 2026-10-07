@@ -12,12 +12,21 @@ final class AutoloadTest extends PhpunitTestCase
 {
     private string $baseDir;
 
+    private string $className;
+
+    private string $fqcn;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->baseDir = sys_get_temp_dir() . '/codeception-phpunit-autoload-' . uniqid('', true);
+        $this->className = 'Bar_' . bin2hex(random_bytes(4));
+        $this->fqcn = 'Foo\\' . $this->className;
         mkdir($this->baseDir);
-        file_put_contents($this->baseDir . '/Bar.php', '<?php namespace Foo; class Bar {}');
+        file_put_contents(
+            $this->baseDir . '/' . $this->className . '.php',
+            "<?php namespace Foo; class {$this->className} {}"
+        );
         Autoload::addNamespace('Foo\\', $this->baseDir);
     }
 
@@ -30,13 +39,13 @@ final class AutoloadTest extends PhpunitTestCase
 
     public function testLoadExistingClass(): void
     {
-        $path = Autoload::load('Foo\\Bar');
-        $this->assertSame($this->baseDir . '/Bar.php', $path);
+        $path = Autoload::load($this->fqcn);
+        $this->assertSame($this->baseDir . '/' . $this->className . '.php', $path);
     }
 
     public function testMissingClassReturnsFalse(): void
     {
-        $this->assertFalse(Autoload::load('Foo\\Missing'));
+        $this->assertFalse(Autoload::load('Foo\\Missing_' . bin2hex(random_bytes(2))));
     }
 
     private function removeDir(string $dir): void
