@@ -46,15 +46,19 @@ final class ActionSequenceTest extends PhpunitTestCase
     public function testPreservesModuleRequireExceptionWhenRethrowFails(): void
     {
         $ctx = new class {
+            public ?ModuleRequireException $thrown = null;
+
             public function needModule(): void
             {
-                throw new ModuleRequireException('Db', 'not configured');
+                $this->thrown = new ModuleRequireException('Db', 'not configured');
+                throw $this->thrown;
             }
         };
         try {
             ActionSequence::build()->needModule()->run($ctx);
             $this->fail('expected exception');
         } catch (ModuleRequireException $e) {
+            $this->assertSame($ctx->thrown, $e);
             $this->assertStringContainsString('not configured', $e->getMessage());
         }
     }

@@ -12,30 +12,42 @@ final class EnvReset
     /** @var array<string, mixed> */
     private static array $envSnapshot = [];
 
-    /** @var string[] */
-    private static array $putenvKeys = [];
+    /**
+     * Original getenv values for keys touched via putenv(); false means the key did not exist.
+     *
+     * @var array<string, string|false>
+     */
+    private static array $putenvOriginal = [];
 
     public static function capture(): void
     {
         self::$serverSnapshot = $_SERVER;
         self::$envSnapshot = $_ENV;
-        self::$putenvKeys = [];
+        self::$putenvOriginal = [];
     }
 
     public static function restore(): void
     {
         $_SERVER = self::$serverSnapshot;
         $_ENV = self::$envSnapshot;
-        foreach (self::$putenvKeys as $key) {
-            putenv($key);
+        foreach (self::$putenvOriginal as $name => $original) {
+            if ($original === false) {
+                putenv($name);
+                unset($_ENV[$name], $_SERVER[$name]);
+            } else {
+                putenv($name . '=' . $original);
+            }
         }
-        self::$putenvKeys = [];
+        self::$putenvOriginal = [];
     }
 
     public static function putenv(string $assignment): void
     {
         $name = explode('=', $assignment, 2)[0];
-        self::$putenvKeys[] = $name;
+        if (!array_key_exists($name, self::$putenvOriginal)) {
+            $value = getenv($name);
+            self::$putenvOriginal[$name] = $value !== false ? $value : false;
+        }
         putenv($assignment);
     }
 }

@@ -108,8 +108,7 @@
             "tests/data/services/UserService.php",
             "tests/unit/Codeception/Command/BaseCommandRunner.php",
             "tests/unit/Codeception/Util/MockAutoload.php",
-            "tests/unit/Codeception/Util/ReflectionTestClass.php",
-            "tests/phpunit/fixtures/ParserSampleClass.php"
+            "tests/unit/Codeception/Util/ReflectionTestClass.php"
         ]
     },
     "bin":["codecept"],

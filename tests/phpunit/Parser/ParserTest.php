@@ -28,8 +28,8 @@ PHP;
 
     public function testGetClassesFromFixtureFile(): void
     {
-        $file = dirname(__DIR__) . '/fixtures/ParserSampleClass.php';
+        $file = dirname(__DIR__) . '/Fixtures/ParserSampleClass.php';
         $classes = Parser::getClassesFromFile($file);
-        $this->assertContains('CodeceptionPhpunitFixtures\\ParserSampleClass', $classes);
+        $this->assertContains('CodeceptionPhpunit\\Tests\\Fixtures\\ParserSampleClass', $classes);
     }
 }

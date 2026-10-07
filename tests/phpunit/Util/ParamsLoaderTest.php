@@ -46,16 +46,19 @@ final class ParamsLoaderTest extends PhpunitTestCase
 
     public function testMalformedXmlWithLibxmlGuard(): void
     {
-        $tmp = tempnam(sys_get_temp_dir(), 'badxml');
+        $tmp = sys_get_temp_dir() . '/badxml_' . uniqid('', true) . '.xml';
         file_put_contents($tmp, '<not>closed');
         $previous = libxml_use_internal_errors(true);
         try {
             $this->expectException(ConfigurationException::class);
+            $this->expectExceptionMessage("Params can't be loaded from `{$tmp}`.");
             ParamsLoader::load($tmp);
         } finally {
             libxml_use_internal_errors($previous);
             libxml_clear_errors();
-            unlink($tmp);
+            if (is_file($tmp)) {
+                unlink($tmp);
+            }
         }
     }
 }

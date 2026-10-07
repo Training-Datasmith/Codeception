@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CodeceptionPhpunitFixtures;
+namespace CodeceptionPhpunit\Tests\Fixtures;
 
 final class ParserSampleClass
 {
